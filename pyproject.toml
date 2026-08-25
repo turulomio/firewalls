@@ -15,6 +15,8 @@ firewalls_deploy = "firewalls.cli:main"
 firewalls_log_ingress = "firewalls.log_ingress:main"
 firewalls_log_egress = "firewalls.log_egress:main"
 firewalls_monitor = "firewalls.monitor:main"
+firewalls_probes = "firewalls.probes:main"
+
 
 [build-system]
 requires = ["poetry-core"]

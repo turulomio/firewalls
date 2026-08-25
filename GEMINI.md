@@ -27,8 +27,8 @@ Este proyecto centraliza y gestiona las configuraciones de firewall basadas en `
           └── policies/
   ```
 - **Código Python**:
-  - `firewalls/`: Paquete Python que contiene la lógica del CLI (`firewalls/cli.py`), monitor de entrada (`firewalls/log_ingress.py`), monitor de salida (`firewalls/log_egress.py`) y monitor continuo de conteo (`firewalls/monitor.py`).
-  - `pyproject.toml`: Configuración del proyecto, dependencias y scripts de consola (`firewalls_deploy`, `firewalls_log_ingress`, `firewalls_log_egress`, `firewalls_monitor`) gestionados con **Poetry**.
+  - `firewalls/`: Paquete Python que contiene la lógica del CLI (`firewalls/cli.py`), monitor de entrada (`firewalls/log_ingress.py`), monitor de salida (`firewalls/log_egress.py`), monitor continuo de conteo (`firewalls/monitor.py`) y pruebas de conectividad (`firewalls/probes.py`).
+  - `pyproject.toml`: Configuración del proyecto, dependencias y scripts de consola (`firewalls_deploy`, `firewalls_log_ingress`, `firewalls_log_egress`, `firewalls_monitor`, `firewalls_probes`) gestionados con **Poetry**.
 
 ---
 
@@ -42,6 +42,7 @@ Este proyecto centraliza y gestiona las configuraciones de firewall basadas en `
      - `poetry run firewalls_log_ingress`
      - `poetry run firewalls_log_egress`
      - `poetry run firewalls_monitor [-n INTERVALO_SEGUNDOS]`
+     - `poetry run firewalls_probes [-H HOST] [-p PUERTO] [-proto {tcp,udp}] [-t TIMEOUT] [-c COUNT]`
 
 2. **Sistema Operativo Destino**:
    - **Gentoo Linux**.
