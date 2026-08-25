@@ -66,11 +66,91 @@ poetry run firewalls_log_ingress --summary   # Muestra resumen ordenado
 poetry run firewalls_log_egress
 poetry run firewalls_log_egress --summary    # Muestra resumen ordenado
 
-# Dashboard en tiempo real con refresco e historial de posiciones configurable
-poetry run firewalls_monitor                            # Refresco por defecto (3s) y 20 posiciones
+# Dashboard en tiempo real con refresco, historial de posiciones y resolución DNS (PTR)
+poetry run firewalls_monitor                            # Refresco por defecto (3s), 20 posiciones y resolución DNS
 poetry run firewalls_monitor -n 2 -p 5                  # Refresco cada 2s mostrando 5 posiciones
-poetry run firewalls_monitor --interval 5 --positions 50 # Refresco cada 5s mostrando 50 posiciones
+poetry run firewalls_monitor --no-resolve               # Desactivar la resolución de nombres de dominio (solo IPs)
 ```
+
+## 🧪 Pruebas de Conectividad (`firewalls_probes`)
+
+El comando `firewalls_probes` permite ejecutar pruebas de conectividad tanto **salientes (egress)** como **entrantes (ingress)** para validar que el firewall está aplicando las reglas de forma esperada.
+
+### Opciones del comando `firewalls_probes`
+
+| Parámetro | Opción corta | Descripción | Valor por defecto |
+| :--- | :--- | :--- | :--- |
+| `--host` | `-H` | Host o dirección IP de destino para pruebas salientes | `kde.org` |
+| `--port` | `-p` | Puerto a probar | `1555` |
+| `--protocol` | `-proto` | Protocolo de transporte (`tcp` o `udp`) | `tcp` |
+| `--timeout` | `-t` | Tiempo máximo de espera en segundos | `5.0` |
+| `--count` | `-c` | Número de intentos a realizar | `1` |
+| `--listen` | `-l` | **Modo Escucha (Entrante/Ingress)**: Abre el puerto en el PC local | Desactivado (Saliente) |
+| `--bind` | `-b` | Dirección IP de interfaz local para modo escucha | `0.0.0.0` |
+
+---
+
+### Set de Pruebas Recomendado
+
+A continuación se detalla un conjunto de pruebas estándar para validar el comportamiento del firewall:
+
+#### 1. Verificación de Tráfico Saliente Permitido (Egress - Éxito esperado)
+
+- **Navegación Web Estándar (HTTP/HTTPS)**:
+  ```bash
+  poetry run firewalls_probes -H kde.org -p 80 -proto tcp
+  poetry run firewalls_probes -H kde.org -p 443 -proto tcp
+  ```
+- **Sincronización Portage de Gentoo (rsync)**:
+  ```bash
+  poetry run firewalls_probes -H rsync.gentoo.org -p 873 -proto tcp
+  ```
+- **Resolución DNS y Sincronización Horaria (NTP)**:
+  ```bash
+  poetry run firewalls_probes -H 1.1.1.1 -p 53 -proto udp
+  poetry run firewalls_probes -H pool.ntp.org -p 123 -proto udp
+  ```
+
+#### 2. Comprobación de Bloqueo de Salida No Autorizada (Zero Trust - Bloqueo esperado)
+
+- **Intento de conexión a puerto no autorizado (ej. TCP 1555)**:
+  ```bash
+  poetry run firewalls_probes -H kde.org -p 1555 -proto tcp -t 3.0
+  ```
+  *Resultado esperado*: `[DENEGADO/FALLO]` por `Tiempo de espera agotado (Timeout)`.
+
+- **Intento de SSH saliente a host remoto (TCP 22)**:
+  ```bash
+  poetry run firewalls_probes -H github.com -p 22 -proto tcp -t 3.0
+  ```
+  *Resultado esperado*: `[DENEGADO/FALLO]`.
+
+#### 3. Verificación de Tráfico Entrante (Ingress / Escucha)
+
+- **Comprobar si un puerto local está abierto a conexiones entrantes**:
+  ```bash
+  # Abre el puerto 8080 local a la escucha durante 10 segundos esperando una conexión entrante
+  poetry run firewalls_probes -l -p 8080 -t 10.0
+  ```
+- **Escucha en puerto UDP local**:
+  ```bash
+  poetry run firewalls_probes -l -p 51820 -proto udp -t 10.0
+  ```
+
+#### 4. Validación Integrada con el Monitor de Firewall
+
+Para verificar visualmente que las reglas de bloqueo registran eventos correctamente:
+
+1. Abre una terminal y ejecuta el monitor en tiempo real:
+   ```bash
+   poetry run firewalls_monitor -a
+   ```
+2. En otra terminal, lanza un sondeo bloqueado:
+   ```bash
+   poetry run firewalls_probes -H kde.org -p 1555
+   ```
+3. Comprueba cómo el monitor registra la denegación en el panel de **SALIDAS DENEGADAS (EGRESS)** resolviendo la IP a su nombre de dominio en tiempo real.
+
 
 ## Configuración de Logs (`syslog-ng`)
 

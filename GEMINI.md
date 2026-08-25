@@ -42,7 +42,7 @@ Este proyecto centraliza y gestiona las configuraciones de firewall basadas en `
      - `poetry run firewalls_log_ingress`
      - `poetry run firewalls_log_egress`
      - `poetry run firewalls_monitor [-n INTERVALO_SEGUNDOS]`
-     - `poetry run firewalls_probes [-H HOST] [-p PUERTO] [-proto {tcp,udp}] [-t TIMEOUT] [-c COUNT]`
+     - `poetry run firewalls_probes [-H HOST] [-p PUERTO] [-proto {tcp,udp}] [-t TIMEOUT] [-c COUNT] [-l]`
 
 2. **Sistema Operativo Destino**:
    - **Gentoo Linux**.
