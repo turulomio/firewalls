@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "firewalls"
+version = "0.1.0"
+description = "Gestor de configuraciones y despliegue de firewalld en Gentoo"
+authors = ["worky"]
+readme = "README.md"
+packages = [{include = "firewalls"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+colorama = "^0.4.6"
+
+[tool.poetry.scripts]
+deploy = "firewalls.cli:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
