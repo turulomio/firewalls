@@ -16,6 +16,66 @@ init(autoreset=True)
 
 DEFAULT_LOG = Path("/var/log/firewalld/denied.log")
 DNS_CACHE: dict[str, str] = {}
+SERVICE_CACHE: dict[tuple[str, str], str] = {}
+
+KNOWN_PROTOCOLS: dict[str, str] = {
+    "1": "ICMP",
+    "2": "IGMP",
+    "6": "TCP",
+    "17": "UDP",
+    "41": "IPv6",
+    "47": "GRE",
+    "50": "ESP",
+    "51": "AH",
+    "58": "ICMPv6",
+    "88": "EIGRP",
+    "89": "OSPF",
+    "112": "VRRP",
+    "132": "SCTP",
+}
+
+
+def normalize_proto(proto: str) -> str:
+    """Normalize protocol name or number (e.g. '2' -> 'IGMP', '6' -> 'TCP')."""
+    if not proto or proto == "N/A":
+        return "N/A"
+    return KNOWN_PROTOCOLS.get(proto, proto.upper())
+
+
+def resolve_service(dpt: str, proto: str) -> str:
+    """Resolve port and protocol to standard service name with caching."""
+    if not dpt or dpt == "N/A":
+        return ""
+    key = (dpt, proto.lower())
+    if key in SERVICE_CACHE:
+        return SERVICE_CACHE[key]
+
+    service = ""
+    try:
+        port_num = int(dpt)
+        proto_name = proto.lower() if proto.lower() in ("tcp", "udp") else None
+        if proto_name:
+            service = socket.getservbyport(port_num, proto_name)
+        else:
+            service = socket.getservbyport(port_num)
+    except (ValueError, OSError, OverflowError):
+        service = ""
+
+    SERVICE_CACHE[key] = service
+    return service
+
+
+def format_port_entry(dpt: str, proto: str) -> str:
+    """Format port entry with port number, PROTO (TCP/UDP), and optional service in parentheses."""
+    proto_str = normalize_proto(proto)
+    if not dpt or dpt == "N/A":
+        return proto_str
+
+    service = resolve_service(dpt, proto_str)
+    if service:
+        return f"{dpt} {proto_str} ({service})"
+    return f"{dpt} {proto_str}"
+
 
 
 def resolve_ip(ip: str) -> str:
@@ -144,36 +204,36 @@ def render_dashboard(
 
             # Panel 1: INGRESS
             print(f"\n{Fore.RED}📥 ENTRADAS DENEGADAS (INGRESS){Style.RESET_ALL} - Eventos capturados: {Fore.YELLOW}{total_ingress}{Style.RESET_ALL}")
-            print(f"{Fore.YELLOW}{'POS':<5} {'CONTEO':<10} {'PROTO':<8} {'IP / DOMINIO ORIGEN':<48} {'PUERTO DESTINO':<12}{Style.RESET_ALL}")
-            print("-" * 88)
+            print(f"{Fore.YELLOW}{'POS':<5} {'CONTEO':<10} {'PUERTO':<24} {'IP / DOMINIO ORIGEN':<48}{Style.RESET_ALL}")
+            print("-" * 90)
             if not ingress_counts:
                 print(f"{Fore.WHITE}Esperando eventos de entrada denegados...{Style.RESET_ALL}")
             else:
                 for rank, ((proto, src, dpt), count) in enumerate(ingress_counts.most_common(top_limit), start=1):
                     host_str = format_host_entry(src, resolve_dns)
+                    port_str = format_port_entry(dpt, proto)
                     print(
                         f"{Fore.WHITE}#{rank:<4}{Style.RESET_ALL} "
                         f"{Fore.GREEN}{count:<10}{Style.RESET_ALL} "
-                        f"{Fore.CYAN}{proto:<8}{Style.RESET_ALL} "
-                        f"{Fore.WHITE}{host_str:<48}{Style.RESET_ALL} "
-                        f"{Fore.MAGENTA}{dpt:<12}{Style.RESET_ALL}"
+                        f"{Fore.CYAN}{port_str:<24}{Style.RESET_ALL} "
+                        f"{Fore.WHITE}{host_str:<48}{Style.RESET_ALL}"
                     )
 
             # Panel 2: EGRESS
             print(f"\n{Fore.RED}📤 SALIDAS DENEGADAS (EGRESS){Style.RESET_ALL} - Eventos capturados: {Fore.YELLOW}{total_egress}{Style.RESET_ALL}")
-            print(f"{Fore.YELLOW}{'POS':<5} {'CONTEO':<10} {'PROTO':<8} {'IP / DOMINIO DESTINO':<48} {'PUERTO':<12}{Style.RESET_ALL}")
-            print("-" * 88)
+            print(f"{Fore.YELLOW}{'POS':<5} {'CONTEO':<10} {'PUERTO':<24} {'IP / DOMINIO DESTINO':<48}{Style.RESET_ALL}")
+            print("-" * 90)
             if not egress_counts:
                 print(f"{Fore.WHITE}Esperando eventos de salida denegados...{Style.RESET_ALL}")
             else:
                 for rank, ((proto, dst, dpt), count) in enumerate(egress_counts.most_common(top_limit), start=1):
                     host_str = format_host_entry(dst, resolve_dns)
+                    port_str = format_port_entry(dpt, proto)
                     print(
                         f"{Fore.WHITE}#{rank:<4}{Style.RESET_ALL} "
                         f"{Fore.GREEN}{count:<10}{Style.RESET_ALL} "
-                        f"{Fore.CYAN}{proto:<8}{Style.RESET_ALL} "
-                        f"{Fore.WHITE}{host_str:<48}{Style.RESET_ALL} "
-                        f"{Fore.MAGENTA}{dpt:<12}{Style.RESET_ALL}"
+                        f"{Fore.CYAN}{port_str:<24}{Style.RESET_ALL} "
+                        f"{Fore.WHITE}{host_str:<48}{Style.RESET_ALL}"
                     )
 
         sys.stdout.flush()
