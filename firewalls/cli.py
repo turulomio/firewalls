@@ -111,6 +111,23 @@ def reload_syslog_service():
             run(["systemctl", "start", "syslog-ng"])
 
 
+def reload_sysctl_settings(source_etc: Path):
+    """Reload sysctl settings if sysctl.d configuration exists in the deployed machine."""
+    sysctl_dir = source_etc / "sysctl.d"
+    if not sysctl_dir.is_dir():
+        return
+
+    print(f"{Fore.CYAN}[INFO]{Style.RESET_ALL} Detectada configuración sysctl.d. Recargando parámetros de kernel con sysctl...")
+    if which("sysctl"):
+        res = run(["sysctl", "--system"])
+        if res.returncode == 0:
+            print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} Parámetros de sysctl aplicados correctamente.")
+        else:
+            print(f"{Fore.YELLOW}[AVISO]{Style.RESET_ALL} sysctl --system finalizó con código {res.returncode}.")
+    else:
+        print(f"{Fore.YELLOW}[AVISO]{Style.RESET_ALL} No se encontró el ejecutable 'sysctl' en el PATH.")
+
+
 def reload_firewalld():
     """Check firewalld status and reload or start the service with OpenRC/systemd."""
     if not which("firewall-cmd"):
@@ -275,6 +292,7 @@ def main() -> int:
     fix_firewalld_permissions(Path("/etc/firewalld"))
     ensure_log_directory(Path("/var/log/firewalld"))
 
+    reload_sysctl_settings(source_etc)
     reload_syslog_service()
     reload_firewalld()
 
