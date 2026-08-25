@@ -12,7 +12,6 @@ firewalls/
 ├── firewalls/                    # Paquete Python con el comando CLI
 │   ├── __init__.py
 │   └── cli.py
-├── deploy.py                     # Script ejecutable directo en Python
 ├── README.md
 └── worky/                        # Configuración para la máquina "worky"
     ├── WORKY.md                  # Descripción funcional de reglas y servicios de la máquina
@@ -30,30 +29,21 @@ firewalls/
 
 ## Uso
 
-Puedes ejecutar el despliegue de cualquiera de las siguientes formas:
+Puedes ejecutar el despliegue con **Poetry**:
 
-### 1. Con Poetry
+### Desplegar una máquina
 ```bash
 poetry run firewalls_deploy <nombre_maquina>
-```
-
-### 2. Directamente con el script Python
-```bash
-./deploy.py <nombre_maquina>
 ```
 
 Ejemplo para la máquina `worky`:
 ```bash
 poetry run firewalls_deploy worky
-# o bien
-./deploy.py worky
 ```
 
 ### Detener el servicio `firewalld`:
 ```bash
 poetry run firewalls_deploy stop
-# o bien
-./deploy.py stop
 ```
 
 ### Qué hace el comando `firewalls_deploy`:
@@ -100,4 +90,4 @@ Para añadir una nueva máquina (por ejemplo `servidor1`):
    cp -r worky/etc/firewalld/* servidor1/etc/firewalld/
    ```
 2. Personaliza los archivos XML de zonas y configuración según las necesidades de esa máquina.
-3. Despliega los cambios con `poetry run firewalls_deploy servidor1` o `./deploy.py servidor1`.
+3. Despliega los cambios con: `poetry run firewalls_deploy servidor1`.

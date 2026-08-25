@@ -28,8 +28,7 @@ Este proyecto centraliza y gestiona las configuraciones de firewall basadas en `
   ```
 - **Código Python**:
   - `firewalls/`: Paquete Python que contiene la lógica del CLI (`firewalls/cli.py`), monitor de entrada (`firewalls/log_ingress.py`), monitor de salida (`firewalls/log_egress.py`) y monitor continuo de conteo (`firewalls/monitor.py`).
-  - `deploy.py`: Punto de entrada directo en la raíz.
-  - `pyproject.toml`: Configuración del proyecto, dependencias y scripts de consola (`deploy`, `firewalls_log_ingress`, `firewalls_log_egress`, `firewalls_monitor`) gestionados con **Poetry**.
+  - `pyproject.toml`: Configuración del proyecto, dependencias y scripts de consola (`firewalls_deploy`, `firewalls_log_ingress`, `firewalls_log_egress`, `firewalls_monitor`) gestionados con **Poetry**.
 
 ---
 
@@ -65,4 +64,4 @@ Este proyecto centraliza y gestiona las configuraciones de firewall basadas en `
 Para dar de alta una nueva máquina:
 1. Crear el directorio `<nueva_maquina>/etc/firewalld/` con sus respectivas subcarpetas.
 2. Copiar o generar las configuraciones XML de zonas/servicios correspondientes.
-3. Desplegar con: `poetry run firewalls_deploy <nueva_maquina>` o `./deploy.py <nueva_maquina>`.
+3. Desplegar con: `poetry run firewalls_deploy <nueva_maquina>`.
