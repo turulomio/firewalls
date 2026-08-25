@@ -88,6 +88,24 @@ def fix_firewalld_permissions(firewalld_path: Path = Path("/etc/firewalld")):
         print(f"{Fore.YELLOW}[AVISO]{Style.RESET_ALL} No se pudieron ajustar todos los permisos en {firewalld_path}: {e}")
 
 
+def ensure_log_directory(log_dir: Path = Path("/var/log/firewalld")):
+    """Ensure /var/log/firewalld exists with secure permissions."""
+    try:
+        log_dir.mkdir(parents=True, exist_ok=True)
+        chown(log_dir, user="root", group="root")
+        chmod(log_dir, 0o750)
+    except Exception as e:
+        print(f"{Fore.YELLOW}[AVISO]{Style.RESET_ALL} No se pudo verificar/crear el directorio de logs {log_dir}: {e}")
+
+
+def reload_syslog_service():
+    """Reload syslog-ng daemon if active to apply firewalld logging rules."""
+    if which("rc-service"):
+        run(["rc-service", "syslog-ng", "reload"], capture_output=True)
+    elif which("systemctl"):
+        run(["systemctl", "reload", "syslog-ng"], capture_output=True)
+
+
 def reload_firewalld():
     """Check firewalld status and reload or start the service."""
     if not which("firewall-cmd"):
@@ -185,8 +203,10 @@ def main() -> int:
         print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} Error al copiar archivos: {e}")
         return 1
 
-    print(f"{Fore.CYAN}[2/3]{Style.RESET_ALL} Ajustando permisos en /etc/firewalld...")
+    print(f"{Fore.CYAN}[2/3]{Style.RESET_ALL} Ajustando permisos y directorios...")
     fix_firewalld_permissions(Path("/etc/firewalld"))
+    ensure_log_directory(Path("/var/log/firewalld"))
+    reload_syslog_service()
 
     reload_firewalld()
 
