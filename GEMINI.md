@@ -10,10 +10,12 @@ Este proyecto centraliza y gestiona las configuraciones de firewall basadas en `
 - Cada máquina tiene un directorio en la raíz con su nombre (ejemplo: `worky/`).
 - Dentro de la carpeta de cada máquina, existen:
   - `<NOMBRE_MAQUINA>.md` (ejemplo: `WORKY.md`): Documento en mayúsculas que describe las reglas activas de forma funcional y los servicios que se quieren configurar.
+  - `post_deploy.sh` *(Opcional)*: Script ejecutable con comandos de consola a ejecutar automáticamente al finalizar el despliegue de la máquina (ej. para resolver/añadir IPs dinámicas a IPSets).
   - Subdirectorio `etc/` que reproduce fielmente la estructura real que se copiará a `/etc/` en el sistema de destino:
   ```text
   <nombre_maquina>/
   ├── <NOMBRE_MAQUINA>.md
+  ├── post_deploy.sh
   └── etc/
       └── firewalld/
           ├── firewalld.conf

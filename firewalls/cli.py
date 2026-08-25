@@ -155,23 +155,86 @@ def reload_firewalld():
             exit(1)
 
 
+def run_post_deploy_script(machine_dir: Path):
+    """Execute optional post_deploy.sh script for the machine if present."""
+    script_names = ["post_deploy.sh", "post_deploy"]
+    target_script = None
+    for sname in script_names:
+        candidate = machine_dir / sname
+        if candidate.is_file():
+            target_script = candidate
+            break
+
+    if not target_script:
+        return
+
+    print(f"{Fore.CYAN}[4/4]{Style.RESET_ALL} Ejecutando script de post-despliegue ({target_script.name})...")
+    try:
+        chmod(target_script, 0o755)
+        res = run([str(target_script)])
+        if res.returncode == 0:
+            print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} Script post-despliegue ejecutado con éxito.")
+        else:
+            print(f"{Fore.YELLOW}[AVISO]{Style.RESET_ALL} El script post-despliegue finalizó con código {res.returncode}.")
+    except Exception as e:
+        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} Error al ejecutar script post-despliegue: {e}")
+
+
+def stop_firewalld() -> int:
+    """Stop firewalld service using OpenRC or systemd."""
+    ensure_root()
+    print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
+    print(f"{Fore.CYAN}  Deteniendo servicio firewalld                       {Style.RESET_ALL}")
+    print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
+
+    if which("rc-service"):
+        print(f"{Fore.YELLOW}[INFO]{Style.RESET_ALL} Ejecutando OpenRC: rc-service firewalld stop...")
+        res = run(["rc-service", "firewalld", "stop"])
+        if res.returncode == 0:
+            print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} Servicio firewalld detenido correctamente.")
+            return 0
+        else:
+            print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} No se pudo detener el servicio firewalld con OpenRC.")
+            return 1
+    elif which("systemctl"):
+        print(f"{Fore.YELLOW}[INFO]{Style.RESET_ALL} Ejecutando systemd: systemctl stop firewalld...")
+        res = run(["systemctl", "stop", "firewalld"])
+        if res.returncode == 0:
+            print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} Servicio firewalld detenido correctamente.")
+            return 0
+        else:
+            print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} No se pudo detener el servicio firewalld con systemd.")
+            return 1
+    else:
+        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} No se pudo determinar el gestor de servicios para detener firewalld.")
+        return 1
+
+
 def main() -> int:
     project_root = get_project_root()
     available_machines = get_available_machines(project_root)
 
     parser = ArgumentParser(
         prog="deploy",
-        description="Despliega la configuración de firewalld para una máquina en Gentoo Linux y recarga el servicio.",
+        description="Despliega la configuración de firewalld para una máquina en Gentoo Linux y recarga el servicio, o detiene el servicio.",
         formatter_class=RawDescriptionHelpFormatter,
-        epilog=f"Máquinas disponibles:\n  {', '.join(available_machines) if available_machines else 'Ninguna encontrada'}",
+        epilog=f"Máquinas disponibles:\n  {', '.join(available_machines) if available_machines else 'Ninguna encontrada'}\n\nOpciones especiales:\n  stop                  Detiene el servicio firewalld del sistema.",
     )
     parser.add_argument(
         "machine",
         nargs="?",
-        help="Nombre de la máquina cuya configuración se desea desplegar (ej. worky)",
+        help="Nombre de la máquina cuya configuración se desea desplegar (ej. worky) o 'stop' para detener firewalld",
+    )
+    parser.add_argument(
+        "--stop",
+        action="store_true",
+        help="Detiene el servicio firewalld del sistema",
     )
 
     args = parser.parse_args()
+
+    if args.stop or args.machine == "stop":
+        return stop_firewalld()
 
     if not args.machine:
         parser.print_help()
@@ -198,7 +261,7 @@ def main() -> int:
     print(f"{Fore.CYAN}  Despliegue de Firewalld (Gentoo) - Máquina: {Fore.GREEN}{machine}{Fore.CYAN}  {Style.RESET_ALL}")
     print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
 
-    print(f"{Fore.CYAN}[1/3]{Style.RESET_ALL} Desplegando archivos...")
+    print(f"{Fore.CYAN}[1/4]{Style.RESET_ALL} Desplegando archivos...")
     print(f"      Origen:  {source_etc}/")
     print(f"      Destino: /etc/")
 
@@ -208,12 +271,15 @@ def main() -> int:
         print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} Error al copiar archivos: {e}")
         return 1
 
-    print(f"{Fore.CYAN}[2/3]{Style.RESET_ALL} Ajustando permisos y directorios...")
+    print(f"{Fore.CYAN}[2/4]{Style.RESET_ALL} Ajustando permisos y directorios...")
     fix_firewalld_permissions(Path("/etc/firewalld"))
     ensure_log_directory(Path("/var/log/firewalld"))
     reload_syslog_service()
 
+    print(f"{Fore.CYAN}[3/4]{Style.RESET_ALL} Gestionando servicio firewalld...")
     reload_firewalld()
+
+    run_post_deploy_script(machine_dir)
 
     print(f"{Fore.GREEN}======================================================{Style.RESET_ALL}")
     print(f"{Fore.GREEN}  Despliegue finalizado con éxito para '{machine}'  {Style.RESET_ALL}")

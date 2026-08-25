@@ -16,6 +16,7 @@ firewalls/
 ├── README.md
 └── worky/                        # Configuración para la máquina "worky"
     ├── WORKY.md                  # Descripción funcional de reglas y servicios de la máquina
+    ├── post_deploy.sh            # Script opcional de comandos post-despliegue
     └── etc/
         └── firewalld/
             ├── firewalld.conf    # Configuración principal
@@ -46,6 +47,13 @@ Ejemplo para la máquina `worky`:
 poetry run firewalls_deploy worky
 # o bien
 ./deploy.py worky
+```
+
+### Detener el servicio `firewalld`:
+```bash
+poetry run firewalls_deploy stop
+# o bien
+./deploy.py stop
 ```
 
 ### Qué hace el comando `firewalls_deploy`:
