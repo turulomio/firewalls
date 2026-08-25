@@ -44,10 +44,14 @@ Este proyecto centraliza y gestiona las configuraciones de firewall basadas en `
 
 3. **Reglas de Despliegue (`deploy`)**:
    - **Parámetro obligatorio**: Nombre de la máquina a desplegar.
-   - **Permisos**: Requiere elevación con `sudo` / `root` para escribir en `/etc`.
+   - **Ejecución y Privilegios**: Se asume que el usuario ejecutará el script con permisos de `root`. No se debe incluir lógica interna de `sudo` para reejecutar o elevar privilegios.
    - **Copia**: Sincroniza recursivamente `<maquina>/etc/` a `/etc/` preservando atributos y enlaces.
-   - **Permisos de archivos**: Ajusta permisos estándar de seguridad en `/etc/firewalld` (`root:root`, directorios `0750`, ficheros `0644`).
+   - **Permisos de archivos**: **No se cambian los permisos del directorio `/etc`**. Únicamente se asigna propietario `root:root` y permisos estándar (`0750` directorios, `0644` ficheros) a los elementos que se escriban bajo `/etc/firewalld`.
    - **Recarga automática**: Si `firewalld` está activo, ejecuta `firewall-cmd --reload`. Si está detenido, intenta arrancarlo mediante el gestor de servicios del sistema.
+
+4. **Configuración de Logs (`syslog-ng`)**:
+   - Requiere incluir la siguiente directiva en `/etc/syslog-ng/conf.d/*.conf` desde `/etc/syslog-ng/syslog-ng.conf`:
+     `@include "/etc/syslog-ng/conf.d/*.conf"`
 
 ---
 

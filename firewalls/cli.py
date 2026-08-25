@@ -33,17 +33,10 @@ def get_available_machines(project_root: Path) -> list[str]:
 
 
 def ensure_root():
-    """Ensure script is running as root; re-exec with sudo if needed."""
+    """Ensure script is running as root."""
     if geteuid() != 0:
-        print(f"{Fore.YELLOW}[INFO]{Style.RESET_ALL} Se requieren privilegios de root para aplicar la configuración en /etc.")
-        print(f"{Fore.YELLOW}[INFO]{Style.RESET_ALL} Reejecutando con sudo...")
-        try:
-            # Re-exec preserving current python and arguments
-            args = ["sudo", executable] + argv
-            execvp("sudo", args)
-        except Exception as e:
-            print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} No se pudo elevar privilegios con sudo: {e}")
-            exit(1)
+        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} Este script debe ser ejecutado con permisos de root.")
+        exit(1)
 
 
 def copy_configuration(source_etc: Path, target_etc: Path = Path("/etc")):
@@ -67,12 +60,12 @@ def copy_configuration(source_etc: Path, target_etc: Path = Path("/etc")):
 
 
 def fix_firewalld_permissions(firewalld_path: Path = Path("/etc/firewalld")):
-    """Set standard permissions and ownership for firewalld directory."""
+    """Set root ownership and standard permissions only for files under /etc/firewalld."""
     if not firewalld_path.exists():
         return
 
-    # Set root:root ownership
     try:
+        # Set permissions for /etc/firewalld directory itself and all items inside it
         chown(firewalld_path, user="root", group="root")
         chmod(firewalld_path, 0o750)
         for root, dirs, files in walk(firewalld_path):
@@ -85,7 +78,7 @@ def fix_firewalld_permissions(firewalld_path: Path = Path("/etc/firewalld")):
                 chown(file_full, user="root", group="root")
                 chmod(file_full, 0o644)
     except Exception as e:
-        print(f"{Fore.YELLOW}[AVISO]{Style.RESET_ALL} No se pudieron ajustar todos los permisos en {firewalld_path}: {e}")
+        print(f"{Fore.YELLOW}[AVISO]{Style.RESET_ALL} No se pudieron ajustar los permisos en {firewalld_path}: {e}")
 
 
 def ensure_log_directory(log_dir: Path = Path("/var/log/firewalld")):
@@ -99,15 +92,27 @@ def ensure_log_directory(log_dir: Path = Path("/var/log/firewalld")):
 
 
 def reload_syslog_service():
-    """Reload syslog-ng daemon if active to apply firewalld logging rules."""
+    """Ensure syslog-ng daemon is running or restarted/reloaded with OpenRC/systemd."""
     if which("rc-service"):
-        run(["rc-service", "syslog-ng", "reload"], capture_output=True)
+        print(f"{Fore.CYAN}[2.5/3]{Style.RESET_ALL} Gestionando servicio syslog-ng con OpenRC...")
+        res = run(["rc-service", "syslog-ng", "status"], capture_output=True, text=True)
+        if res.returncode == 0:
+            print(f"        Recargando/Reiniciando syslog-ng con OpenRC...")
+            run(["rc-service", "syslog-ng", "restart"])
+        else:
+            print(f"        Iniciando servicio syslog-ng con OpenRC...")
+            run(["rc-service", "syslog-ng", "start"])
     elif which("systemctl"):
-        run(["systemctl", "reload", "syslog-ng"], capture_output=True)
+        print(f"{Fore.CYAN}[2.5/3]{Style.RESET_ALL} Gestionando servicio syslog-ng con systemd...")
+        res = run(["systemctl", "is-active", "--quiet", "syslog-ng"])
+        if res.returncode == 0:
+            run(["systemctl", "reload-or-restart", "syslog-ng"])
+        else:
+            run(["systemctl", "start", "syslog-ng"])
 
 
 def reload_firewalld():
-    """Check firewalld status and reload or start the service."""
+    """Check firewalld status and reload or start the service with OpenRC/systemd."""
     if not which("firewall-cmd"):
         print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} 'firewall-cmd' no está instalado o no se encuentra en el PATH.")
         print(f"        En Gentoo puedes instalarlo con: {Fore.YELLOW}emerge --ask net-firewall/firewalld{Style.RESET_ALL}")

@@ -50,10 +50,18 @@ poetry run deploy worky
 
 ### Qué hace el comando `deploy`:
 1. Valida que la configuración de la máquina especificada existe.
-2. Solicita elevación automática de privilegios con `sudo` si no se ejecuta como `root`.
+2. Requiere permisos de `root` (debe ser ejecutado directamente por root).
 3. Sincroniza recursivamente `<nombre_maquina>/etc/` en `/etc/` preservando permisos.
-4. Ajusta los permisos estándar de `/etc/firewalld` (`root:root`, directorios `750`, ficheros `644`).
+4. Asigna propietario `root:root` y permisos estándar a los archivos escritos en `/etc/firewalld` (`0750` directorios, `0644` ficheros), sin alterar los permisos de `/etc`.
 5. Ejecuta `firewall-cmd --reload` (o arranca el servicio si no estaba iniciado con OpenRC / systemd).
+
+## Configuración de Logs (`syslog-ng`)
+
+Para que los archivos de configuración en `etc/syslog-ng/conf.d/` (como `firewalld.conf`) sean cargados por `syslog-ng` en el sistema de destino, es necesario incluir la siguiente línea en `/etc/syslog-ng/syslog-ng.conf`:
+
+```syslog-ng
+@include "/etc/syslog-ng/conf.d/*.conf"
+```
 
 ## Añadir una nueva máquina
 
