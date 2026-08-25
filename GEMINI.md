@@ -8,9 +8,12 @@ Este proyecto centraliza y gestiona las configuraciones de firewall basadas en `
 ## 🗂️ Estructura del Repositorio
 
 - Cada máquina tiene un directorio en la raíz con su nombre (ejemplo: `worky/`).
-- Dentro de la carpeta de cada máquina, existe un subdirectorio `etc/` que reproduce fielmente la estructura real que se copiará a `/etc/` en el sistema de destino:
+- Dentro de la carpeta de cada máquina, existen:
+  - `<NOMBRE_MAQUINA>.md` (ejemplo: `WORKY.md`): Documento en mayúsculas que describe las reglas activas de forma funcional y los servicios que se quieren configurar.
+  - Subdirectorio `etc/` que reproduce fielmente la estructura real que se copiará a `/etc/` en el sistema de destino:
   ```text
   <nombre_maquina>/
+  ├── <NOMBRE_MAQUINA>.md
   └── etc/
       └── firewalld/
           ├── firewalld.conf

@@ -15,6 +15,7 @@ firewalls/
 ├── deploy.py                     # Script ejecutable directo en Python
 ├── README.md
 └── worky/                        # Configuración para la máquina "worky"
+    ├── WORKY.md                  # Descripción funcional de reglas y servicios de la máquina
     └── etc/
         └── firewalld/
             ├── firewalld.conf    # Configuración principal
