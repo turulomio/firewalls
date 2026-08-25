@@ -94,7 +94,7 @@ def ensure_log_directory(log_dir: Path = Path("/var/log/firewalld")):
 def reload_syslog_service():
     """Ensure syslog-ng daemon is running or restarted/reloaded with OpenRC/systemd."""
     if which("rc-service"):
-        print(f"{Fore.CYAN}[2.5/3]{Style.RESET_ALL} Gestionando servicio syslog-ng con OpenRC...")
+        print(f"{Fore.CYAN}[3/5]{Style.RESET_ALL} Gestionando servicio syslog-ng con OpenRC...")
         res = run(["rc-service", "syslog-ng", "status"], capture_output=True, text=True)
         if res.returncode == 0:
             print(f"        Recargando/Reiniciando syslog-ng con OpenRC...")
@@ -103,7 +103,7 @@ def reload_syslog_service():
             print(f"        Iniciando servicio syslog-ng con OpenRC...")
             run(["rc-service", "syslog-ng", "start"])
     elif which("systemctl"):
-        print(f"{Fore.CYAN}[2.5/3]{Style.RESET_ALL} Gestionando servicio syslog-ng con systemd...")
+        print(f"{Fore.CYAN}[3/5]{Style.RESET_ALL} Gestionando servicio syslog-ng con systemd...")
         res = run(["systemctl", "is-active", "--quiet", "syslog-ng"])
         if res.returncode == 0:
             run(["systemctl", "reload-or-restart", "syslog-ng"])
@@ -123,7 +123,7 @@ def reload_firewalld():
     is_running = (state_res.returncode == 0)
 
     if is_running:
-        print(f"{Fore.CYAN}[3/3]{Style.RESET_ALL} Recargando reglas de firewalld...")
+        print(f"{Fore.CYAN}[4/5]{Style.RESET_ALL} Recargando reglas de firewalld...")
         reload_res = run(["firewall-cmd", "--reload"])
         if reload_res.returncode == 0:
             print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} Configuración recargada con éxito en firewalld.")
@@ -168,7 +168,7 @@ def run_post_deploy_script(machine_dir: Path):
     if not target_script:
         return
 
-    print(f"{Fore.CYAN}[4/4]{Style.RESET_ALL} Ejecutando script de post-despliegue ({target_script.name})...")
+    print(f"{Fore.CYAN}[5/5]{Style.RESET_ALL} Ejecutando script de post-despliegue ({target_script.name})...")
     try:
         chmod(target_script, 0o755)
         res = run([str(target_script)])
@@ -261,7 +261,7 @@ def main() -> int:
     print(f"{Fore.CYAN}  Despliegue de Firewalld (Gentoo) - Máquina: {Fore.GREEN}{machine}{Fore.CYAN}  {Style.RESET_ALL}")
     print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
 
-    print(f"{Fore.CYAN}[1/4]{Style.RESET_ALL} Desplegando archivos...")
+    print(f"{Fore.CYAN}[1/5]{Style.RESET_ALL} Desplegando archivos...")
     print(f"      Origen:  {source_etc}/")
     print(f"      Destino: /etc/")
 
@@ -271,12 +271,11 @@ def main() -> int:
         print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} Error al copiar archivos: {e}")
         return 1
 
-    print(f"{Fore.CYAN}[2/4]{Style.RESET_ALL} Ajustando permisos y directorios...")
+    print(f"{Fore.CYAN}[2/5]{Style.RESET_ALL} Ajustando permisos y directorios...")
     fix_firewalld_permissions(Path("/etc/firewalld"))
     ensure_log_directory(Path("/var/log/firewalld"))
-    reload_syslog_service()
 
-    print(f"{Fore.CYAN}[3/4]{Style.RESET_ALL} Gestionando servicio firewalld...")
+    reload_syslog_service()
     reload_firewalld()
 
     run_post_deploy_script(machine_dir)
