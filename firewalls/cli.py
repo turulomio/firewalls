@@ -145,40 +145,6 @@ def reload_syslog_service():
         else:
             run(["systemctl", "start", "syslog-ng"])
 
-
-def reload_ulogd_service(source_etc: Path):
-    """Ensure ulogd daemon is running or restarted if configured."""
-    if not (source_etc / "ulogd.conf").is_file() and not Path("/etc/ulogd.conf").is_file():
-        return
-
-    if which("rc-service") and Path("/etc/init.d/ulogd").is_file():
-        print(f"{Fore.CYAN}[INFO]{Style.RESET_ALL} Gestionando servicio ulogd con OpenRC...")
-        res = run(["rc-service", "ulogd", "status"], capture_output=True, text=True)
-        if res.returncode == 0:
-            print(f"        Reiniciando servicio ulogd con OpenRC...")
-            restart_res = run(["rc-service", "ulogd", "restart"])
-            if restart_res.returncode == 0:
-                print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} Servicio ulogd reiniciado correctamente.")
-            else:
-                print(f"{Fore.YELLOW}[AVISO]{Style.RESET_ALL} No se pudo reiniciar ulogd (código {restart_res.returncode}).")
-        else:
-            print(f"        Iniciando servicio ulogd con OpenRC...")
-            start_res = run(["rc-service", "ulogd", "start"])
-            if start_res.returncode == 0:
-                print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} Servicio ulogd iniciado correctamente.")
-            else:
-                print(f"{Fore.YELLOW}[AVISO]{Style.RESET_ALL} No se pudo iniciar ulogd (código {start_res.returncode}). Verifica que el kernel tenga CONFIG_NETFILTER_NETLINK_LOG.")
-    elif which("systemctl"):
-        print(f"{Fore.CYAN}[INFO]{Style.RESET_ALL} Gestionando servicio ulogd con systemd...")
-        res = run(["systemctl", "is-active", "--quiet", "ulogd"])
-        if res.returncode == 0:
-            run(["systemctl", "restart", "ulogd"])
-        else:
-            run(["systemctl", "start", "ulogd"])
-
-
-
-
 def reload_sysctl_settings(source_etc: Path):
     """Reload sysctl settings if sysctl.d configuration exists in the deployed machine."""
     sysctl_dir = source_etc / "sysctl.d"
@@ -362,7 +328,6 @@ def main() -> int:
 
     reload_sysctl_settings(source_etc)
     reload_syslog_service()
-    reload_ulogd_service(source_etc)
     reload_firewalld()
 
 

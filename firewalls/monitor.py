@@ -12,6 +12,8 @@ from collections import Counter
 from pathlib import Path
 from colorama import Fore, Style, init
 
+from firewalls.log_control import managed_firewall_log
+
 init(autoreset=True)
 
 DEFAULT_LOG = Path("/var/log/firewalld/denied.log")
@@ -294,13 +296,14 @@ def main():
     args = parser.parse_args()
 
     try:
-        render_dashboard(
-            args.file,
-            args.interval,
-            args.top,
-            count_historical=args.all,
-            resolve_dns=args.resolve,
-        )
+        with managed_firewall_log("all"):
+            render_dashboard(
+                args.file,
+                args.interval,
+                args.top,
+                count_historical=args.all,
+                resolve_dns=args.resolve,
+            )
     except KeyboardInterrupt:
         print(f"\n{Fore.YELLOW}Monitor finalizado.{Style.RESET_ALL}")
         sys.exit(0)

@@ -10,6 +10,8 @@ from collections import Counter
 from pathlib import Path
 from colorama import Fore, Style, init
 
+from firewalls.log_control import managed_firewall_log
+
 init(autoreset=True)
 
 DEFAULT_LOG = Path("/var/log/firewalld/denied.log")
@@ -129,8 +131,8 @@ def show_summary(log_file: Path):
 
 def follow_logs(log_file: Path):
     if not log_file.exists():
-        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} No existe el archivo de log: {log_file}")
-        sys.exit(1)
+        log_file.parent.mkdir(parents=True, exist_ok=True)
+        log_file.touch(mode=0o640, exist_ok=True)
 
     print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
     print(f"{Fore.CYAN}  Monitor de Tráfico SALIENTE Denegado (Egress)       {Style.RESET_ALL}")
@@ -158,7 +160,6 @@ def follow_logs(log_file: Path):
                         f"(Origen: {data['spt']} -> Interfaz: {data['out']})"
                     )
                     sys.stdout.flush()
-                    sys.stdout.flush()
         except KeyboardInterrupt:
             print(f"\n{Fore.YELLOW}Monitor finalizado.{Style.RESET_ALL}")
 
@@ -179,7 +180,8 @@ def main():
     if args.summary:
         show_summary(args.file)
     else:
-        follow_logs(args.file)
+        with managed_firewall_log("all"):
+            follow_logs(args.file)
 
 
 if __name__ == "__main__":
