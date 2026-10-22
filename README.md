@@ -152,13 +152,45 @@ Para verificar visualmente que las reglas de bloqueo registran eventos correctam
 3. Comprueba cómo el monitor registra la denegación en el panel de **SALIDAS DENEGADAS (EGRESS)** resolviendo la IP a su nombre de dominio en tiempo real.
 
 
-## Configuración de Logs (`syslog-ng`)
+## 📊 Configuración de Logs y Aislamiento de `dmesg`
 
-Para que los archivos de configuración en `etc/syslog-ng/conf.d/` (como `firewalld.conf`) sean cargados por `syslog-ng` en el sistema de destino, es necesario incluir la siguiente línea en `/etc/syslog-ng/syslog-ng.conf`:
+Para evitar que los descartes del firewall inunden el buffer circular del kernel (`dmesg`) y `/var/log/messages`:
 
-```syslog-ng
-@include "/etc/syslog-ng/conf.d/*.conf"
-```
+1. **Aislamiento en `dmesg` mediante `ulogd` (Netfilter Userspace Logging)**:
+   - Tradicionalmente, `LogDenied=all` en `firewalld` invoca `printk()` a nivel de kernel, inundando `dmesg`.
+   - **Solución con `ulogd`**: Al enrutar los paquetes bloqueados mediante `NFLOG` (`group="0"` o superior) directamente a espacio de usuario hacia `ulogd` (`app-admin/ulogd`), los descartes se escriben de forma transparente y directa en `/var/log/firewalld/denied.log` sin tocar `dmesg`.
+   - **Requisito de kernel en Gentoo**: Requiere tener compilado en el kernel el soporte para Netlink log:
+     ```text
+     CONFIG_NETFILTER_NETLINK_LOG=m (o =y)
+     ```
+     **Ubicación en `make menuconfig`**:
+     ```text
+     Networking support  --->
+       Networking options  --->
+         Network packet filtering framework (Netfilter)  --->
+           Core Netfilter Configuration  --->
+             <M> Netfilter LOG over NFNETLINK interface (CONFIG_NETFILTER_NETLINK_LOG)
+     ```
+     **Pasos de compilación e instalación**:
+     ```bash
+     cd /usr/src/linux
+     make menuconfig
+     make modules && make modules_install
+     modprobe nfnetlink_log
+     rc-service ulogd start
+     ```
+
+
+2. **Alternativa nativa sin recompilar kernel (`LogDenied=unicast` o `off`)**:
+   - Si el kernel actual no incluye `CONFIG_NETFILTER_NETLINK_LOG`, la forma directa de mitigar la saturación de `dmesg` es configurar en `firewalld.conf`:
+     - `LogDenied=unicast`: Elimina el 99% de las ráfagas repetitivas de red local en `dmesg` (broadcast UDP y mDNS).
+     - `LogDenied=off`: Apaga por completo las llamadas a `printk()` en el kernel.
+
+3. **Canalización con `syslog-ng`**:
+   - `syslog-ng` se mantiene como registrador general del sistema y los logs de ciclo de vida del servicio `firewalld` (`/var/log/firewalld/firewalld.log`).
+   - El CLI `firewalls_deploy` gestiona automáticamente la inclusión de `@include "/etc/syslog-ng/conf.d/*.conf"` antes de las directivas catch-all de `/var/log/messages`, garantizando con `flags(final);` que ninguna traza del firewall se duplique en `messages`.
+
+
 
 ## Añadir una nueva máquina
 
