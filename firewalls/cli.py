@@ -91,8 +91,43 @@ def ensure_log_directory(log_dir: Path = Path("/var/log/firewalld")):
         print(f"{Fore.YELLOW}[AVISO]{Style.RESET_ALL} No se pudo verificar/crear el directorio de logs {log_dir}: {e}")
 
 
+def ensure_syslog_ng_include(syslog_conf: Path = Path("/etc/syslog-ng/syslog-ng.conf")):
+    """Ensure /etc/syslog-ng/syslog-ng.conf includes conf.d/*.conf BEFORE destination/log messages."""
+    if not syslog_conf.is_file():
+        return
+    try:
+        content = syslog_conf.read_text(encoding="utf-8")
+        include_line = '@include "/etc/syslog-ng/conf.d/*.conf"'
+        
+        # Remove any misplaced includes at the end or elsewhere to ensure correct order
+        lines = [line for line in content.splitlines() if 'conf.d/*.conf' not in line]
+        clean_content = "\n".join(lines).rstrip() + "\n"
+
+        # Find where destinations or logs start to place include BEFORE them
+        # so flags(final) in conf.d takes precedence over catch-all log destinations
+        target_marker = "destination messages"
+        if target_marker in clean_content:
+            parts = clean_content.split(target_marker, 1)
+            new_content = parts[0] + f"# Include modular configuration files (before default destinations/logs)\n{include_line}\n\n" + target_marker + parts[1]
+        else:
+            log_marker = "log {"
+            if log_marker in clean_content:
+                parts = clean_content.split(log_marker, 1)
+                new_content = parts[0] + f"# Include modular configuration files\n{include_line}\n\n" + log_marker + parts[1]
+            else:
+                new_content = clean_content + f"\n{include_line}\n"
+
+        if new_content != content:
+            print(f"{Fore.CYAN}[INFO]{Style.RESET_ALL} Configurando inclusión prioritaria de conf.d en {syslog_conf}...")
+            syslog_conf.write_text(new_content, encoding="utf-8")
+    except Exception as e:
+        print(f"{Fore.YELLOW}[AVISO]{Style.RESET_ALL} No se pudo actualizar {syslog_conf}: {e}")
+
+
+
 def reload_syslog_service():
     """Ensure syslog-ng daemon is running or restarted/reloaded with OpenRC/systemd."""
+    ensure_syslog_ng_include()
     if which("rc-service"):
         print(f"{Fore.CYAN}[3/5]{Style.RESET_ALL} Gestionando servicio syslog-ng con OpenRC...")
         res = run(["rc-service", "syslog-ng", "status"], capture_output=True, text=True)
@@ -109,6 +144,7 @@ def reload_syslog_service():
             run(["systemctl", "reload-or-restart", "syslog-ng"])
         else:
             run(["systemctl", "start", "syslog-ng"])
+
 
 
 def reload_sysctl_settings(source_etc: Path):
