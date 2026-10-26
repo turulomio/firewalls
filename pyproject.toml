@@ -9,6 +9,7 @@ packages = [{include = "firewalls"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 colorama = "^0.4.6"
+poethepoet = "^0.49.0"
 
 [tool.poetry.scripts]
 firewalls_deploy = "firewalls.cli:main"
