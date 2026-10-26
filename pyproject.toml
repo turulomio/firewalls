@@ -18,6 +18,8 @@ firewalls_log_egress = "firewalls.log_egress:main"
 firewalls_monitor = "firewalls.monitor:main"
 firewalls_probes = "firewalls.probes:main"
 
+[tool.poe.tasks]
+translate = { script = "firewalls.poethepoet:translate" }
 
 [build-system]
 requires = ["poetry-core"]

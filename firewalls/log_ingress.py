@@ -11,6 +11,7 @@ from pathlib import Path
 
 from colorama import Fore, Style, init
 
+from firewalls import _
 from firewalls.log_control import managed_firewall_log
 
 init(autoreset=True)
@@ -145,7 +146,7 @@ def show_summary(log_file: Path) -> None:
         SystemExit: If log_file does not exist.
     """
     if not log_file.exists():
-        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} Log file does not exist: {log_file}")
+        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} {_('Log file does not exist: {file}').format(file=log_file)}")
         sys.exit(1)
 
     counter: Counter[tuple[str, str, str]] = Counter()
@@ -157,13 +158,16 @@ def show_summary(log_file: Path) -> None:
                 counter[key] += 1
 
     print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
-    print(f"{Fore.CYAN}  Denied Ingress Connections Summary                  {Style.RESET_ALL}")
+    print(f"{Fore.CYAN}  {_('Denied Ingress Connections Summary')}                  {Style.RESET_ALL}")
     print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
     if not counter:
-        print(f"{Fore.YELLOW}No denied ingress events found.{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}{_('No denied ingress events found.')}{Style.RESET_ALL}")
         return
 
-    print(f"{Fore.YELLOW}{'COUNT':<8} {'PORT':<24} {'SOURCE':<24}{Style.RESET_ALL}")
+    count_hdr = _("COUNT")
+    port_hdr = _("PORT")
+    src_hdr = _("SOURCE")
+    print(f"{Fore.YELLOW}{count_hdr:<8} {port_hdr:<24} {src_hdr:<24}{Style.RESET_ALL}")
     print("-" * 58)
     for (proto, src, dpt), count in counter.most_common():
         port_str = format_port_entry(dpt, proto)
@@ -181,10 +185,16 @@ def follow_logs(log_file: Path) -> None:
         log_file.touch(mode=0o640, exist_ok=True)
 
     print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
-    print(f"{Fore.CYAN}  Denied INGRESS Traffic Monitor                      {Style.RESET_ALL}")
-    print(f"{Fore.CYAN}  Log File: {log_file}                                {Style.RESET_ALL}")
+    print(f"{Fore.CYAN}  {_('Denied INGRESS Traffic Monitor')}                      {Style.RESET_ALL}")
+    print(f"{Fore.CYAN}  {_('Log File: {file}').format(file=log_file)}                                {Style.RESET_ALL}")
     print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
-    print(f"{Fore.GREEN}Streaming real-time events (Press Ctrl+C to exit)...\n{Style.RESET_ALL}")
+    print(f"{Fore.GREEN}{_('Streaming real-time events (Press Ctrl+C to exit)...')}\n{Style.RESET_ALL}")
+
+    blocked_tag = _("BLOCKED INGRESS")
+    port_lbl = _("Port")
+    src_lbl = _("Source")
+    src_port_lbl = _("Source Port")
+    iface_lbl = _("Interface")
 
     with log_file.open("r", encoding="utf-8", errors="ignore") as f:
         f.seek(0, 2)
@@ -199,27 +209,27 @@ def follow_logs(log_file: Path) -> None:
                     port_str = format_port_entry(data["dpt"], data["proto"])
                     print(
                         f"{Fore.YELLOW}[{data['timestamp']}]{Style.RESET_ALL} "
-                        f"{Fore.RED}[BLOCKED INGRESS]{Style.RESET_ALL} "
-                        f"Port: {Fore.CYAN}{port_str:<22}{Style.RESET_ALL} "
-                        f"Source: {Fore.GREEN}{data['src']:<15}{Style.RESET_ALL} "
-                        f"(Source Port: {data['spt']} -> Interface: {data['in']})"
+                        f"{Fore.RED}[{blocked_tag}]{Style.RESET_ALL} "
+                        f"{port_lbl}: {Fore.CYAN}{port_str:<22}{Style.RESET_ALL} "
+                        f"{src_lbl}: {Fore.GREEN}{data['src']:<15}{Style.RESET_ALL} "
+                        f"({src_port_lbl}: {data['spt']} -> {iface_lbl}: {data['in']})"
                     )
                     sys.stdout.flush()
         except KeyboardInterrupt:
-            print(f"\n{Fore.YELLOW}Monitor stopped.{Style.RESET_ALL}")
+            print(f"\n{Fore.YELLOW}{_('Monitor stopped.')}{Style.RESET_ALL}")
 
 
 def main() -> None:
     """Main CLI entrypoint for firewalls_log_ingress."""
     parser = argparse.ArgumentParser(
         prog="firewalls_log_ingress",
-        description="Monitor and summarize incoming (ingress) connections blocked by the firewall.",
+        description=_("Monitor and summarize incoming (ingress) connections blocked by the firewall."),
     )
     parser.add_argument(
-        "-s", "--summary", action="store_true", help="Display a ranked summary of blocked ingress connections."
+        "-s", "--summary", action="store_true", help=_("Display a ranked summary of blocked ingress connections.")
     )
     parser.add_argument(
-        "-f", "--file", type=Path, default=DEFAULT_LOG, help="Path to log file (default /var/log/firewalld/denied.log)."
+        "-f", "--file", type=Path, default=DEFAULT_LOG, help=_("Path to log file (default /var/log/firewalld/denied.log).")
     )
     args = parser.parse_args()
 

@@ -13,6 +13,7 @@ from pathlib import Path
 
 from colorama import Fore, Style, init
 
+from firewalls import _
 from firewalls.log_control import managed_firewall_log
 
 init(autoreset=True)
@@ -120,7 +121,7 @@ def resolve_ip(ip: str) -> str:
     try:
         old_timeout = socket.getdefaulttimeout()
         socket.setdefaulttimeout(1.0)
-        domain, _, _ = socket.gethostbyaddr(ip)
+        domain, _aliases, _addrs = socket.gethostbyaddr(ip)
         socket.setdefaulttimeout(old_timeout)
         DNS_CACHE[ip] = domain
         return domain
@@ -240,28 +241,41 @@ def render_dashboard(
             except Exception:
                 pass
 
-        # Clear terminal screen (ANSI)
         sys.stdout.write("\033[H\033[2J")
 
-        dns_status = "DNS PTR Active" if resolve_dns else "DNS PTR Disabled"
+        dns_status = _("DNS PTR Active") if resolve_dns else _("DNS PTR Disabled")
+        banner_title = _("FIREWALL DENIAL MONITOR | Started: {start} | Refresh: {interval}s | {dns}").format(
+            start=start_time_str, interval=interval, dns=dns_status
+        )
+        file_status = _("File: {file} | Last update: {now}").format(
+            file=log_file, now=f"{Fore.YELLOW}{now_str}{Style.RESET_ALL}{Fore.CYAN}"
+        )
         print(f"{Fore.CYAN}===================================================================================================={Style.RESET_ALL}")
-        print(f"{Fore.CYAN}  FIREWALL DENIAL MONITOR | Started: {start_time_str} | Refresh: {interval}s | {dns_status}{Style.RESET_ALL}")
-        print(f"{Fore.CYAN}  File: {log_file} | Last update: {Fore.YELLOW}{now_str}{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}  {banner_title}{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}  {file_status}{Style.RESET_ALL}")
         print(f"{Fore.CYAN}===================================================================================================={Style.RESET_ALL}")
 
         if not log_file.exists():
-            print(f"\n{Fore.RED}[ERROR] Log file not found: {log_file}{Style.RESET_ALL}")
-            print(f"{Fore.YELLOW}Waiting for log file to be created...{Style.RESET_ALL}")
+            print(f"\n{Fore.RED}" + _("[ERROR] Log file not found: {file}").format(file=log_file) + f"{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}{_('Waiting for log file to be created...')}{Style.RESET_ALL}")
         else:
             total_ingress = sum(ingress_counts.values())
             total_egress = sum(egress_counts.values())
 
+            pos_hdr = _("POS")
+            cnt_hdr = _("COUNT")
+            prt_hdr = _("PORT")
+            src_ip_hdr = _("SOURCE IP / HOSTNAME")
+            dst_ip_hdr = _("DESTINATION IP / HOSTNAME")
+
             # Panel 1: INGRESS
-            print(f"\n{Fore.RED}📥 DENIED INCOMING (INGRESS){Style.RESET_ALL} - Captured events: {Fore.YELLOW}{total_ingress}{Style.RESET_ALL}")
-            print(f"{Fore.YELLOW}{'POS':<5} {'COUNT':<10} {'PORT':<24} {'SOURCE IP / HOSTNAME':<48}{Style.RESET_ALL}")
+            ingress_title = _("DENIED INCOMING (INGRESS)")
+            captured_lbl = _("Captured events: {events}").format(events=f"{Fore.YELLOW}{total_ingress}{Style.RESET_ALL}")
+            print(f"\n{Fore.RED}📥 {ingress_title}{Style.RESET_ALL} - {captured_lbl}")
+            print(f"{Fore.YELLOW}{pos_hdr:<5} {cnt_hdr:<10} {prt_hdr:<24} {src_ip_hdr:<48}{Style.RESET_ALL}")
             print("-" * 90)
             if not ingress_counts:
-                print(f"{Fore.WHITE}Waiting for denied incoming events...{Style.RESET_ALL}")
+                print(f"{Fore.WHITE}{_('Waiting for denied incoming events...')}{Style.RESET_ALL}")
             else:
                 for rank, ((proto, src, dpt), count) in enumerate(ingress_counts.most_common(top_limit), start=1):
                     host_str = format_host_entry(src, resolve_dns)
@@ -274,11 +288,13 @@ def render_dashboard(
                     )
 
             # Panel 2: EGRESS
-            print(f"\n{Fore.RED}📤 DENIED OUTGOING (EGRESS){Style.RESET_ALL} - Captured events: {Fore.YELLOW}{total_egress}{Style.RESET_ALL}")
-            print(f"{Fore.YELLOW}{'POS':<5} {'COUNT':<10} {'PORT':<24} {'DESTINATION IP / HOSTNAME':<48}{Style.RESET_ALL}")
+            egress_title = _("DENIED OUTGOING (EGRESS)")
+            captured_egress_lbl = _("Captured events: {events}").format(events=f"{Fore.YELLOW}{total_egress}{Style.RESET_ALL}")
+            print(f"\n{Fore.RED}📤 {egress_title}{Style.RESET_ALL} - {captured_egress_lbl}")
+            print(f"{Fore.YELLOW}{pos_hdr:<5} {cnt_hdr:<10} {prt_hdr:<24} {dst_ip_hdr:<48}{Style.RESET_ALL}")
             print("-" * 90)
             if not egress_counts:
-                print(f"{Fore.WHITE}Waiting for denied outgoing events...{Style.RESET_ALL}")
+                print(f"{Fore.WHITE}{_('Waiting for denied outgoing events...')}{Style.RESET_ALL}")
             else:
                 for rank, ((proto, dst, dpt), count) in enumerate(egress_counts.most_common(top_limit), start=1):
                     host_str = format_host_entry(dst, resolve_dns)
@@ -298,7 +314,7 @@ def main() -> None:
     """Main CLI entrypoint for firewalls_monitor."""
     parser = argparse.ArgumentParser(
         prog="firewalls_monitor",
-        description="Real-time live dashboard tallying denied incoming and outgoing connections (IP + port + reverse DNS).",
+        description=_("Real-time live dashboard tallying denied incoming and outgoing connections (IP + port + reverse DNS)."),
     )
     parser.add_argument(
         "-n",
@@ -306,14 +322,14 @@ def main() -> None:
         "--interval",
         type=float,
         default=3.0,
-        help="Refresh interval in seconds (default 3.0).",
+        help=_("Refresh interval in seconds (default 3.0)."),
     )
     parser.add_argument(
         "-f",
         "--file",
         type=Path,
         default=DEFAULT_LOG,
-        help="Path to log file (default /var/log/firewalld/denied.log).",
+        help=_("Path to log file (default /var/log/firewalld/denied.log)."),
     )
     parser.add_argument(
         "-p",
@@ -325,26 +341,26 @@ def main() -> None:
         dest="top",
         type=int,
         default=20,
-        help="Maximum ranking positions to display per panel (default 20).",
+        help=_("Maximum ranking positions to display per panel (default 20)."),
     )
     parser.add_argument(
         "-a",
         "--all",
         action="store_true",
-        help="Count all historical events in the log file instead of starting from zero.",
+        help=_("Count all historical events in the log file instead of starting from zero."),
     )
     parser.add_argument(
         "-r",
         "--resolve",
         action="store_true",
         default=True,
-        help="Resolve IP addresses to domain names via reverse DNS PTR (enabled by default).",
+        help=_("Resolve IP addresses to domain names via reverse DNS PTR (enabled by default)."),
     )
     parser.add_argument(
         "--no-resolve",
         action="store_false",
         dest="resolve",
-        help="Disable reverse DNS resolution (show IP addresses only).",
+        help=_("Disable reverse DNS resolution (show IP addresses only)."),
     )
     args = parser.parse_args()
 
@@ -358,7 +374,7 @@ def main() -> None:
                 resolve_dns=args.resolve,
             )
     except KeyboardInterrupt:
-        print(f"\n{Fore.YELLOW}Monitor stopped.{Style.RESET_ALL}")
+        print(f"\n{Fore.YELLOW}{_('Monitor stopped.')}{Style.RESET_ALL}")
         sys.exit(0)
 
 

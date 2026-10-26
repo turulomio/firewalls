@@ -8,6 +8,8 @@ import time
 
 from colorama import Fore, Style, init
 
+from firewalls import _
+
 init(autoreset=True)
 
 
@@ -31,16 +33,20 @@ def probe_tcp_out(host: str, ip: str, port: int, timeout: float) -> tuple[bool, 
         sock.connect((ip, port))
         elapsed_ms = (time.perf_counter() - start_time) * 1000
         sock.close()
-        return True, "Outgoing connection established successfully", elapsed_ms
+        return True, _("Outgoing connection established successfully"), elapsed_ms
     except socket.timeout:
         elapsed_ms = (time.perf_counter() - start_time) * 1000
-        return False, f"Connection timed out (Timeout > {timeout}s) - Probable egress firewall drop", elapsed_ms
+        return (
+            False,
+            _("Connection timed out (Timeout > {timeout}s) - Probable egress firewall drop").format(timeout=timeout),
+            elapsed_ms,
+        )
     except ConnectionRefusedError:
         elapsed_ms = (time.perf_counter() - start_time) * 1000
-        return False, "Connection refused - Port closed on remote destination", elapsed_ms
+        return False, _("Connection refused - Port closed on remote destination"), elapsed_ms
     except OSError as e:
         elapsed_ms = (time.perf_counter() - start_time) * 1000
-        return False, f"Network error ({e.strerror or e})", elapsed_ms
+        return False, _("Network error ({error})").format(error=e.strerror or e), elapsed_ms
     finally:
         sock.close()
 
@@ -65,13 +71,17 @@ def probe_udp_out(host: str, ip: str, port: int, timeout: float) -> tuple[bool, 
         sock.sendto(b"FIREWALL_PROBE", (ip, port))
         sock.recvfrom(1024)
         elapsed_ms = (time.perf_counter() - start_time) * 1000
-        return True, "UDP response received from destination", elapsed_ms
+        return True, _("UDP response received from destination"), elapsed_ms
     except socket.timeout:
         elapsed_ms = (time.perf_counter() - start_time) * 1000
-        return False, f"No UDP response (Timeout > {timeout}s) - Port filtered or dropped", elapsed_ms
+        return (
+            False,
+            _("No UDP response (Timeout > {timeout}s) - Port filtered or dropped").format(timeout=timeout),
+            elapsed_ms,
+        )
     except OSError as e:
         elapsed_ms = (time.perf_counter() - start_time) * 1000
-        return False, f"UDP network error ({e.strerror or e})", elapsed_ms
+        return False, _("UDP network error ({error})").format(error=e.strerror or e), elapsed_ms
     finally:
         sock.close()
 
@@ -98,16 +108,28 @@ def probe_tcp_listen(bind_ip: str, port: int, timeout: float) -> tuple[bool, str
         conn, addr = sock.accept()
         elapsed_ms = (time.perf_counter() - start_time) * 1000
         conn.close()
-        return True, f"Incoming connection received successfully from {addr[0]}:{addr[1]}", elapsed_ms
+        return (
+            True,
+            _("Incoming connection received successfully from {host}:{port}").format(host=addr[0], port=addr[1]),
+            elapsed_ms,
+        )
     except socket.timeout:
         elapsed_ms = (time.perf_counter() - start_time) * 1000
-        return False, f"No incoming connections within {timeout}s - Probable ingress firewall block", elapsed_ms
+        return (
+            False,
+            _("No incoming connections within {timeout}s - Probable ingress firewall block").format(timeout=timeout),
+            elapsed_ms,
+        )
     except PermissionError:
         elapsed_ms = (time.perf_counter() - start_time) * 1000
-        return False, f"Permission denied binding port {port} (root privileges required for ports < 1024)", elapsed_ms
+        return (
+            False,
+            _("Permission denied binding port {port} (root privileges required for ports < 1024)").format(port=port),
+            elapsed_ms,
+        )
     except OSError as e:
         elapsed_ms = (time.perf_counter() - start_time) * 1000
-        return False, f"Local socket error ({e.strerror or e})", elapsed_ms
+        return False, _("Local socket error ({error})").format(error=e.strerror or e), elapsed_ms
     finally:
         sock.close()
 
@@ -132,16 +154,28 @@ def probe_udp_listen(bind_ip: str, port: int, timeout: float) -> tuple[bool, str
         sock.bind((bind_ip, port))
         data, addr = sock.recvfrom(1024)
         elapsed_ms = (time.perf_counter() - start_time) * 1000
-        return True, f"Incoming UDP packet received successfully from {addr[0]}:{addr[1]}", elapsed_ms
+        return (
+            True,
+            _("Incoming UDP packet received successfully from {host}:{port}").format(host=addr[0], port=addr[1]),
+            elapsed_ms,
+        )
     except socket.timeout:
         elapsed_ms = (time.perf_counter() - start_time) * 1000
-        return False, f"No incoming UDP packets within {timeout}s - Probable ingress firewall block", elapsed_ms
+        return (
+            False,
+            _("No incoming UDP packets within {timeout}s - Probable ingress firewall block").format(timeout=timeout),
+            elapsed_ms,
+        )
     except PermissionError:
         elapsed_ms = (time.perf_counter() - start_time) * 1000
-        return False, f"Permission denied binding port {port} (root privileges required for ports < 1024)", elapsed_ms
+        return (
+            False,
+            _("Permission denied binding port {port} (root privileges required for ports < 1024)").format(port=port),
+            elapsed_ms,
+        )
     except OSError as e:
         elapsed_ms = (time.perf_counter() - start_time) * 1000
-        return False, f"Local socket error ({e.strerror or e})", elapsed_ms
+        return False, _("Local socket error ({error})").format(error=e.strerror or e), elapsed_ms
     finally:
         sock.close()
 
@@ -188,16 +222,18 @@ def run_probes(
 
     if listen:
         print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
-        print(f"{Fore.CYAN}  Firewall Ingress Probe (Listen Mode)                {Style.RESET_ALL}")
-        print(f"{Fore.CYAN}  Listening: {bind_ip}:{port} ({protocol.upper()}) | Timeout: {timeout}s{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}  {_('Firewall Ingress Probe (Listen Mode)')}                {Style.RESET_ALL}")
+        print(
+            f"{Fore.CYAN}  {_('Listening: {bind}:{port} ({proto}) | Timeout: {timeout}s').format(bind=bind_ip, port=port, proto=protocol.upper(), timeout=timeout)}{Style.RESET_ALL}"
+        )
         print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
 
         successes = 0
         for i in range(1, count + 1):
             if count > 1:
-                print(f"Waiting for incoming connection [{i}/{count}]...")
+                print(_("Waiting for incoming connection [{curr}/{total}]...").format(curr=i, total=count))
             else:
-                print(f"Waiting for incoming connection on port {port}...")
+                print(_("Waiting for incoming connection on port {port}...").format(port=port))
 
             if protocol == "tcp":
                 ok, msg, ms = probe_tcp_listen(bind_ip, port, timeout)
@@ -205,24 +241,37 @@ def run_probes(
                 ok, msg, ms = probe_udp_listen(bind_ip, port, timeout)
 
             status_color = Fore.GREEN if ok else Fore.RED
-            status_text = "PASSED" if ok else "FAILED"
+            status_text = _("PASSED") if ok else _("FAILED")
 
-            print(f"  Result: [{status_color}{status_text}{Style.RESET_ALL}] {msg} ({ms:.1f} ms)")
+            print(
+                f"  "
+                + _("Result: [{status}] {msg} ({ms:.1f} ms)").format(
+                    status=f"{status_color}{status_text}{Style.RESET_ALL}", msg=msg, ms=ms
+                )
+            )
             if ok:
                 successes += 1
 
-        print(f"\n{Fore.YELLOW}Summary: {successes}/{count} incoming connections received successfully.{Style.RESET_ALL}")
+        print(
+            f"\n{Fore.YELLOW}"
+            + _("Summary: {successes}/{count} incoming connections received successfully.").format(
+                successes=successes, count=count
+            )
+            + f"{Style.RESET_ALL}"
+        )
         return 0 if successes == count else 1
 
     else:
         ip = resolve_target(host)
         if not ip:
-            print(f"{Fore.RED}[ERROR] Could not resolve host: {host}{Style.RESET_ALL}")
+            print(f"{Fore.RED}" + _("[ERROR] Could not resolve host: {host}").format(host=host) + f"{Style.RESET_ALL}")
             return 1
 
         print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
-        print(f"{Fore.CYAN}  Firewall Egress Probe (Outgoing Mode)               {Style.RESET_ALL}")
-        print(f"{Fore.CYAN}  Target: {host} ({ip}):{port} ({protocol.upper()}) | Timeout: {timeout}s{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}  {_('Firewall Egress Probe (Outgoing Mode)')}               {Style.RESET_ALL}")
+        print(
+            f"{Fore.CYAN}  {_('Target: {host} ({ip}):{port} ({proto}) | Timeout: {timeout}s').format(host=host, ip=ip, port=port, proto=protocol.upper(), timeout=timeout)}{Style.RESET_ALL}"
+        )
         print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
 
         successes = 0
@@ -235,13 +284,19 @@ def run_probes(
                 ok, msg, ms = probe_udp_out(host, ip, port, timeout)
 
             status_color = Fore.GREEN if ok else Fore.RED
-            status_text = "PASSED" if ok else "FAILED"
+            status_text = _("PASSED") if ok else _("FAILED")
 
             print(f"  {prefix}[{status_color}{status_text}{Style.RESET_ALL}] {msg} ({ms:.1f} ms)")
             if ok:
                 successes += 1
 
-        print(f"\n{Fore.YELLOW}Summary: {successes}/{count} probe attempts succeeded.{Style.RESET_ALL}")
+        print(
+            f"\n{Fore.YELLOW}"
+            + _("Summary: {successes}/{count} probe attempts succeeded.").format(
+                successes=successes, count=count
+            )
+            + f"{Style.RESET_ALL}"
+        )
         return 0 if successes == count else 1
 
 
@@ -253,55 +308,55 @@ def main() -> int:
     """
     parser = argparse.ArgumentParser(
         prog="firewalls_probes",
-        description="Probe firewall connectivity for ingress and egress connections across hosts and ports.",
+        description=_("Probe firewall connectivity for ingress and egress connections across hosts and ports."),
     )
     parser.add_argument(
         "-H",
         "--host",
         type=str,
         default="kde.org",
-        help="Target hostname or IP address for outgoing probes (default: kde.org)",
+        help=_("Target hostname or IP address for outgoing probes (default: kde.org)"),
     )
     parser.add_argument(
         "-p",
         "--port",
         type=int,
         default=1555,
-        help="Port to probe (default: 1555)",
+        help=_("Port to probe (default: 1555)"),
     )
     parser.add_argument(
         "-proto",
         "--protocol",
         choices=["tcp", "udp"],
         default="tcp",
-        help="Transport protocol (tcp or udp, default: tcp)",
+        help=_("Transport protocol (tcp or udp, default: tcp)"),
     )
     parser.add_argument(
         "-t",
         "--timeout",
         type=float,
         default=5.0,
-        help="Maximum socket timeout in seconds (default: 5.0)",
+        help=_("Maximum socket timeout in seconds (default: 5.0)"),
     )
     parser.add_argument(
         "-c",
         "--count",
         type=int,
         default=1,
-        help="Number of probe attempts to perform (default: 1)",
+        help=_("Number of probe attempts to perform (default: 1)"),
     )
     parser.add_argument(
         "-l",
         "--listen",
         action="store_true",
-        help="Run in incoming listen mode (Ingress test) binding local port",
+        help=_("Run in incoming listen mode (Ingress test) binding local port"),
     )
     parser.add_argument(
         "-b",
         "--bind",
         type=str,
         default="0.0.0.0",
-        help="Local IP address to bind in listen mode (default: 0.0.0.0)",
+        help=_("Local IP address to bind in listen mode (default: 0.0.0.0)"),
     )
 
     args = parser.parse_args()
