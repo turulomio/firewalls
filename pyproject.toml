@@ -5,6 +5,9 @@ description = "Centralized firewalld configuration and deployment manager for Ge
 authors = ["worky"]
 readme = "README.md"
 packages = [{include = "firewalls"}]
+include = [
+    { path = "example", format = ["sdist", "wheel"] }
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"
