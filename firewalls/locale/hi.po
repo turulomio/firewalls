@@ -1,492 +1,492 @@
-# Hindi translations for PACKAGE package.
-# Copyright (C) 2026 THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# Automatically generated, 2026.
+# Hindi translations for firewalls package.
+# Copyright (C) 2026 turulomio
+# This file is distributed under the same license as the firewalls package.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: firewalls 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-26 10:16+0100\n"
-"PO-Revision-Date: 2026-10-26 09:12+0100\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2026-10-26 10:24+0100\n"
+"PO-Revision-Date: 2026-10-26 10:30+0100\n"
+"Last-Translator: turulomio\n"
+"Language-Team: Hindi\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "This script must be executed with root privileges."
-msgstr ""
+msgstr "यह स्क्रिप्ट root विशेषाधिकारों के साथ निष्पादित होनी चाहिए।"
 
 #, python-brace-format
 msgid "rsync synchronization failed with exit code {code}"
-msgstr ""
+msgstr "rsync सिंक्रनाइज़ेशन निकास कोड {code} के साथ विफल रहा"
 
 #, python-brace-format
 msgid "Could not adjust permissions in {path}: {error}"
-msgstr ""
+msgstr "{path} में अनुमतियों को समायोजित नहीं किया जा सका: {error}"
 
 #, python-brace-format
 msgid "Could not verify or create log directory {dir}: {error}"
-msgstr ""
+msgstr "लॉग निर्देशिका {dir} को सत्यापित या निर्मित नहीं किया जा सका: {error}"
 
 #, python-brace-format
 msgid "Configuring conf.d include directive in {conf}..."
-msgstr ""
+msgstr "{conf} में conf.d include निर्देश कॉन्फ़िगर किया जा रहा है..."
 
 #, python-brace-format
 msgid "Could not update {conf}: {error}"
-msgstr ""
+msgstr "{conf} को अद्यतन नहीं किया जा सका: {error}"
 
 msgid "Managing syslog-ng service with OpenRC..."
-msgstr ""
+msgstr "OpenRC के साथ syslog-ng सेवा प्रबंधित की जा रही है..."
 
 msgid "Restarting/Reloading syslog-ng with OpenRC..."
-msgstr ""
+msgstr "OpenRC के साथ syslog-ng को पुनः आरंभ/पुनः लोड किया जा रहा है..."
 
 msgid "Starting syslog-ng service with OpenRC..."
-msgstr ""
+msgstr "OpenRC के साथ syslog-ng सेवा प्रारंभ की जा रही है..."
 
 msgid "Managing syslog-ng service with systemd..."
-msgstr ""
+msgstr "systemd के साथ syslog-ng सेवा प्रबंधित की जा रही है..."
 
 msgid "Detected sysctl.d configuration. Applying kernel parameters with sysctl..."
-msgstr ""
+msgstr "sysctl.d कॉन्फ़िगरेशन का पता चला। sysctl के साथ कर्नेल पैरामीटर लागू किए जा रहे हैं..."
 
 msgid "sysctl parameters applied successfully."
-msgstr ""
+msgstr "sysctl पैरामीटर सफलतापूर्वक लागू किए गए।"
 
 #, python-brace-format
 msgid "sysctl --system exited with code {code}."
-msgstr ""
+msgstr "sysctl --system कोड {code} के साथ बाहर निकला।"
 
 msgid "'sysctl' binary not found in PATH."
-msgstr ""
+msgstr "PATH में 'sysctl' बाइनरी नहीं मिली।"
 
 msgid "'firewall-cmd' is not installed or not found in PATH."
-msgstr ""
+msgstr "'firewall-cmd' स्थापित नहीं है या PATH में नहीं मिला।"
 
 #, python-brace-format
 msgid "On Gentoo Linux, install it with: {cmd}"
-msgstr ""
+msgstr "Gentoo Linux पर, इसे इसके साथ स्थापित करें: {cmd}"
 
 msgid "Reloading firewalld rules..."
-msgstr ""
+msgstr "firewalld नियम पुनः लोड किए जा रहे हैं..."
 
 msgid "Configuration reloaded successfully in firewalld."
-msgstr ""
+msgstr "firewalld में कॉन्फ़िगरेशन सफलतापूर्वक पुनः लोड किया गया।"
 
 msgid "firewalld reload failed. Please check XML configuration files."
-msgstr ""
+msgstr "firewalld पुनः लोड विफल रहा। कृपया XML कॉन्फ़िगरेशन फ़ाइलों की जाँच करें।"
 
 msgid "firewalld is not running."
-msgstr ""
+msgstr "firewalld नहीं चल रहा है।"
 
 msgid "Detected OpenRC. Starting firewalld service..."
-msgstr ""
+msgstr "OpenRC का पता चला। firewalld सेवा प्रारंभ की जा रही है..."
 
 msgid "firewalld service started successfully."
-msgstr ""
+msgstr "firewalld सेवा सफलतापूर्वक प्रारंभ हुई।"
 
 msgid "Failed to start firewalld service with OpenRC."
-msgstr ""
+msgstr "OpenRC के साथ firewalld सेवा प्रारंभ करने में विफल।"
 
 msgid "Detected systemd. Starting firewalld service..."
-msgstr ""
+msgstr "systemd का पता चला। firewalld सेवा प्रारंभ की जा रही है..."
 
 msgid "Failed to start firewalld service with systemd."
-msgstr ""
+msgstr "systemd के साथ firewalld सेवा प्रारंभ करने में विफल।"
 
 msgid "Could not determine service manager to start firewalld."
-msgstr ""
+msgstr "firewalld प्रारंभ करने के लिए सेवा प्रबंधक का निर्धारण नहीं किया जा सका।"
 
 msgid "Please start the service manually."
-msgstr ""
+msgstr "कृपया सेवा को मैन्युअल रूप से प्रारंभ करें।"
 
 #, python-brace-format
 msgid "Executing post-deployment script ({name})..."
-msgstr ""
+msgstr "परिनियोजन उपरांत स्क्रिप्ट ({name}) निष्पादित की जा रही है..."
 
 msgid "Post-deployment script finished successfully."
-msgstr ""
+msgstr "परिनियोजन उपरांत स्क्रिप्ट सफलतापूर्वक समाप्त हुई।"
 
 #, python-brace-format
 msgid "Post-deployment script exited with code {code}."
-msgstr ""
+msgstr "परिनियोजन उपरांत स्क्रिप्ट निकास कोड {code} के साथ समाप्त हुई।"
 
 #, python-brace-format
 msgid "Error running post-deployment script: {error}"
-msgstr ""
+msgstr "परिनियोजन उपरांत स्क्रिप्ट चलाने में त्रुटि: {error}"
 
 msgid "Stopping firewalld service"
-msgstr ""
+msgstr "firewalld सेवा रोकी जा रही है"
 
 msgid "Running OpenRC: rc-service firewalld stop..."
-msgstr ""
+msgstr "OpenRC निष्पादित हो रहा है: rc-service firewalld stop..."
 
 msgid "firewalld service stopped successfully."
-msgstr ""
+msgstr "firewalld सेवा सफलतापूर्वक रोक दी गई।"
 
 msgid "Failed to stop firewalld service with OpenRC."
-msgstr ""
+msgstr "OpenRC के साथ firewalld सेवा रोकने में विफल।"
 
 msgid "Running systemd: systemctl stop firewalld..."
-msgstr ""
+msgstr "systemd निष्पादित हो रहा है: systemctl stop firewalld..."
 
 msgid "Failed to stop firewalld service with systemd."
-msgstr ""
+msgstr "systemd के साथ firewalld सेवा रोकने में विफल।"
 
 msgid "Could not determine service manager to stop firewalld."
-msgstr ""
+msgstr "firewalld को रोकने के लिए सेवा प्रबंधक का निर्धारण नहीं किया जा सका।"
 
 msgid "None found"
-msgstr ""
+msgstr "कोई नहीं मिला"
 
 msgid "Deploy firewalld configuration for a machine on Gentoo Linux and reload or stop the service."
-msgstr ""
+msgstr "Gentoo Linux पर मशीन के लिए firewalld कॉन्फ़िगरेशन परिनियोजित करें और सेवा पुनः लोड या बंद करें।"
 
 msgid "Detected machines:"
-msgstr ""
+msgstr "पहचानी गई मशीनें:"
 
 msgid "Search directories:"
-msgstr ""
+msgstr "खोज निर्देशिकाएँ:"
 
 msgid "Special options:"
-msgstr ""
+msgstr "विशेष विकल्प:"
 
 msgid "Stop the system firewalld service."
-msgstr ""
+msgstr "सिस्टम firewalld सेवा को रोकें।"
 
 msgid "Machine name or directory path to deploy (e.g., example, /path/to/machine) or 'stop' to stop firewalld"
-msgstr ""
+msgstr "परिनियोजित करने के लिए मशीन का नाम या निर्देशिका पथ (उदा. example, /path/to/machine) या firewalld रोकने के लिए 'stop'"
 
 msgid "Directory containing machine configuration folders (overrides FIREWALLS_DIR)"
-msgstr ""
+msgstr "मशीन कॉन्फ़िगरेशन फ़ोल्डर वाली निर्देशिका (FIREWALLS_DIR को ओवरराइड करती है)"
 
 msgid "Stop the system firewalld service"
-msgstr ""
+msgstr "सिस्टम firewalld सेवा को रोकें"
 
 #, python-brace-format
 msgid "Configuration for machine '{machine}' not found."
-msgstr ""
+msgstr "मशीन '{machine}' के लिए कॉन्फ़िगरेशन नहीं मिला।"
 
 msgid "Search directories examined:"
-msgstr ""
+msgstr "जाँची गई खोज निर्देशिकाएँ:"
 
 msgid "Available machines:"
-msgstr ""
+msgstr "उपलब्ध मशीनें:"
 
 #, python-brace-format
 msgid "Missing 'etc' subfolder in '{dir}': {etc}"
-msgstr ""
+msgstr "'{dir}' में 'etc' सबफ़ोल्डर अनुपलब्ध है: {etc}"
 
 #, python-brace-format
 msgid "Firewalld Deployment (Gentoo) - Machine: {machine}"
-msgstr ""
+msgstr "Firewalld परिनियोजन (Gentoo) - मशीन: {machine}"
 
 #, python-brace-format
 msgid "Source Path: {path}"
-msgstr ""
+msgstr "स्रोत पथ: {path}"
 
 msgid "Deploying configuration files..."
-msgstr ""
+msgstr "कॉन्फ़िगरेशन फ़ाइलें परिनियोजित की जा रही हैं..."
 
 #, python-brace-format
 msgid "Source:      {src}/"
-msgstr ""
+msgstr "स्रोत:       {src}/"
 
 msgid "Destination: /etc/"
-msgstr ""
+msgstr "गंतव्य:      /etc/"
 
 #, python-brace-format
 msgid "File copy error: {error}"
-msgstr ""
+msgstr "फ़ाइल प्रतिलिपि त्रुटि: {error}"
 
 msgid "Adjusting permissions and directories..."
-msgstr ""
+msgstr "अनुमतियाँ और निर्देशिकाएँ समायोजित की जा रही हैं..."
 
 #, python-brace-format
 msgid "Deployment completed successfully for '{machine}'"
-msgstr ""
+msgstr "'{machine}' के लिए परिनियोजन सफलतापूर्वक पूर्ण हुआ"
 
 #, python-brace-format
 msgid "Enabling firewalld packet drop logging (LogDenied={mode})..."
-msgstr ""
+msgstr "firewalld पैकेट ड्रॉप लॉगिंग सक्षम की जा रही है (LogDenied={mode})..."
 
 msgid "Temporary drop logging activated."
-msgstr ""
+msgstr "अस्थायी ड्रॉप लॉगिंग सक्रिय की गई।"
 
 #, python-brace-format
 msgid "Could not set LogDenied={mode} in firewalld."
-msgstr ""
+msgstr "firewalld में LogDenied={mode} सेट नहीं किया जा सका।"
 
 msgid "Disabling firewalld packet drop logging (LogDenied=off)..."
-msgstr ""
+msgstr "firewalld पैकेट ड्रॉप लॉगिंग अक्षम की जा रही है (LogDenied=off)..."
 
 msgid "Drop logging deactivated (dmesg protected)."
-msgstr ""
+msgstr "ड्रॉप लॉगिंग निष्क्रिय की गई (dmesg सुरक्षित)।"
 
 msgid "Could not reset LogDenied in firewalld."
-msgstr ""
+msgstr "firewalld में LogDenied रीसेट नहीं किया जा सका।"
 
 #, python-brace-format
 msgid "Log file does not exist: {file}"
-msgstr ""
+msgstr "लॉग फ़ाइल मौजूद नहीं है: {file}"
 
 msgid "Denied Egress Connections Summary"
-msgstr ""
+msgstr "अस्वीकृत आउटगोइंग (Egress) कनेक्शन सारांश"
 
 msgid "No denied egress events found."
-msgstr ""
+msgstr "कोई अस्वीकृत आउटगोइंग इवेंट नहीं मिला।"
 
 msgid "COUNT"
-msgstr ""
+msgstr "गणना"
 
 msgid "PORT"
-msgstr ""
+msgstr "पोर्ट"
 
 msgid "DESTINATION"
-msgstr ""
+msgstr "गंतव्य"
 
 msgid "Denied EGRESS Traffic Monitor"
-msgstr ""
+msgstr "अस्वीकृत आउटगोइंग (EGRESS) ट्रैफ़िक मॉनिटर"
 
 #, python-brace-format
 msgid "Log File: {file}"
-msgstr ""
+msgstr "लॉग फ़ाइल: {file}"
 
 msgid "Streaming real-time events (Press Ctrl+C to exit)..."
-msgstr ""
+msgstr "वास्तविक समय की घटनाओं की स्ट्रीमिंग (बाहर निकलने के लिए Ctrl+C दबाएँ)..."
 
 msgid "BLOCKED EGRESS"
-msgstr ""
+msgstr "अवरुद्ध आउटगोइंग (EGRESS)"
 
 msgid "Port"
-msgstr ""
+msgstr "पोर्ट"
 
 msgid "Destination"
-msgstr ""
+msgstr "गंतव्य"
 
 msgid "Source"
-msgstr ""
+msgstr "स्रोत"
 
 msgid "Interface"
-msgstr ""
+msgstr "इंटरफ़ेस"
 
 msgid "Monitor stopped."
-msgstr ""
+msgstr "मॉनिटर रोक दिया गया।"
 
 msgid "Monitor and summarize outgoing (egress) connections blocked by the firewall."
-msgstr ""
+msgstr "फ़ायरवॉल द्वारा अवरुद्ध आउटगोइंग (egress) कनेक्शन की निगरानी और सारांश प्रस्तुत करें।"
 
 msgid "Display a ranked summary of blocked egress connections."
-msgstr ""
+msgstr "अवरुद्ध आउटगोइंग कनेक्शन का रैंक सारांश प्रदर्शित करें।"
 
 msgid "Path to log file (default /var/log/firewalld/denied.log)."
-msgstr ""
+msgstr "लॉग फ़ाइल का पथ (डिफ़ॉल्ट /var/log/firewalld/denied.log)।"
 
 msgid "Denied Ingress Connections Summary"
-msgstr ""
+msgstr "अस्वीकृत इनकमिंग (Ingress) कनेक्शन सारांश"
 
 msgid "No denied ingress events found."
-msgstr ""
+msgstr "कोई अस्वीकृत इनकमिंग इवेंट नहीं मिला।"
 
 msgid "SOURCE"
-msgstr ""
+msgstr "स्रोत"
 
 msgid "Denied INGRESS Traffic Monitor"
-msgstr ""
+msgstr "अस्वीकृत इनकमिंग (INGRESS) ट्रैफ़िक मॉनिटर"
 
 msgid "BLOCKED INGRESS"
-msgstr ""
+msgstr "अवरुद्ध इनकमिंग (INGRESS)"
 
 msgid "Source Port"
-msgstr ""
+msgstr "स्रोत पोर्ट"
 
 msgid "Monitor and summarize incoming (ingress) connections blocked by the firewall."
-msgstr ""
+msgstr "फ़ायरवॉल द्वारा अवरुद्ध इनकमिंग (ingress) कनेक्शन की निगरानी और सारांश प्रस्तुत करें।"
 
 msgid "Display a ranked summary of blocked ingress connections."
-msgstr ""
+msgstr "अवरुद्ध इनकमिंग कनेक्शन का रैंक सारांश प्रदर्शित करें।"
 
 msgid "DNS PTR Active"
-msgstr ""
+msgstr "DNS PTR सक्रिय"
 
 msgid "DNS PTR Disabled"
-msgstr ""
+msgstr "DNS PTR अक्षम"
 
 #, python-brace-format
 msgid "FIREWALL DENIAL MONITOR | Started: {start} | Refresh: {interval}s | {dns}"
-msgstr ""
+msgstr "फ़ायरवॉल अस्वीकृति मॉनिटर | प्रारंभ: {start} | ताज़ा दर: {interval}s | {dns}"
 
 #, python-brace-format
 msgid "File: {file} | Last update: {now}"
-msgstr ""
+msgstr "फ़ाइल: {file} | अंतिम अद्यतन: {now}"
 
 #, python-brace-format
 msgid "[ERROR] Log file not found: {file}"
-msgstr ""
+msgstr "[त्रुटि] लॉग फ़ाइल नहीं मिली: {file}"
 
 msgid "Waiting for log file to be created..."
-msgstr ""
+msgstr "लॉग फ़ाइल बनने की प्रतीक्षा की जा रही है..."
 
 msgid "POS"
-msgstr ""
+msgstr "स्थान"
 
 msgid "SOURCE IP / HOSTNAME"
-msgstr ""
+msgstr "स्रोत IP / होस्टनाम"
 
 msgid "DESTINATION IP / HOSTNAME"
-msgstr ""
+msgstr "गंतव्य IP / होस्टनाम"
 
 msgid "DENIED INCOMING (INGRESS)"
-msgstr ""
+msgstr "अस्वीकृत इनकमिंग (INGRESS)"
 
 #, python-brace-format
 msgid "Captured events: {events}"
-msgstr ""
+msgstr "रिकॉर्ड की गई घटनाएँ: {events}"
 
 msgid "Waiting for denied incoming events..."
-msgstr ""
+msgstr "अस्वीकृत इनकमिंग घटनाओं की प्रतीक्षा की जा रही है..."
 
 msgid "DENIED OUTGOING (EGRESS)"
-msgstr ""
+msgstr "अस्वीकृत आउटगोइंग (EGRESS)"
 
 msgid "Waiting for denied outgoing events..."
-msgstr ""
+msgstr "अस्वीकृत आउटगोइंग घटनाओं की प्रतीक्षा की जा रही है..."
 
 msgid "Real-time live dashboard tallying denied incoming and outgoing connections (IP + port + reverse DNS)."
-msgstr ""
+msgstr "अस्वीकृत इनकमिंग और आउटगोइंग कनेक्शनों की गणना करने वाला रीयल-टाइम डैशबोर्ड (IP + पोर्ट + रिवर्स DNS)।"
 
 msgid "Refresh interval in seconds (default 3.0)."
-msgstr ""
+msgstr "ताज़ा करने का अंतराल सेकंड में (डिफ़ॉल्ट 3.0)।"
 
 msgid "Maximum ranking positions to display per panel (default 20)."
-msgstr ""
+msgstr "प्रति पैनल प्रदर्शित करने के लिए अधिकतम रैंकिंग पद (डिफ़ॉल्ट 20)।"
 
 msgid "Count all historical events in the log file instead of starting from zero."
-msgstr ""
+msgstr "शून्य से शुरू करने के बजाय लॉग फ़ाइल में सभी ऐतिहासिक घटनाओं की गणना करें।"
 
 msgid "Resolve IP addresses to domain names via reverse DNS PTR (enabled by default)."
-msgstr ""
+msgstr "रिवर्स DNS PTR के माध्यम से IP पतों को डोमेन नामों में हल करें (डिफ़ॉल्ट रूप से सक्षम)।"
 
 msgid "Disable reverse DNS resolution (show IP addresses only)."
-msgstr ""
+msgstr "रिवर्स DNS समाधान अक्षम करें (केवल IP पते दिखाएं)।"
 
 msgid "Outgoing connection established successfully"
-msgstr ""
+msgstr "आउटगोइंग कनेक्शन सफलतापूर्वक स्थापित हुआ"
 
 #, python-brace-format
 msgid "Connection timed out (Timeout > {timeout}s) - Probable egress firewall drop"
-msgstr ""
+msgstr "कनेक्शन का समय समाप्त (टाइमआउट > {timeout}s) - संभावित आउटगोइंग फ़ायरवॉल ड्रॉप"
 
 msgid "Connection refused - Port closed on remote destination"
-msgstr ""
+msgstr "कनेक्शन अस्वीकृत - दूरस्थ गंतव्य पर पोर्ट बंद है"
 
 #, python-brace-format
 msgid "Network error ({error})"
-msgstr ""
+msgstr "नेटवर्क त्रुटि ({error})"
 
 msgid "UDP response received from destination"
-msgstr ""
+msgstr "गंतव्य से UDP प्रतिक्रिया प्राप्त हुई"
 
 #, python-brace-format
 msgid "No UDP response (Timeout > {timeout}s) - Port filtered or dropped"
-msgstr ""
+msgstr "कोई UDP प्रतिक्रिया नहीं (टाइमआउट > {timeout}s) - पोर्ट फ़िल्टर या ड्रॉप किया गया"
 
 #, python-brace-format
 msgid "UDP network error ({error})"
-msgstr ""
+msgstr "UDP नेटवर्क त्रुटि ({error})"
 
 #, python-brace-format
 msgid "Incoming connection received successfully from {host}:{port}"
-msgstr ""
+msgstr "{host}:{port} से इनकमिंग कनेक्शन सफलतापूर्वक प्राप्त हुआ"
 
 #, python-brace-format
 msgid "No incoming connections within {timeout}s - Probable ingress firewall block"
-msgstr ""
+msgstr "{timeout}s के भीतर कोई इनकमिंग कनेक्शन नहीं - संभावित इनकमिंग फ़ायरवॉल ब्लॉक"
 
 #, python-brace-format
 msgid "Permission denied binding port {port} (root privileges required for ports < 1024)"
-msgstr ""
+msgstr "पोर्ट {port} बाइंड करने की अनुमति अस्वीकृत (1024 से कम पोर्ट के लिए root अधिकार आवश्यक हैं)"
 
 #, python-brace-format
 msgid "Local socket error ({error})"
-msgstr ""
+msgstr "स्थानीय सॉकेट त्रुटि ({error})"
 
 #, python-brace-format
 msgid "Incoming UDP packet received successfully from {host}:{port}"
-msgstr ""
+msgstr "{host}:{port} से इनकमिंग UDP पैकेट सफलतापूर्वक प्राप्त हुआ"
 
 #, python-brace-format
 msgid "No incoming UDP packets within {timeout}s - Probable ingress firewall block"
-msgstr ""
+msgstr "{timeout}s के भीतर कोई इनकमिंग UDP पैकेट नहीं - संभावित इनकमिंग फ़ायरवॉल ब्लॉक"
 
 msgid "Firewall Ingress Probe (Listen Mode)"
-msgstr ""
+msgstr "फ़ायरवॉल इनकमिंग प्रोब (सुनने का मोड)"
 
 #, python-brace-format
 msgid "Listening: {bind}:{port} ({proto}) | Timeout: {timeout}s"
-msgstr ""
+msgstr "सुन रहा है: {bind}:{port} ({proto}) | टाइमआउट: {timeout}s"
 
 #, python-brace-format
 msgid "Waiting for incoming connection [{curr}/{total}]..."
-msgstr ""
+msgstr "इनकमिंग कनेक्शन की प्रतीक्षा कर रहा है [{curr}/{total}]..."
 
 #, python-brace-format
 msgid "Waiting for incoming connection on port {port}..."
-msgstr ""
+msgstr "पोर्ट {port} पर इनकमिंग कनेक्शन की प्रतीक्षा कर रहा है..."
 
 msgid "PASSED"
-msgstr ""
+msgstr "सफल"
 
 msgid "FAILED"
-msgstr ""
+msgstr "विफल"
 
 #, python-brace-format
 msgid "Result: [{status}] {msg} ({ms:.1f} ms)"
-msgstr ""
+msgstr "परिणाम: [{status}] {msg} ({ms:.1f} ms)"
 
 #, python-brace-format
 msgid "Summary: {successes}/{count} incoming connections received successfully."
-msgstr ""
+msgstr "सारांश: {successes}/{count} इनकमिंग कनेक्शन सफलतापूर्वक प्राप्त हुए।"
 
 #, python-brace-format
 msgid "[ERROR] Could not resolve host: {host}"
-msgstr ""
+msgstr "[त्रुटि] होस्ट का समाधान नहीं किया जा सका: {host}"
 
 msgid "Firewall Egress Probe (Outgoing Mode)"
-msgstr ""
+msgstr "फ़ायरवॉल आउटगोइंग प्रोब (आउटगोइंग मोड)"
 
 #, python-brace-format
 msgid "Target: {host} ({ip}):{port} ({proto}) | Timeout: {timeout}s"
-msgstr ""
+msgstr "लक्ष्य: {host} ({ip}):{port} ({proto}) | टाइमआउट: {timeout}s"
 
 #, python-brace-format
 msgid "Summary: {successes}/{count} probe attempts succeeded."
-msgstr ""
+msgstr "सारांश: {successes}/{count} प्रोब प्रयास सफल रहे।"
 
 msgid "Probe firewall connectivity for ingress and egress connections across hosts and ports."
-msgstr ""
+msgstr "होस्ट और पोर्ट पर इनग्रेस और एग्रेस कनेक्शन के लिए फ़ायरवॉल कनेक्टिविटी की जांच करें।"
 
 msgid "Target hostname or IP address for outgoing probes (default: kde.org)"
-msgstr ""
+msgstr "आउटगोइंग प्रोब के लिए लक्ष्य होस्टनाम या IP पता (डिफ़ॉल्ट: kde.org)"
 
 msgid "Port to probe (default: 1555)"
-msgstr ""
+msgstr "जांच के लिए पोर्ट (डिफ़ॉल्ट: 1555)"
 
 msgid "Transport protocol (tcp or udp, default: tcp)"
-msgstr ""
+msgstr "ट्रांसपोर्ट प्रोटोकॉल (tcp या udp, डिफ़ॉल्ट: tcp)"
 
 msgid "Maximum socket timeout in seconds (default: 5.0)"
-msgstr ""
+msgstr "अधिकतम सॉकेट टाइमआउट सेकंड में (डिफ़ॉल्ट: 5.0)"
 
 msgid "Number of probe attempts to perform (default: 1)"
-msgstr ""
+msgstr "किए जाने वाले प्रोब प्रयासों की संख्या (डिफ़ॉल्ट: 1)"
 
 msgid "Run in incoming listen mode (Ingress test) binding local port"
-msgstr ""
+msgstr "स्थानीय पोर्ट बाइंड करके इनकमिंग लिसन मोड (इनग्रेस टेस्ट) में चलाएं"
 
 msgid "Local IP address to bind in listen mode (default: 0.0.0.0)"
-msgstr ""
+msgstr "लिसन मोड में बाइंड करने के लिए स्थानीय IP पता (डिफ़ॉल्ट: 0.0.0.0)"

@@ -1,493 +1,492 @@
-# Romanian translations for PACKAGE package.
-# Copyright (C) 2026 THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# Automatically generated, 2026.
+# Romanian translations for firewalls package.
+# Copyright (C) 2026 turulomio
+# This file is distributed under the same license as the firewalls package.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: firewalls 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-26 10:16+0100\n"
-"PO-Revision-Date: 2026-10-26 09:12+0100\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2026-10-26 10:24+0100\n"
+"PO-Revision-Date: 2026-10-26 10:30+0100\n"
+"Last-Translator: turulomio\n"
+"Language-Team: Romanian\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
 
 msgid "This script must be executed with root privileges."
-msgstr ""
+msgstr "Acest script trebuie executat cu privilegii de root."
 
 #, python-brace-format
 msgid "rsync synchronization failed with exit code {code}"
-msgstr ""
+msgstr "Sincronizarea rsync a eșuat cu codul de ieșire {code}"
 
 #, python-brace-format
 msgid "Could not adjust permissions in {path}: {error}"
-msgstr ""
+msgstr "Nu s-au putut ajusta permisiunile în {path}: {error}"
 
 #, python-brace-format
 msgid "Could not verify or create log directory {dir}: {error}"
-msgstr ""
+msgstr "Nu s-a putut verifica sau crea directorul de jurnale {dir}: {error}"
 
 #, python-brace-format
 msgid "Configuring conf.d include directive in {conf}..."
-msgstr ""
+msgstr "Se configurează directiva de includere conf.d în {conf}..."
 
 #, python-brace-format
 msgid "Could not update {conf}: {error}"
-msgstr ""
+msgstr "Nu s-a putut actualiza {conf}: {error}"
 
 msgid "Managing syslog-ng service with OpenRC..."
-msgstr ""
+msgstr "Se gestionează serviciul syslog-ng cu OpenRC..."
 
 msgid "Restarting/Reloading syslog-ng with OpenRC..."
-msgstr ""
+msgstr "Se repornește/reîncarcă syslog-ng cu OpenRC..."
 
 msgid "Starting syslog-ng service with OpenRC..."
-msgstr ""
+msgstr "Se pornește serviciul syslog-ng cu OpenRC..."
 
 msgid "Managing syslog-ng service with systemd..."
-msgstr ""
+msgstr "Se gestionează serviciul syslog-ng cu systemd..."
 
 msgid "Detected sysctl.d configuration. Applying kernel parameters with sysctl..."
-msgstr ""
+msgstr "S-a detectat configurația sysctl.d. Se aplică parametrii de nucleu cu sysctl..."
 
 msgid "sysctl parameters applied successfully."
-msgstr ""
+msgstr "Parametrii sysctl au fost aplicați cu succes."
 
 #, python-brace-format
 msgid "sysctl --system exited with code {code}."
-msgstr ""
+msgstr "sysctl --system s-a încheiat cu codul {code}."
 
 msgid "'sysctl' binary not found in PATH."
-msgstr ""
+msgstr "Fișierul binar 'sysctl' nu a fost găsit în PATH."
 
 msgid "'firewall-cmd' is not installed or not found in PATH."
-msgstr ""
+msgstr "'firewall-cmd' nu este instalat sau nu a fost găsit în PATH."
 
 #, python-brace-format
 msgid "On Gentoo Linux, install it with: {cmd}"
-msgstr ""
+msgstr "Pe Gentoo Linux, instalați-l cu: {cmd}"
 
 msgid "Reloading firewalld rules..."
-msgstr ""
+msgstr "Se reîncarcă regulile firewalld..."
 
 msgid "Configuration reloaded successfully in firewalld."
-msgstr ""
+msgstr "Configurația a fost reîncărcată cu succes în firewalld."
 
 msgid "firewalld reload failed. Please check XML configuration files."
-msgstr ""
+msgstr "Reîncărcarea firewalld a eșuat. Verificați fișierele XML de configurare."
 
 msgid "firewalld is not running."
-msgstr ""
+msgstr "firewalld nu rulează."
 
 msgid "Detected OpenRC. Starting firewalld service..."
-msgstr ""
+msgstr "S-a detectat OpenRC. Se pornește serviciul firewalld..."
 
 msgid "firewalld service started successfully."
-msgstr ""
+msgstr "Serviciul firewalld a pornit cu succes."
 
 msgid "Failed to start firewalld service with OpenRC."
-msgstr ""
+msgstr "Eșec la pornirea serviciului firewalld cu OpenRC."
 
 msgid "Detected systemd. Starting firewalld service..."
-msgstr ""
+msgstr "S-a detectat systemd. Se pornește serviciul firewalld..."
 
 msgid "Failed to start firewalld service with systemd."
-msgstr ""
+msgstr "Eșec la pornirea serviciului firewalld cu systemd."
 
 msgid "Could not determine service manager to start firewalld."
-msgstr ""
+msgstr "Nu s-a putut determina managerul de servicii pentru a porni firewalld."
 
 msgid "Please start the service manually."
-msgstr ""
+msgstr "Vă rugăm să porniți serviciul manual."
 
 #, python-brace-format
 msgid "Executing post-deployment script ({name})..."
-msgstr ""
+msgstr "Se execută scriptul post-implementare ({name})..."
 
 msgid "Post-deployment script finished successfully."
-msgstr ""
+msgstr "Scriptul post-implementare s-a finalizat cu succes."
 
 #, python-brace-format
 msgid "Post-deployment script exited with code {code}."
-msgstr ""
+msgstr "Scriptul post-implementare s-a încheiat cu codul {code}."
 
 #, python-brace-format
 msgid "Error running post-deployment script: {error}"
-msgstr ""
+msgstr "Eroare la rularea scriptului post-implementare: {error}"
 
 msgid "Stopping firewalld service"
-msgstr ""
+msgstr "Se oprește serviciul firewalld"
 
 msgid "Running OpenRC: rc-service firewalld stop..."
-msgstr ""
+msgstr "Se execută OpenRC: rc-service firewalld stop..."
 
 msgid "firewalld service stopped successfully."
-msgstr ""
+msgstr "Serviciul firewalld a fost oprit cu succes."
 
 msgid "Failed to stop firewalld service with OpenRC."
-msgstr ""
+msgstr "Eșec la oprirea serviciului firewalld cu OpenRC."
 
 msgid "Running systemd: systemctl stop firewalld..."
-msgstr ""
+msgstr "Se execută systemd: systemctl stop firewalld..."
 
 msgid "Failed to stop firewalld service with systemd."
-msgstr ""
+msgstr "Eșec la oprirea serviciului firewalld cu systemd."
 
 msgid "Could not determine service manager to stop firewalld."
-msgstr ""
+msgstr "Nu s-a putut determina managerul de servicii pentru a opri firewalld."
 
 msgid "None found"
-msgstr ""
+msgstr "Niciunul găsit"
 
 msgid "Deploy firewalld configuration for a machine on Gentoo Linux and reload or stop the service."
-msgstr ""
+msgstr "Implementează configurația firewalld pentru o mașină pe Gentoo Linux și reîncarcă sau oprește serviciul."
 
 msgid "Detected machines:"
-msgstr ""
+msgstr "Mașini detectate:"
 
 msgid "Search directories:"
-msgstr ""
+msgstr "Directoare de căutare:"
 
 msgid "Special options:"
-msgstr ""
+msgstr "Opțiuni speciale:"
 
 msgid "Stop the system firewalld service."
-msgstr ""
+msgstr "Oprește serviciul firewalld al sistemului."
 
 msgid "Machine name or directory path to deploy (e.g., example, /path/to/machine) or 'stop' to stop firewalld"
-msgstr ""
+msgstr "Numele sau calea mașinii de implementat (ex. example, /cale/spre/masina) sau 'stop' pentru oprire firewalld"
 
 msgid "Directory containing machine configuration folders (overrides FIREWALLS_DIR)"
-msgstr ""
+msgstr "Directorul ce conține folderele de configurare ale mașinilor (suprascrie FIREWALLS_DIR)"
 
 msgid "Stop the system firewalld service"
-msgstr ""
+msgstr "Oprește serviciul firewalld al sistemului"
 
 #, python-brace-format
 msgid "Configuration for machine '{machine}' not found."
-msgstr ""
+msgstr "Configurația pentru mașina '{machine}' nu a fost găsită."
 
 msgid "Search directories examined:"
-msgstr ""
+msgstr "Directoare de căutare examinate:"
 
 msgid "Available machines:"
-msgstr ""
+msgstr "Mașini disponibile:"
 
 #, python-brace-format
 msgid "Missing 'etc' subfolder in '{dir}': {etc}"
-msgstr ""
+msgstr "Lipsește subdirectorul 'etc' în '{dir}': {etc}"
 
 #, python-brace-format
 msgid "Firewalld Deployment (Gentoo) - Machine: {machine}"
-msgstr ""
+msgstr "Implementare Firewalld (Gentoo) - Mașină: {machine}"
 
 #, python-brace-format
 msgid "Source Path: {path}"
-msgstr ""
+msgstr "Calea sursă: {path}"
 
 msgid "Deploying configuration files..."
-msgstr ""
+msgstr "Se implementează fișierele de configurare..."
 
 #, python-brace-format
 msgid "Source:      {src}/"
-msgstr ""
+msgstr "Sursă:       {src}/"
 
 msgid "Destination: /etc/"
-msgstr ""
+msgstr "Destinație:  /etc/"
 
 #, python-brace-format
 msgid "File copy error: {error}"
-msgstr ""
+msgstr "Eroare la copierea fișierului: {error}"
 
 msgid "Adjusting permissions and directories..."
-msgstr ""
+msgstr "Se ajustează permisiunile și directoarele..."
 
 #, python-brace-format
 msgid "Deployment completed successfully for '{machine}'"
-msgstr ""
+msgstr "Implementarea s-a finalizat cu succes pentru '{machine}'"
 
 #, python-brace-format
 msgid "Enabling firewalld packet drop logging (LogDenied={mode})..."
-msgstr ""
+msgstr "Se activează jurnalizarea pachetelor respinse în firewalld (LogDenied={mode})..."
 
 msgid "Temporary drop logging activated."
-msgstr ""
+msgstr "Jurnalizarea temporară a pachetelor respinse a fost activată."
 
 #, python-brace-format
 msgid "Could not set LogDenied={mode} in firewalld."
-msgstr ""
+msgstr "Nu s-a putut seta LogDenied={mode} în firewalld."
 
 msgid "Disabling firewalld packet drop logging (LogDenied=off)..."
-msgstr ""
+msgstr "Se dezactivează jurnalizarea pachetelor respinse în firewalld (LogDenied=off)..."
 
 msgid "Drop logging deactivated (dmesg protected)."
-msgstr ""
+msgstr "Jurnalizarea pachetelor respinse a fost dezactivată (dmesg protejat)."
 
 msgid "Could not reset LogDenied in firewalld."
-msgstr ""
+msgstr "Nu s-a putut reseta LogDenied în firewalld."
 
 #, python-brace-format
 msgid "Log file does not exist: {file}"
-msgstr ""
+msgstr "Fișierul jurnal nu există: {file}"
 
 msgid "Denied Egress Connections Summary"
-msgstr ""
+msgstr "Rezumatul conexiunilor de ieșire blocate (Egress)"
 
 msgid "No denied egress events found."
-msgstr ""
+msgstr "Nu s-au găsit evenimente de ieșire respinse."
 
 msgid "COUNT"
-msgstr ""
+msgstr "NUMĂR"
 
 msgid "PORT"
-msgstr ""
+msgstr "PORT"
 
 msgid "DESTINATION"
-msgstr ""
+msgstr "DESTINAȚIE"
 
 msgid "Denied EGRESS Traffic Monitor"
-msgstr ""
+msgstr "Monitorizare trafic de IEȘIRE respins (Egress)"
 
 #, python-brace-format
 msgid "Log File: {file}"
-msgstr ""
+msgstr "Fișier jurnal: {file}"
 
 msgid "Streaming real-time events (Press Ctrl+C to exit)..."
-msgstr ""
+msgstr "Se afișează evenimentele în timp real (Apăsați Ctrl+C pentru ieșire)..."
 
 msgid "BLOCKED EGRESS"
-msgstr ""
+msgstr "IEȘIRE BLOCATĂ"
 
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 msgid "Destination"
-msgstr ""
+msgstr "Destinație"
 
 msgid "Source"
-msgstr ""
+msgstr "Sursă"
 
 msgid "Interface"
-msgstr ""
+msgstr "Interfață"
 
 msgid "Monitor stopped."
-msgstr ""
+msgstr "Monitorizarea a fost oprită."
 
 msgid "Monitor and summarize outgoing (egress) connections blocked by the firewall."
-msgstr ""
+msgstr "Monitorizează și rezumă conexiunile de ieșire blocate de firewall."
 
 msgid "Display a ranked summary of blocked egress connections."
-msgstr ""
+msgstr "Afișează un rezumat clasificat al conexiunilor de ieșire blocate."
 
 msgid "Path to log file (default /var/log/firewalld/denied.log)."
-msgstr ""
+msgstr "Calea către fișierul jurnal (implicit /var/log/firewalld/denied.log)."
 
 msgid "Denied Ingress Connections Summary"
-msgstr ""
+msgstr "Rezumatul conexiunilor de intrare blocate (Ingress)"
 
 msgid "No denied ingress events found."
-msgstr ""
+msgstr "Nu s-au găsit evenimente de intrare respinse."
 
 msgid "SOURCE"
-msgstr ""
+msgstr "SURSĂ"
 
 msgid "Denied INGRESS Traffic Monitor"
-msgstr ""
+msgstr "Monitorizare trafic de INTRARE respins (Ingress)"
 
 msgid "BLOCKED INGRESS"
-msgstr ""
+msgstr "INTRARE BLOCATĂ"
 
 msgid "Source Port"
-msgstr ""
+msgstr "Port sursă"
 
 msgid "Monitor and summarize incoming (ingress) connections blocked by the firewall."
-msgstr ""
+msgstr "Monitorizează și rezumă conexiunile de intrare blocate de firewall."
 
 msgid "Display a ranked summary of blocked ingress connections."
-msgstr ""
+msgstr "Afișează un rezumat clasificat al conexiunilor de intrare blocate."
 
 msgid "DNS PTR Active"
-msgstr ""
+msgstr "DNS PTR Activ"
 
 msgid "DNS PTR Disabled"
-msgstr ""
+msgstr "DNS PTR Dezactivat"
 
 #, python-brace-format
 msgid "FIREWALL DENIAL MONITOR | Started: {start} | Refresh: {interval}s | {dns}"
-msgstr ""
+msgstr "MONITORIZARE BLOCĂRI FIREWALL | Pornit: {start} | Reîmprospătare: {interval}s | {dns}"
 
 #, python-brace-format
 msgid "File: {file} | Last update: {now}"
-msgstr ""
+msgstr "Fișier: {file} | Ultima actualizare: {now}"
 
 #, python-brace-format
 msgid "[ERROR] Log file not found: {file}"
-msgstr ""
+msgstr "[EROARE] Fișierul jurnal nu a fost găsit: {file}"
 
 msgid "Waiting for log file to be created..."
-msgstr ""
+msgstr "Se așteaptă crearea fișierului jurnal..."
 
 msgid "POS"
-msgstr ""
+msgstr "POZ"
 
 msgid "SOURCE IP / HOSTNAME"
-msgstr ""
+msgstr "IP / NUME GAZDĂ SURSĂ"
 
 msgid "DESTINATION IP / HOSTNAME"
-msgstr ""
+msgstr "IP / NUME GAZDĂ DESTINAȚIE"
 
 msgid "DENIED INCOMING (INGRESS)"
-msgstr ""
+msgstr "INTRĂRI RESPINSE (INGRESS)"
 
 #, python-brace-format
 msgid "Captured events: {events}"
-msgstr ""
+msgstr "Evenimente capturate: {events}"
 
 msgid "Waiting for denied incoming events..."
-msgstr ""
+msgstr "Se așteaptă evenimente de intrare respinse..."
 
 msgid "DENIED OUTGOING (EGRESS)"
-msgstr ""
+msgstr "IEȘIRI RESPINSE (EGRESS)"
 
 msgid "Waiting for denied outgoing events..."
-msgstr ""
+msgstr "Se așteaptă evenimente de ieșire respinse..."
 
 msgid "Real-time live dashboard tallying denied incoming and outgoing connections (IP + port + reverse DNS)."
-msgstr ""
+msgstr "Panou în timp real care numără conexiunile de intrare și ieșire respinse (IP + port + DNS invers)."
 
 msgid "Refresh interval in seconds (default 3.0)."
-msgstr ""
+msgstr "Interval de reîmprospătare în secunde (implicit 3.0)."
 
 msgid "Maximum ranking positions to display per panel (default 20)."
-msgstr ""
+msgstr "Număr maxim de poziții de afișat în clasament per panou (implicit 20)."
 
 msgid "Count all historical events in the log file instead of starting from zero."
-msgstr ""
+msgstr "Numără toate evenimentele istorice din fișierul jurnal în loc să înceapă de la zero."
 
 msgid "Resolve IP addresses to domain names via reverse DNS PTR (enabled by default)."
-msgstr ""
+msgstr "Rezolvă adresele IP în nume de domenii prin DNS invers PTR (activat implicit)."
 
 msgid "Disable reverse DNS resolution (show IP addresses only)."
-msgstr ""
+msgstr "Dezactivează rezolvarea DNS inversă (arată doar adrese IP)."
 
 msgid "Outgoing connection established successfully"
-msgstr ""
+msgstr "Conexiunea de ieșire a fost stabilită cu succes"
 
 #, python-brace-format
 msgid "Connection timed out (Timeout > {timeout}s) - Probable egress firewall drop"
-msgstr ""
+msgstr "Timp de așteptare expirat (Timeout > {timeout}s) - Posibilă respingere de firewall la ieșire"
 
 msgid "Connection refused - Port closed on remote destination"
-msgstr ""
+msgstr "Conexiune refuzată - Port închis la destinația la distanță"
 
 #, python-brace-format
 msgid "Network error ({error})"
-msgstr ""
+msgstr "Eroare de rețea ({error})"
 
 msgid "UDP response received from destination"
-msgstr ""
+msgstr "Răspuns UDP primit de la destinație"
 
 #, python-brace-format
 msgid "No UDP response (Timeout > {timeout}s) - Port filtered or dropped"
-msgstr ""
+msgstr "Fără răspuns UDP (Timeout > {timeout}s) - Port filtrat sau respins"
 
 #, python-brace-format
 msgid "UDP network error ({error})"
-msgstr ""
+msgstr "Eroare de rețea UDP ({error})"
 
 #, python-brace-format
 msgid "Incoming connection received successfully from {host}:{port}"
-msgstr ""
+msgstr "Conexiune de intrare primită cu succes de la {host}:{port}"
 
 #, python-brace-format
 msgid "No incoming connections within {timeout}s - Probable ingress firewall block"
-msgstr ""
+msgstr "Nicio conexiune de intrare în {timeout}s - Posibilă blocare de firewall la intrare"
 
 #, python-brace-format
 msgid "Permission denied binding port {port} (root privileges required for ports < 1024)"
-msgstr ""
+msgstr "Permisiune refuzată la legarea portului {port} (sunt necesare privilegii de root pentru porturi < 1024)"
 
 #, python-brace-format
 msgid "Local socket error ({error})"
-msgstr ""
+msgstr "Eroare de socket local ({error})"
 
 #, python-brace-format
 msgid "Incoming UDP packet received successfully from {host}:{port}"
-msgstr ""
+msgstr "Pachet UDP de intrare primit cu succes de la {host}:{port}"
 
 #, python-brace-format
 msgid "No incoming UDP packets within {timeout}s - Probable ingress firewall block"
-msgstr ""
+msgstr "Niciun pachet UDP de intrare în {timeout}s - Posibilă blocare de firewall la intrare"
 
 msgid "Firewall Ingress Probe (Listen Mode)"
-msgstr ""
+msgstr "Testare firewall de intrare (Mod ascultare)"
 
 #, python-brace-format
 msgid "Listening: {bind}:{port} ({proto}) | Timeout: {timeout}s"
-msgstr ""
+msgstr "Se ascultă: {bind}:{port} ({proto}) | Timeout: {timeout}s"
 
 #, python-brace-format
 msgid "Waiting for incoming connection [{curr}/{total}]..."
-msgstr ""
+msgstr "Se așteaptă conexiunea de intrare [{curr}/{total}]..."
 
 #, python-brace-format
 msgid "Waiting for incoming connection on port {port}..."
-msgstr ""
+msgstr "Se așteaptă conexiunea de intrare pe portul {port}..."
 
 msgid "PASSED"
-msgstr ""
+msgstr "REUȘIT"
 
 msgid "FAILED"
-msgstr ""
+msgstr "EȘUAT"
 
 #, python-brace-format
 msgid "Result: [{status}] {msg} ({ms:.1f} ms)"
-msgstr ""
+msgstr "Rezultat: [{status}] {msg} ({ms:.1f} ms)"
 
 #, python-brace-format
 msgid "Summary: {successes}/{count} incoming connections received successfully."
-msgstr ""
+msgstr "Rezumat: {successes}/{count} conexiuni de intrare primite cu succes."
 
 #, python-brace-format
 msgid "[ERROR] Could not resolve host: {host}"
-msgstr ""
+msgstr "[EROARE] Nu s-a putut rezolva gazda: {host}"
 
 msgid "Firewall Egress Probe (Outgoing Mode)"
-msgstr ""
+msgstr "Testare firewall de ieșire (Mod ieșire)"
 
 #, python-brace-format
 msgid "Target: {host} ({ip}):{port} ({proto}) | Timeout: {timeout}s"
-msgstr ""
+msgstr "Țintă: {host} ({ip}):{port} ({proto}) | Timeout: {timeout}s"
 
 #, python-brace-format
 msgid "Summary: {successes}/{count} probe attempts succeeded."
-msgstr ""
+msgstr "Rezumat: {successes}/{count} încercări de testare au reușit."
 
 msgid "Probe firewall connectivity for ingress and egress connections across hosts and ports."
-msgstr ""
+msgstr "Testează conectivitatea firewall-ului pentru conexiuni de intrare și ieșire pe gazde și porturi."
 
 msgid "Target hostname or IP address for outgoing probes (default: kde.org)"
-msgstr ""
+msgstr "Nume gazdă sau adresă IP țintă pentru testele de ieșire (implicit: kde.org)"
 
 msgid "Port to probe (default: 1555)"
-msgstr ""
+msgstr "Portul de testat (implicit: 1555)"
 
 msgid "Transport protocol (tcp or udp, default: tcp)"
-msgstr ""
+msgstr "Protocol de transport (tcp sau udp, implicit: tcp)"
 
 msgid "Maximum socket timeout in seconds (default: 5.0)"
-msgstr ""
+msgstr "Timp maxim de așteptare în secunde (implicit: 5.0)"
 
 msgid "Number of probe attempts to perform (default: 1)"
-msgstr ""
+msgstr "Numărul de încercări de testat (implicit: 1)"
 
 msgid "Run in incoming listen mode (Ingress test) binding local port"
-msgstr ""
+msgstr "Rulare în mod ascultare de intrare (test Ingress) legând portul local"
 
 msgid "Local IP address to bind in listen mode (default: 0.0.0.0)"
-msgstr ""
+msgstr "Adresa IP locală pentru legare în modul ascultare (implicit: 0.0.0.0)"

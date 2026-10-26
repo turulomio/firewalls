@@ -1,493 +1,492 @@
-# French translations for PACKAGE package.
-# Copyright (C) 2026 THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# Automatically generated, 2026.
+# French translations for firewalls package.
+# Copyright (C) 2026 turulomio
+# This file is distributed under the same license as the firewalls package.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: firewalls 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-26 10:16+0100\n"
-"PO-Revision-Date: 2026-10-26 09:12+0100\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2026-10-26 10:24+0100\n"
+"PO-Revision-Date: 2026-10-26 10:30+0100\n"
+"Last-Translator: turulomio\n"
+"Language-Team: French\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "This script must be executed with root privileges."
-msgstr ""
+msgstr "Ce script doit être exécuté avec les privilèges root."
 
 #, python-brace-format
 msgid "rsync synchronization failed with exit code {code}"
-msgstr ""
+msgstr "Échec de la synchronisation rsync avec le code de sortie {code}"
 
 #, python-brace-format
 msgid "Could not adjust permissions in {path}: {error}"
-msgstr ""
+msgstr "Impossible d'ajuster les permissions dans {path} : {error}"
 
 #, python-brace-format
 msgid "Could not verify or create log directory {dir}: {error}"
-msgstr ""
+msgstr "Impossible de vérifier ou créer le répertoire de journaux {dir} : {error}"
 
 #, python-brace-format
 msgid "Configuring conf.d include directive in {conf}..."
-msgstr ""
+msgstr "Configuration de la directive d'inclusion de conf.d dans {conf}..."
 
 #, python-brace-format
 msgid "Could not update {conf}: {error}"
-msgstr ""
+msgstr "Impossible de mettre à jour {conf} : {error}"
 
 msgid "Managing syslog-ng service with OpenRC..."
-msgstr ""
+msgstr "Gestion du service syslog-ng avec OpenRC..."
 
 msgid "Restarting/Reloading syslog-ng with OpenRC..."
-msgstr ""
+msgstr "Redémarrage/Rechargement de syslog-ng avec OpenRC..."
 
 msgid "Starting syslog-ng service with OpenRC..."
-msgstr ""
+msgstr "Démarrage du service syslog-ng avec OpenRC..."
 
 msgid "Managing syslog-ng service with systemd..."
-msgstr ""
+msgstr "Gestion du service syslog-ng avec systemd..."
 
 msgid "Detected sysctl.d configuration. Applying kernel parameters with sysctl..."
-msgstr ""
+msgstr "Configuration sysctl.d détectée. Application des paramètres noyau avec sysctl..."
 
 msgid "sysctl parameters applied successfully."
-msgstr ""
+msgstr "Paramètres sysctl appliqués avec succès."
 
 #, python-brace-format
 msgid "sysctl --system exited with code {code}."
-msgstr ""
+msgstr "sysctl --system s'est terminé avec le code {code}."
 
 msgid "'sysctl' binary not found in PATH."
-msgstr ""
+msgstr "Exécutable 'sysctl' introuvable dans le PATH."
 
 msgid "'firewall-cmd' is not installed or not found in PATH."
-msgstr ""
+msgstr "'firewall-cmd' n'est pas installé ou introuvable dans le PATH."
 
 #, python-brace-format
 msgid "On Gentoo Linux, install it with: {cmd}"
-msgstr ""
+msgstr "Sur Gentoo Linux, installez-le avec : {cmd}"
 
 msgid "Reloading firewalld rules..."
-msgstr ""
+msgstr "Rechargement des règles de firewalld..."
 
 msgid "Configuration reloaded successfully in firewalld."
-msgstr ""
+msgstr "Configuration rechargée avec succès dans firewalld."
 
 msgid "firewalld reload failed. Please check XML configuration files."
-msgstr ""
+msgstr "Échec du rechargement de firewalld. Veuillez vérifier les fichiers XML de configuration."
 
 msgid "firewalld is not running."
-msgstr ""
+msgstr "firewalld n'est pas en cours d'exécution."
 
 msgid "Detected OpenRC. Starting firewalld service..."
-msgstr ""
+msgstr "OpenRC détecté. Démarrage du service firewalld..."
 
 msgid "firewalld service started successfully."
-msgstr ""
+msgstr "Service firewalld démarré avec succès."
 
 msgid "Failed to start firewalld service with OpenRC."
-msgstr ""
+msgstr "Échec du démarrage du service firewalld avec OpenRC."
 
 msgid "Detected systemd. Starting firewalld service..."
-msgstr ""
+msgstr "systemd détecté. Démarrage du service firewalld..."
 
 msgid "Failed to start firewalld service with systemd."
-msgstr ""
+msgstr "Échec du démarrage du service firewalld avec systemd."
 
 msgid "Could not determine service manager to start firewalld."
-msgstr ""
+msgstr "Impossible de déterminer le gestionnaire de services pour démarrer firewalld."
 
 msgid "Please start the service manually."
-msgstr ""
+msgstr "Veuillez démarrer le service manuellement."
 
 #, python-brace-format
 msgid "Executing post-deployment script ({name})..."
-msgstr ""
+msgstr "Exécution du script de post-déploiement ({name})..."
 
 msgid "Post-deployment script finished successfully."
-msgstr ""
+msgstr "Script de post-déploiement terminé avec succès."
 
 #, python-brace-format
 msgid "Post-deployment script exited with code {code}."
-msgstr ""
+msgstr "Le script de post-déploiement s'est terminé avec le code {code}."
 
 #, python-brace-format
 msgid "Error running post-deployment script: {error}"
-msgstr ""
+msgstr "Erreur lors de l'exécution du script de post-déploiement : {error}"
 
 msgid "Stopping firewalld service"
-msgstr ""
+msgstr "Arrêt du service firewalld"
 
 msgid "Running OpenRC: rc-service firewalld stop..."
-msgstr ""
+msgstr "Exécution sous OpenRC : rc-service firewalld stop..."
 
 msgid "firewalld service stopped successfully."
-msgstr ""
+msgstr "Service firewalld arrêté avec succès."
 
 msgid "Failed to stop firewalld service with OpenRC."
-msgstr ""
+msgstr "Échec de l'arrêt du service firewalld avec OpenRC."
 
 msgid "Running systemd: systemctl stop firewalld..."
-msgstr ""
+msgstr "Exécution sous systemd : systemctl stop firewalld..."
 
 msgid "Failed to stop firewalld service with systemd."
-msgstr ""
+msgstr "Échec de l'arrêt du service firewalld avec systemd."
 
 msgid "Could not determine service manager to stop firewalld."
-msgstr ""
+msgstr "Impossible de déterminer le gestionnaire de services pour arrêter firewalld."
 
 msgid "None found"
-msgstr ""
+msgstr "Aucune trouvée"
 
 msgid "Deploy firewalld configuration for a machine on Gentoo Linux and reload or stop the service."
-msgstr ""
+msgstr "Déploie la configuration firewalld pour une machine sous Gentoo Linux et recharge ou arrête le service."
 
 msgid "Detected machines:"
-msgstr ""
+msgstr "Machines détectées :"
 
 msgid "Search directories:"
-msgstr ""
+msgstr "Répertoires de recherche :"
 
 msgid "Special options:"
-msgstr ""
+msgstr "Options spéciales :"
 
 msgid "Stop the system firewalld service."
-msgstr ""
+msgstr "Arrête le service firewalld du système."
 
 msgid "Machine name or directory path to deploy (e.g., example, /path/to/machine) or 'stop' to stop firewalld"
-msgstr ""
+msgstr "Nom ou chemin de la machine à déployer (ex. example, /chemin/vers/machine) ou 'stop' pour arrêter firewalld"
 
 msgid "Directory containing machine configuration folders (overrides FIREWALLS_DIR)"
-msgstr ""
+msgstr "Répertoire contenant les dossiers de configuration des machines (écrase FIREWALLS_DIR)"
 
 msgid "Stop the system firewalld service"
-msgstr ""
+msgstr "Arrête le service firewalld du système"
 
 #, python-brace-format
 msgid "Configuration for machine '{machine}' not found."
-msgstr ""
+msgstr "Configuration pour la machine '{machine}' introuvable."
 
 msgid "Search directories examined:"
-msgstr ""
+msgstr "Répertoires de recherche examinés :"
 
 msgid "Available machines:"
-msgstr ""
+msgstr "Machines disponibles :"
 
 #, python-brace-format
 msgid "Missing 'etc' subfolder in '{dir}': {etc}"
-msgstr ""
+msgstr "Sous-dossier 'etc' manquant dans '{dir}' : {etc}"
 
 #, python-brace-format
 msgid "Firewalld Deployment (Gentoo) - Machine: {machine}"
-msgstr ""
+msgstr "Déploiement de Firewalld (Gentoo) - Machine : {machine}"
 
 #, python-brace-format
 msgid "Source Path: {path}"
-msgstr ""
+msgstr "Chemin source : {path}"
 
 msgid "Deploying configuration files..."
-msgstr ""
+msgstr "Déploiement des fichiers de configuration..."
 
 #, python-brace-format
 msgid "Source:      {src}/"
-msgstr ""
+msgstr "Source :     {src}/"
 
 msgid "Destination: /etc/"
-msgstr ""
+msgstr "Destination : /etc/"
 
 #, python-brace-format
 msgid "File copy error: {error}"
-msgstr ""
+msgstr "Erreur de copie de fichier : {error}"
 
 msgid "Adjusting permissions and directories..."
-msgstr ""
+msgstr "Ajustement des permissions et des répertoires..."
 
 #, python-brace-format
 msgid "Deployment completed successfully for '{machine}'"
-msgstr ""
+msgstr "Déploiement terminé avec succès pour '{machine}'"
 
 #, python-brace-format
 msgid "Enabling firewalld packet drop logging (LogDenied={mode})..."
-msgstr ""
+msgstr "Activation de la journalisation des rejets firewalld (LogDenied={mode})..."
 
 msgid "Temporary drop logging activated."
-msgstr ""
+msgstr "Journalisation temporaire des rejets activée."
 
 #, python-brace-format
 msgid "Could not set LogDenied={mode} in firewalld."
-msgstr ""
+msgstr "Impossible de configurer LogDenied={mode} dans firewalld."
 
 msgid "Disabling firewalld packet drop logging (LogDenied=off)..."
-msgstr ""
+msgstr "Désactivation de la journalisation des rejets firewalld (LogDenied=off)..."
 
 msgid "Drop logging deactivated (dmesg protected)."
-msgstr ""
+msgstr "Journalisation des rejets désactivée (dmesg protégé)."
 
 msgid "Could not reset LogDenied in firewalld."
-msgstr ""
+msgstr "Impossible de réinitialiser LogDenied dans firewalld."
 
 #, python-brace-format
 msgid "Log file does not exist: {file}"
-msgstr ""
+msgstr "Le fichier journal n'existe pas : {file}"
 
 msgid "Denied Egress Connections Summary"
-msgstr ""
+msgstr "Résumé des connexions sortantes bloquées (Egress)"
 
 msgid "No denied egress events found."
-msgstr ""
+msgstr "Aucun événement de sortie rejeté trouvé."
 
 msgid "COUNT"
-msgstr ""
+msgstr "COMPTE"
 
 msgid "PORT"
-msgstr ""
+msgstr "PORT"
 
 msgid "DESTINATION"
-msgstr ""
+msgstr "DESTINATION"
 
 msgid "Denied EGRESS Traffic Monitor"
-msgstr ""
+msgstr "Moniteur de trafic SORTANT rejeté (Egress)"
 
 #, python-brace-format
 msgid "Log File: {file}"
-msgstr ""
+msgstr "Fichier journal : {file}"
 
 msgid "Streaming real-time events (Press Ctrl+C to exit)..."
-msgstr ""
+msgstr "Affichage des événements en temps réel (Ctrl+C pour quitter)..."
 
 msgid "BLOCKED EGRESS"
-msgstr ""
+msgstr "SORTIE BLOQUÉE"
 
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 msgid "Destination"
-msgstr ""
+msgstr "Destination"
 
 msgid "Source"
-msgstr ""
+msgstr "Source"
 
 msgid "Interface"
-msgstr ""
+msgstr "Interface"
 
 msgid "Monitor stopped."
-msgstr ""
+msgstr "Moniteur arrêté."
 
 msgid "Monitor and summarize outgoing (egress) connections blocked by the firewall."
-msgstr ""
+msgstr "Surveille et résume les connexions sortantes bloquées par le pare-feu."
 
 msgid "Display a ranked summary of blocked egress connections."
-msgstr ""
+msgstr "Affiche un résumé classé des connexions sortantes bloquées."
 
 msgid "Path to log file (default /var/log/firewalld/denied.log)."
-msgstr ""
+msgstr "Chemin du fichier journal (par défaut /var/log/firewalld/denied.log)."
 
 msgid "Denied Ingress Connections Summary"
-msgstr ""
+msgstr "Résumé des connexions entrantes bloquées (Ingress)"
 
 msgid "No denied ingress events found."
-msgstr ""
+msgstr "Aucun événement d'entrée rejeté trouvé."
 
 msgid "SOURCE"
-msgstr ""
+msgstr "SOURCE"
 
 msgid "Denied INGRESS Traffic Monitor"
-msgstr ""
+msgstr "Moniteur de trafic ENTRANT rejeté (Ingress)"
 
 msgid "BLOCKED INGRESS"
-msgstr ""
+msgstr "ENTRÉE BLOQUÉE"
 
 msgid "Source Port"
-msgstr ""
+msgstr "Port source"
 
 msgid "Monitor and summarize incoming (ingress) connections blocked by the firewall."
-msgstr ""
+msgstr "Surveille et résume les connexions entrantes bloquées par le pare-feu."
 
 msgid "Display a ranked summary of blocked ingress connections."
-msgstr ""
+msgstr "Affiche un résumé classé des connexions entrantes bloquées."
 
 msgid "DNS PTR Active"
-msgstr ""
+msgstr "DNS PTR Actif"
 
 msgid "DNS PTR Disabled"
-msgstr ""
+msgstr "DNS PTR Désactivé"
 
 #, python-brace-format
 msgid "FIREWALL DENIAL MONITOR | Started: {start} | Refresh: {interval}s | {dns}"
-msgstr ""
+msgstr "MONITEUR DE REJETS DU PARE-FEU | Début : {start} | Rafraîchissement : {interval}s | {dns}"
 
 #, python-brace-format
 msgid "File: {file} | Last update: {now}"
-msgstr ""
+msgstr "Fichier : {file} | Dernière mise à jour : {now}"
 
 #, python-brace-format
 msgid "[ERROR] Log file not found: {file}"
-msgstr ""
+msgstr "[ERREUR] Fichier journal introuvable : {file}"
 
 msgid "Waiting for log file to be created..."
-msgstr ""
+msgstr "En attente de la création du fichier journal..."
 
 msgid "POS"
-msgstr ""
+msgstr "POS"
 
 msgid "SOURCE IP / HOSTNAME"
-msgstr ""
+msgstr "IP / NOM D'HÔTE SOURCE"
 
 msgid "DESTINATION IP / HOSTNAME"
-msgstr ""
+msgstr "IP / NOM D'HÔTE DESTINATION"
 
 msgid "DENIED INCOMING (INGRESS)"
-msgstr ""
+msgstr "ENTRÉES REJETÉES (INGRESS)"
 
 #, python-brace-format
 msgid "Captured events: {events}"
-msgstr ""
+msgstr "Événements capturés : {events}"
 
 msgid "Waiting for denied incoming events..."
-msgstr ""
+msgstr "En attente d'événements entrants rejetés..."
 
 msgid "DENIED OUTGOING (EGRESS)"
-msgstr ""
+msgstr "SORTIES REJETÉES (EGRESS)"
 
 msgid "Waiting for denied outgoing events..."
-msgstr ""
+msgstr "En attente d'événements sortants rejetés..."
 
 msgid "Real-time live dashboard tallying denied incoming and outgoing connections (IP + port + reverse DNS)."
-msgstr ""
+msgstr "Tableau de bord en temps réel comptabilisant les connexions entrantes et sortantes rejetées (IP + port + DNS inverse)."
 
 msgid "Refresh interval in seconds (default 3.0)."
-msgstr ""
+msgstr "Intervalle de rafraîchissement en secondes (par défaut 3.0)."
 
 msgid "Maximum ranking positions to display per panel (default 20)."
-msgstr ""
+msgstr "Nombre maximal de positions dans le classement par panneau (par défaut 20)."
 
 msgid "Count all historical events in the log file instead of starting from zero."
-msgstr ""
+msgstr "Compter tous les événements historiques du fichier journal au lieu de commencer à zéro."
 
 msgid "Resolve IP addresses to domain names via reverse DNS PTR (enabled by default)."
-msgstr ""
+msgstr "Résoudre les adresses IP en noms de domaine via DNS inverse PTR (activé par défaut)."
 
 msgid "Disable reverse DNS resolution (show IP addresses only)."
-msgstr ""
+msgstr "Désactiver la résolution DNS inverse (afficher uniquement les adresses IP)."
 
 msgid "Outgoing connection established successfully"
-msgstr ""
+msgstr "Connexion sortante établie avec succès"
 
 #, python-brace-format
 msgid "Connection timed out (Timeout > {timeout}s) - Probable egress firewall drop"
-msgstr ""
+msgstr "Délai d'attente dépassé (Délai > {timeout}s) - Rejet probable par le pare-feu sortant"
 
 msgid "Connection refused - Port closed on remote destination"
-msgstr ""
+msgstr "Connexion refusée - Port fermé sur la destination distante"
 
 #, python-brace-format
 msgid "Network error ({error})"
-msgstr ""
+msgstr "Erreur réseau ({error})"
 
 msgid "UDP response received from destination"
-msgstr ""
+msgstr "Réponse UDP reçue de la destination"
 
 #, python-brace-format
 msgid "No UDP response (Timeout > {timeout}s) - Port filtered or dropped"
-msgstr ""
+msgstr "Pas de réponse UDP (Délai > {timeout}s) - Port filtré ou rejeté"
 
 #, python-brace-format
 msgid "UDP network error ({error})"
-msgstr ""
+msgstr "Erreur réseau UDP ({error})"
 
 #, python-brace-format
 msgid "Incoming connection received successfully from {host}:{port}"
-msgstr ""
+msgstr "Connexion entrante reçue avec succès depuis {host}:{port}"
 
 #, python-brace-format
 msgid "No incoming connections within {timeout}s - Probable ingress firewall block"
-msgstr ""
+msgstr "Aucune connexion entrante en {timeout}s - Blocage probable par le pare-feu entrant"
 
 #, python-brace-format
 msgid "Permission denied binding port {port} (root privileges required for ports < 1024)"
-msgstr ""
+msgstr "Permission refusée pour lier le port {port} (privilèges root requis pour les ports < 1024)"
 
 #, python-brace-format
 msgid "Local socket error ({error})"
-msgstr ""
+msgstr "Erreur de socket local ({error})"
 
 #, python-brace-format
 msgid "Incoming UDP packet received successfully from {host}:{port}"
-msgstr ""
+msgstr "Paquet UDP entrant reçu avec succès depuis {host}:{port}"
 
 #, python-brace-format
 msgid "No incoming UDP packets within {timeout}s - Probable ingress firewall block"
-msgstr ""
+msgstr "Aucun paquet UDP entrant en {timeout}s - Blocage probable par le pare-feu entrant"
 
 msgid "Firewall Ingress Probe (Listen Mode)"
-msgstr ""
+msgstr "Test de pare-feu entrant (mode écoute)"
 
 #, python-brace-format
 msgid "Listening: {bind}:{port} ({proto}) | Timeout: {timeout}s"
-msgstr ""
+msgstr "En écoute : {bind}:{port} ({proto}) | Délai : {timeout}s"
 
 #, python-brace-format
 msgid "Waiting for incoming connection [{curr}/{total}]..."
-msgstr ""
+msgstr "En attente de connexion entrante [{curr}/{total}]..."
 
 #, python-brace-format
 msgid "Waiting for incoming connection on port {port}..."
-msgstr ""
+msgstr "En attente de connexion entrante sur le port {port}..."
 
 msgid "PASSED"
-msgstr ""
+msgstr "RÉUSSI"
 
 msgid "FAILED"
-msgstr ""
+msgstr "ÉCHOUÉ"
 
 #, python-brace-format
 msgid "Result: [{status}] {msg} ({ms:.1f} ms)"
-msgstr ""
+msgstr "Résultat : [{status}] {msg} ({ms:.1f} ms)"
 
 #, python-brace-format
 msgid "Summary: {successes}/{count} incoming connections received successfully."
-msgstr ""
+msgstr "Résumé : {successes}/{count} connexions entrantes reçues avec succès."
 
 #, python-brace-format
 msgid "[ERROR] Could not resolve host: {host}"
-msgstr ""
+msgstr "[ERREUR] Impossible de résoudre l'hôte : {host}"
 
 msgid "Firewall Egress Probe (Outgoing Mode)"
-msgstr ""
+msgstr "Test de pare-feu sortant (mode sortant)"
 
 #, python-brace-format
 msgid "Target: {host} ({ip}):{port} ({proto}) | Timeout: {timeout}s"
-msgstr ""
+msgstr "Cible : {host} ({ip}):{port} ({proto}) | Délai : {timeout}s"
 
 #, python-brace-format
 msgid "Summary: {successes}/{count} probe attempts succeeded."
-msgstr ""
+msgstr "Résumé : {successes}/{count} tentatives de test réussies."
 
 msgid "Probe firewall connectivity for ingress and egress connections across hosts and ports."
-msgstr ""
+msgstr "Teste la connectivité du pare-feu pour les connexions entrantes et sortantes entre hôtes et ports."
 
 msgid "Target hostname or IP address for outgoing probes (default: kde.org)"
-msgstr ""
+msgstr "Nom d'hôte ou adresse IP cible pour les tests sortants (par défaut : kde.org)"
 
 msgid "Port to probe (default: 1555)"
-msgstr ""
+msgstr "Port à tester (par défaut : 1555)"
 
 msgid "Transport protocol (tcp or udp, default: tcp)"
-msgstr ""
+msgstr "Protocole de transport (tcp ou udp, par défaut : tcp)"
 
 msgid "Maximum socket timeout in seconds (default: 5.0)"
-msgstr ""
+msgstr "Délai d'attente maximal en secondes (par défaut : 5.0)"
 
 msgid "Number of probe attempts to perform (default: 1)"
-msgstr ""
+msgstr "Nombre de tentatives de test à effectuer (par défaut : 1)"
 
 msgid "Run in incoming listen mode (Ingress test) binding local port"
-msgstr ""
+msgstr "Exécuter en mode écoute entrante (test Ingress) en liant le port local"
 
 msgid "Local IP address to bind in listen mode (default: 0.0.0.0)"
-msgstr ""
+msgstr "Adresse IP locale à lier en mode écoute (par défaut : 0.0.0.0)"
