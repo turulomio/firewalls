@@ -8,6 +8,7 @@ import sys
 import time
 from collections import Counter
 from pathlib import Path
+
 from colorama import Fore, Style, init
 
 from firewalls.log_control import managed_firewall_log
@@ -35,14 +36,29 @@ KNOWN_PROTOCOLS: dict[str, str] = {
 
 
 def normalize_proto(proto: str) -> str:
-    """Normalize protocol name or number (e.g. '2' -> 'IGMP', '6' -> 'TCP')."""
+    """Normalize protocol representation from number or lowercase name to uppercase name.
+
+    Args:
+        proto: Raw protocol string from kernel log (e.g., '6', '17', 'tcp').
+
+    Returns:
+        str: Normalized protocol name (e.g., 'TCP', 'UDP', 'IGMP').
+    """
     if not proto or proto == "N/A":
         return "N/A"
     return KNOWN_PROTOCOLS.get(proto, proto.upper())
 
 
 def resolve_service(dpt: str, proto: str) -> str:
-    """Resolve port and protocol to standard service name with caching."""
+    """Resolve destination port and transport protocol to a known service name with caching.
+
+    Args:
+        dpt: Destination port string (e.g., '80', '443').
+        proto: Protocol string (e.g., 'TCP', 'UDP').
+
+    Returns:
+        str: Service name (e.g., 'http', 'https', 'domain') or empty string if unresolvable.
+    """
     if not dpt or dpt == "N/A":
         return ""
     key = (dpt, proto.lower())
@@ -65,7 +81,15 @@ def resolve_service(dpt: str, proto: str) -> str:
 
 
 def format_port_entry(dpt: str, proto: str) -> str:
-    """Format port entry with port number, PROTO (TCP/UDP), and optional service in parentheses."""
+    """Format port string with normalized protocol and optional service name.
+
+    Args:
+        dpt: Destination port string.
+        proto: Transport protocol string.
+
+    Returns:
+        str: Formatted string such as '80 TCP (http)' or '443 UDP (https)'.
+    """
     proto_str = normalize_proto(proto)
     if not dpt or dpt == "N/A":
         return proto_str
@@ -76,14 +100,22 @@ def format_port_entry(dpt: str, proto: str) -> str:
     return f"{dpt} {proto_str}"
 
 
-def parse_line(line: str) -> dict | None:
-    # Match kernel log line for denied packet
-    # Egress lines have non-empty OUT field (e.g. OUT=eno1)
+def parse_line(line: str) -> dict[str, str] | None:
+    """Parse a single kernel firewall log line into egress event fields.
+
+    Egress events have a non-empty OUT interface (e.g., 'OUT=eno1' or 'OUT=wlan0').
+
+    Args:
+        line: Raw log line string.
+
+    Returns:
+        dict[str, str] | None: Dictionary with fields ('timestamp', 'proto',
+        'dst', 'dpt', 'spt', 'out') or None if not an egress drop line.
+    """
     out_match = re.search(r"\bOUT=([^\s]+)", line)
     if not out_match or out_match.group(1) == "":
         return None
 
-    # Check date/time at start of line
     timestamp_match = re.match(r"^([A-Z][a-z]{2}\s+\d+\s+\d{2}:\d{2}:\d{2})", line)
     timestamp = timestamp_match.group(1) if timestamp_match else "N/A"
 
@@ -102,12 +134,20 @@ def parse_line(line: str) -> dict | None:
     }
 
 
-def show_summary(log_file: Path):
+def show_summary(log_file: Path) -> None:
+    """Read log file and print a ranked summary table of denied egress events.
+
+    Args:
+        log_file: Path to the denied packets log file.
+
+    Raises:
+        SystemExit: If log_file does not exist.
+    """
     if not log_file.exists():
-        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} No existe el archivo de log: {log_file}")
+        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} Log file does not exist: {log_file}")
         sys.exit(1)
 
-    counter = Counter()
+    counter: Counter[tuple[str, str, str]] = Counter()
     with log_file.open("r", encoding="utf-8", errors="ignore") as f:
         for line in f:
             data = parse_line(line)
@@ -116,32 +156,36 @@ def show_summary(log_file: Path):
                 counter[key] += 1
 
     print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
-    print(f"{Fore.CYAN}  Resumen de Conexiones Salientes Bloqueadas (Egress) {Style.RESET_ALL}")
+    print(f"{Fore.CYAN}  Denied Egress Connections Summary                   {Style.RESET_ALL}")
     print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
     if not counter:
-        print(f"{Fore.YELLOW}No se encontraron eventos de salida denegados.{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}No denied egress events found.{Style.RESET_ALL}")
         return
 
-    print(f"{Fore.YELLOW}{'CONTEO':<8} {'PUERTO':<24} {'DESTINO':<24}{Style.RESET_ALL}")
+    print(f"{Fore.YELLOW}{'COUNT':<8} {'PORT':<24} {'DESTINATION':<24}{Style.RESET_ALL}")
     print("-" * 58)
     for (proto, dst, dpt), count in counter.most_common():
         port_str = format_port_entry(dpt, proto)
         print(f"{Fore.GREEN}{count:<8}{Style.RESET_ALL} {Fore.CYAN}{port_str:<24}{Style.RESET_ALL} {Fore.WHITE}{dst:<24}{Style.RESET_ALL}")
 
 
-def follow_logs(log_file: Path):
+def follow_logs(log_file: Path) -> None:
+    """Continuously tail and print denied egress connection events in real time.
+
+    Args:
+        log_file: Path to the denied packets log file.
+    """
     if not log_file.exists():
         log_file.parent.mkdir(parents=True, exist_ok=True)
         log_file.touch(mode=0o640, exist_ok=True)
 
     print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
-    print(f"{Fore.CYAN}  Monitor de Tráfico SALIENTE Denegado (Egress)       {Style.RESET_ALL}")
-    print(f"{Fore.CYAN}  Archivo: {log_file}                                  {Style.RESET_ALL}")
+    print(f"{Fore.CYAN}  Denied EGRESS Traffic Monitor                       {Style.RESET_ALL}")
+    print(f"{Fore.CYAN}  Log File: {log_file}                                {Style.RESET_ALL}")
     print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
-    print(f"{Fore.GREEN}Mostrando eventos en tiempo real (Ctrl+C para salir)...\n{Style.RESET_ALL}")
+    print(f"{Fore.GREEN}Streaming real-time events (Press Ctrl+C to exit)...\n{Style.RESET_ALL}")
 
     with log_file.open("r", encoding="utf-8", errors="ignore") as f:
-        # Seek near end for follow mode
         f.seek(0, 2)
         try:
             while True:
@@ -151,29 +195,30 @@ def follow_logs(log_file: Path):
                     continue
                 data = parse_line(line)
                 if data:
-                    port_str = format_port_entry(data['dpt'], data['proto'])
+                    port_str = format_port_entry(data["dpt"], data["proto"])
                     print(
                         f"{Fore.YELLOW}[{data['timestamp']}]{Style.RESET_ALL} "
-                        f"{Fore.RED}[BLOQUEADO SALIDA]{Style.RESET_ALL} "
-                        f"Puerto: {Fore.CYAN}{port_str:<22}{Style.RESET_ALL} "
-                        f"Destino: {Fore.GREEN}{data['dst']:<15}{Style.RESET_ALL} "
-                        f"(Origen: {data['spt']} -> Interfaz: {data['out']})"
+                        f"{Fore.RED}[BLOCKED EGRESS]{Style.RESET_ALL} "
+                        f"Port: {Fore.CYAN}{port_str:<22}{Style.RESET_ALL} "
+                        f"Destination: {Fore.GREEN}{data['dst']:<15}{Style.RESET_ALL} "
+                        f"(Source Port: {data['spt']} -> Interface: {data['out']})"
                     )
                     sys.stdout.flush()
         except KeyboardInterrupt:
-            print(f"\n{Fore.YELLOW}Monitor finalizado.{Style.RESET_ALL}")
+            print(f"\n{Fore.YELLOW}Monitor stopped.{Style.RESET_ALL}")
 
 
-def main():
+def main() -> None:
+    """Main CLI entrypoint for firewalls_log_egress."""
     parser = argparse.ArgumentParser(
         prog="firewalls_log_egress",
-        description="Monitoriza y resume los logs de conexiones salientes bloqueadas por el firewall.",
+        description="Monitor and summarize outgoing (egress) connections blocked by the firewall.",
     )
     parser.add_argument(
-        "-s", "--summary", action="store_true", help="Muestra un resumen ordenado de conexiones salientes bloqueadas."
+        "-s", "--summary", action="store_true", help="Display a ranked summary of blocked egress connections."
     )
     parser.add_argument(
-        "-f", "--file", type=Path, default=DEFAULT_LOG, help="Ruta al archivo de log (por defecto /var/log/firewalld/denied.log)."
+        "-f", "--file", type=Path, default=DEFAULT_LOG, help="Path to log file (default /var/log/firewalld/denied.log)."
     )
     args = parser.parse_args()
 

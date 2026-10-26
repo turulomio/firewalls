@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "firewalls"
 version = "0.1.0"
-description = "Gestor de configuraciones y despliegue de firewalld en Gentoo"
+description = "Centralized firewalld configuration and deployment manager for Gentoo Linux"
 authors = ["worky"]
 readme = "README.md"
 packages = [{include = "firewalls"}]

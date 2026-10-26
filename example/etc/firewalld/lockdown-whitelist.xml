@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<whitelist>
+  <short>Lockdown Whitelist Template</short>
+  <description>Restricts D-Bus firewall manipulation strictly to root (UID 0) and authorized commands.</description>
+  <user id="0"/>
+  <command name="/usr/bin/python*"/>
+  <command name="/usr/bin/firewall-cmd"/>
+</whitelist>

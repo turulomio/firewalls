@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Example post-deployment script
+# Automatically executed upon completion of 'poetry run firewalls_deploy <machine>'
+# (Rename to post_deploy.sh to activate on the corresponding machine directory)
+
+set -euo pipefail
+
+# Example: Dynamically resolve a domain and add its IP to a firewalld IPSet
+# DOMAIN="example.ddns.net"
+# IPSET_NAME="trusted-hosts"
+#
+# echo "Resolving IP for '$DOMAIN'..."
+# IP_ADDR=$(getent hosts "$DOMAIN" | awk '{print $1}')
+# if [ -n "$IP_ADDR" ]; then
+#     echo "Adding IP $IP_ADDR to IPSet '$IPSET_NAME'..."
+#     firewall-cmd --quiet --ipset="$IPSET_NAME" --add-entry="$IP_ADDR" 2>/dev/null || true
+# fi
+
+echo "Post-deploy completed for example machine."

@@ -10,6 +10,7 @@ import sys
 import time
 from collections import Counter
 from pathlib import Path
+
 from colorama import Fore, Style, init
 
 from firewalls.log_control import managed_firewall_log
@@ -38,14 +39,29 @@ KNOWN_PROTOCOLS: dict[str, str] = {
 
 
 def normalize_proto(proto: str) -> str:
-    """Normalize protocol name or number (e.g. '2' -> 'IGMP', '6' -> 'TCP')."""
+    """Normalize protocol representation from number or lowercase name to uppercase name.
+
+    Args:
+        proto: Raw protocol string from kernel log (e.g., '6', '17', 'tcp').
+
+    Returns:
+        str: Normalized protocol name (e.g., 'TCP', 'UDP', 'IGMP').
+    """
     if not proto or proto == "N/A":
         return "N/A"
     return KNOWN_PROTOCOLS.get(proto, proto.upper())
 
 
 def resolve_service(dpt: str, proto: str) -> str:
-    """Resolve port and protocol to standard service name with caching."""
+    """Resolve destination port and transport protocol to a known service name with caching.
+
+    Args:
+        dpt: Destination port string (e.g., '80', '443').
+        proto: Protocol string (e.g., 'TCP', 'UDP').
+
+    Returns:
+        str: Service name (e.g., 'http', 'https', 'domain') or empty string if unresolvable.
+    """
     if not dpt or dpt == "N/A":
         return ""
     key = (dpt, proto.lower())
@@ -68,7 +84,15 @@ def resolve_service(dpt: str, proto: str) -> str:
 
 
 def format_port_entry(dpt: str, proto: str) -> str:
-    """Format port entry with port number, PROTO (TCP/UDP), and optional service in parentheses."""
+    """Format port string with normalized protocol and optional service name.
+
+    Args:
+        dpt: Destination port string.
+        proto: Transport protocol string.
+
+    Returns:
+        str: Formatted string such as '80 TCP (http)' or '443 UDP (https)'.
+    """
     proto_str = normalize_proto(proto)
     if not dpt or dpt == "N/A":
         return proto_str
@@ -79,9 +103,15 @@ def format_port_entry(dpt: str, proto: str) -> str:
     return f"{dpt} {proto_str}"
 
 
-
 def resolve_ip(ip: str) -> str:
-    """Resolve IP address to domain name (PTR record) with caching."""
+    """Resolve IP address to host reverse domain name (PTR record) with caching.
+
+    Args:
+        ip: IPv4 or IPv6 address string.
+
+    Returns:
+        str: Resolved hostname/domain or the original IP string on failure.
+    """
     if not ip or ip in ("N/A", "127.0.0.1", "0.0.0.0"):
         return ip
     if ip in DNS_CACHE:
@@ -100,7 +130,15 @@ def resolve_ip(ip: str) -> str:
 
 
 def format_host_entry(ip: str, resolve: bool) -> str:
-    """Format host entry with IP and optional domain name."""
+    """Format host entry with IP address and optional reverse DNS domain name.
+
+    Args:
+        ip: IP address string.
+        resolve: Whether to perform and display reverse DNS lookup.
+
+    Returns:
+        str: Formatted string (e.g., '1.1.1.1 (one.one.one.one)' or '1.1.1.1').
+    """
     if not resolve:
         return ip
     domain = resolve_ip(ip)
@@ -109,9 +147,16 @@ def format_host_entry(ip: str, resolve: bool) -> str:
     return ip
 
 
-def parse_denied_line(line: str):
-    """Parse log line into ingress or egress event with IP, port, and protocol."""
-    # Egress if OUT= has a non-empty interface
+def parse_denied_line(line: str) -> tuple[str, tuple[str, str, str]]:
+    """Parse firewall log line into direction and event tuple (protocol, address, port).
+
+    Args:
+        line: Raw log line string.
+
+    Returns:
+        tuple[str, tuple[str, str, str]]: A tuple containing the direction
+        ('ingress' or 'egress') and the event key (proto, host_ip, dpt).
+    """
     out_m = re.search(r"\bOUT=([^\s]+)", line)
     is_egress = bool(out_m and out_m.group(1) != "")
 
@@ -137,9 +182,19 @@ def render_dashboard(
     top_limit: int,
     count_historical: bool = False,
     resolve_dns: bool = True,
-):
-    ingress_counts = Counter()
-    egress_counts = Counter()
+) -> None:
+    """Render a continuous real-time dashboard of denied connection tallies.
+
+    Args:
+        log_file: Path to the firewall denied log file.
+        interval: Refresh rate in seconds.
+        top_limit: Maximum number of ranked entries to display per panel.
+        count_historical: If True, counts all existing log lines; if False,
+            starts counting only from the moment the monitor starts.
+        resolve_dns: If True, performs reverse DNS resolution on IPs.
+    """
+    ingress_counts: Counter[tuple[str, str, str]] = Counter()
+    egress_counts: Counter[tuple[str, str, str]] = Counter()
     start_time_str = datetime.datetime.now().strftime("%H:%M:%S")
 
     f = None
@@ -147,7 +202,6 @@ def render_dashboard(
         try:
             f = log_file.open("r", encoding="utf-8", errors="ignore")
             if not count_historical:
-                # Start from end of file (count from zero for new events)
                 f.seek(0, os.SEEK_END)
         except Exception:
             f = None
@@ -155,7 +209,6 @@ def render_dashboard(
     while True:
         now_str = datetime.datetime.now().strftime("%H:%M:%S")
 
-        # Read any new lines appended since last check
         if f is None and log_file.exists():
             try:
                 f = log_file.open("r", encoding="utf-8", errors="ignore")
@@ -166,7 +219,6 @@ def render_dashboard(
 
         if f is not None:
             try:
-                # Check for file truncation/rotation
                 current_pos = f.tell()
                 file_size = log_file.stat().st_size
                 if current_pos > file_size:
@@ -188,28 +240,28 @@ def render_dashboard(
             except Exception:
                 pass
 
-        # Clear screen (ANSI escape)
+        # Clear terminal screen (ANSI)
         sys.stdout.write("\033[H\033[2J")
 
-        dns_status = "DNS PTR Activo" if resolve_dns else "DNS PTR Desactivado"
+        dns_status = "DNS PTR Active" if resolve_dns else "DNS PTR Disabled"
         print(f"{Fore.CYAN}===================================================================================================={Style.RESET_ALL}")
-        print(f"{Fore.CYAN}  MONITOR DE DENEGACIONES FIREWALL | Inicio: {start_time_str} | Refresco: {interval}s | {dns_status}{Style.RESET_ALL}")
-        print(f"{Fore.CYAN}  Archivo: {log_file} | Última actualización: {Fore.YELLOW}{now_str}{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}  FIREWALL DENIAL MONITOR | Started: {start_time_str} | Refresh: {interval}s | {dns_status}{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}  File: {log_file} | Last update: {Fore.YELLOW}{now_str}{Style.RESET_ALL}")
         print(f"{Fore.CYAN}===================================================================================================={Style.RESET_ALL}")
 
         if not log_file.exists():
-            print(f"\n{Fore.RED}[ERROR] No se encuentra el archivo de log: {log_file}{Style.RESET_ALL}")
-            print(f"{Fore.YELLOW}Esperando a que se cree el archivo...{Style.RESET_ALL}")
+            print(f"\n{Fore.RED}[ERROR] Log file not found: {log_file}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}Waiting for log file to be created...{Style.RESET_ALL}")
         else:
             total_ingress = sum(ingress_counts.values())
             total_egress = sum(egress_counts.values())
 
             # Panel 1: INGRESS
-            print(f"\n{Fore.RED}📥 ENTRADAS DENEGADAS (INGRESS){Style.RESET_ALL} - Eventos capturados: {Fore.YELLOW}{total_ingress}{Style.RESET_ALL}")
-            print(f"{Fore.YELLOW}{'POS':<5} {'CONTEO':<10} {'PUERTO':<24} {'IP / DOMINIO ORIGEN':<48}{Style.RESET_ALL}")
+            print(f"\n{Fore.RED}📥 DENIED INCOMING (INGRESS){Style.RESET_ALL} - Captured events: {Fore.YELLOW}{total_ingress}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}{'POS':<5} {'COUNT':<10} {'PORT':<24} {'SOURCE IP / HOSTNAME':<48}{Style.RESET_ALL}")
             print("-" * 90)
             if not ingress_counts:
-                print(f"{Fore.WHITE}Esperando eventos de entrada denegados...{Style.RESET_ALL}")
+                print(f"{Fore.WHITE}Waiting for denied incoming events...{Style.RESET_ALL}")
             else:
                 for rank, ((proto, src, dpt), count) in enumerate(ingress_counts.most_common(top_limit), start=1):
                     host_str = format_host_entry(src, resolve_dns)
@@ -222,11 +274,11 @@ def render_dashboard(
                     )
 
             # Panel 2: EGRESS
-            print(f"\n{Fore.RED}📤 SALIDAS DENEGADAS (EGRESS){Style.RESET_ALL} - Eventos capturados: {Fore.YELLOW}{total_egress}{Style.RESET_ALL}")
-            print(f"{Fore.YELLOW}{'POS':<5} {'CONTEO':<10} {'PUERTO':<24} {'IP / DOMINIO DESTINO':<48}{Style.RESET_ALL}")
+            print(f"\n{Fore.RED}📤 DENIED OUTGOING (EGRESS){Style.RESET_ALL} - Captured events: {Fore.YELLOW}{total_egress}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}{'POS':<5} {'COUNT':<10} {'PORT':<24} {'DESTINATION IP / HOSTNAME':<48}{Style.RESET_ALL}")
             print("-" * 90)
             if not egress_counts:
-                print(f"{Fore.WHITE}Esperando eventos de salida denegados...{Style.RESET_ALL}")
+                print(f"{Fore.WHITE}Waiting for denied outgoing events...{Style.RESET_ALL}")
             else:
                 for rank, ((proto, dst, dpt), count) in enumerate(egress_counts.most_common(top_limit), start=1):
                     host_str = format_host_entry(dst, resolve_dns)
@@ -242,10 +294,11 @@ def render_dashboard(
         time.sleep(interval)
 
 
-def main():
+def main() -> None:
+    """Main CLI entrypoint for firewalls_monitor."""
     parser = argparse.ArgumentParser(
         prog="firewalls_monitor",
-        description="Monitor en tiempo real de conteo acumulado de denegaciones de entrada y salida (IP + puerto + dominio).",
+        description="Real-time live dashboard tallying denied incoming and outgoing connections (IP + port + reverse DNS).",
     )
     parser.add_argument(
         "-n",
@@ -253,14 +306,14 @@ def main():
         "--interval",
         type=float,
         default=3.0,
-        help="Intervalo de refresco en segundos (por defecto 3.0).",
+        help="Refresh interval in seconds (default 3.0).",
     )
     parser.add_argument(
         "-f",
         "--file",
         type=Path,
         default=DEFAULT_LOG,
-        help="Ruta al archivo de log (por defecto /var/log/firewalld/denied.log).",
+        help="Path to log file (default /var/log/firewalld/denied.log).",
     )
     parser.add_argument(
         "-p",
@@ -272,26 +325,26 @@ def main():
         dest="top",
         type=int,
         default=20,
-        help="Número de posiciones / entradas a mostrar en el ranking por panel (por defecto 20).",
+        help="Maximum ranking positions to display per panel (default 20).",
     )
     parser.add_argument(
         "-a",
         "--all",
         action="store_true",
-        help="Incluir el historial completo desde el inicio del archivo de log en lugar de empezar desde cero.",
+        help="Count all historical events in the log file instead of starting from zero.",
     )
     parser.add_argument(
         "-r",
         "--resolve",
         action="store_true",
         default=True,
-        help="Resolver direcciones IP a su nombre de dominio mediante DNS inverso PTR (activado por defecto).",
+        help="Resolve IP addresses to domain names via reverse DNS PTR (enabled by default).",
     )
     parser.add_argument(
         "--no-resolve",
         action="store_false",
         dest="resolve",
-        help="Desactivar la resolución de nombres de dominio (mostrar únicamente direcciones IP).",
+        help="Disable reverse DNS resolution (show IP addresses only).",
     )
     args = parser.parse_args()
 
@@ -305,7 +358,7 @@ def main():
                 resolve_dns=args.resolve,
             )
     except KeyboardInterrupt:
-        print(f"\n{Fore.YELLOW}Monitor finalizado.{Style.RESET_ALL}")
+        print(f"\n{Fore.YELLOW}Monitor stopped.{Style.RESET_ALL}")
         sys.exit(0)
 
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<zone target="DROP">
+  <short>Public</short>
+  <description>Public zone with strict default-drop policy (target DROP). Unsolicited incoming packets are dropped unless explicitly authorized.</description>
+  <!-- Replace 'eth0' with the machine's actual network interface (e.g., eno1, enp3s0, wlan0) -->
+  <interface name="eth0"/>
+  <!-- Example: Enable SSH only if necessary (or restrict with a rich rule by source IP) -->
+  <!-- <service name="ssh"/> -->
+</zone>

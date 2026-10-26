@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ipset type="hash:ip">
+  <short>trusted-dns</short>
+  <description>IPSet of trusted secure DNS resolvers (Cloudflare, Quad9, Google DNS, and local router)</description>
+  <!-- Example local gateway or DNS resolver -->
+  <entry>192.168.1.1</entry>
+  <!-- Cloudflare DNS -->
+  <entry>1.1.1.1</entry>
+  <entry>1.0.0.1</entry>
+  <!-- Quad9 DNS -->
+  <entry>9.9.9.9</entry>
+  <entry>149.112.112.112</entry>
+  <!-- Google DNS -->
+  <entry>8.8.8.8</entry>
+  <entry>8.8.4.4</entry>
+</ipset>

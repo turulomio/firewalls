@@ -1,68 +1,74 @@
-# Proyecto Firewalls (firewalld en Gentoo)
+# Firewalls Project (firewalld on Gentoo Linux)
 
-## 📌 Objetivo del Proyecto
-Este proyecto centraliza y gestiona las configuraciones de firewall basadas en `firewalld` para distintas máquinas que ejecutan **Gentoo Linux**. Permite mantener la configuración versionada en git y desplegarla fácilmente en la máquina correspondiente mediante un comando CLI en Python gestionado con **Poetry**.
+## 📌 Project Purpose
+This project centralizes and manages `firewalld` configurations for machines running **Gentoo Linux**. It allows firewall rules to be version-controlled in git and easily deployed to target systems via a Python CLI tool managed with **Poetry**.
 
 ---
 
-## 🗂️ Estructura del Repositorio
+## 🗂️ Repository Structure
 
-- Cada máquina tiene un directorio en la raíz con su nombre (ejemplo: `worky/`).
-- Dentro de la carpeta de cada máquina, existen:
-  - `<NOMBRE_MAQUINA>.md` (ejemplo: `WORKY.md`): Documento en mayúsculas que describe las reglas activas de forma funcional y los servicios que se quieren configurar.
-  - `post_deploy.sh` *(Opcional)*: Script ejecutable con comandos de consola a ejecutar automáticamente al finalizar el despliegue de la máquina (ej. para resolver/añadir IPs dinámicas a IPSets).
-  - Subdirectorio `etc/` que reproduce fielmente la estructura real que se copiará a `/etc/` en el sistema de destino:
+- The public repository centralizes the CLI tools, monitors, probes, and a clean baseline template (`example/`).
+- Specific (private) machine configurations reside in a separate private repository or external directory (managed via `FIREWALLS_DIR`, `--configs-dir`, or direct paths).
+- Inside each machine configuration directory:
+  - `<MACHINE_NAME>.md` (e.g., `EXAMPLE.md` or `<MACHINE>.md`): Uppercase Markdown document describing the functional security policy, active rules, and authorized services.
+  - `post_deploy.sh` *(Optional)*: Executable shell script run automatically after machine deployment finishes (e.g., to dynamically resolve hostnames into IPSets).
+  - An `etc/` subdirectory mirroring the real structure copied to `/etc/` on the destination host:
   ```text
-  <nombre_maquina>/
-  ├── <NOMBRE_MAQUINA>.md
+  <machine_name>/
+  ├── <MACHINE_NAME>.md
   ├── post_deploy.sh
   └── etc/
-      └── firewalld/
-          ├── firewalld.conf
-          ├── zones/
-          ├── services/
-          ├── ipsets/
-          ├── icmptypes/
-          ├── helpers/
-          └── policies/
+      ├── firewalld/
+      │   ├── firewalld.conf
+      │   ├── lockdown-whitelist.xml
+      │   ├── zones/
+      │   ├── services/
+      │   ├── ipsets/
+      │   ├── icmptypes/
+      │   ├── helpers/
+      │   └── policies/
+      ├── syslog-ng/conf.d/
+      ├── logrotate.d/
+      └── sysctl.d/
   ```
-- **Código Python**:
-  - `firewalls/`: Paquete Python que contiene la lógica del CLI (`firewalls/cli.py`), monitor de entrada (`firewalls/log_ingress.py`), monitor de salida (`firewalls/log_egress.py`), monitor continuo de conteo (`firewalls/monitor.py`) y pruebas de conectividad (`firewalls/probes.py`).
-  - `pyproject.toml`: Configuración del proyecto, dependencias y scripts de consola (`firewalls_deploy`, `firewalls_log_ingress`, `firewalls_log_egress`, `firewalls_monitor`, `firewalls_probes`) gestionados con **Poetry**.
+- **Python Source Code**:
+  - `firewalls/`: Python package containing CLI logic (`firewalls/cli.py`), runtime log manager (`firewalls/log_control.py`), inbound traffic monitor (`firewalls/log_ingress.py`), outbound traffic monitor (`firewalls/log_egress.py`), live denial dashboard (`firewalls/monitor.py`), and connectivity probes (`firewalls/probes.py`).
+  - `AI_PROMPT.md`: Guide and master prompt for generating new machine configurations with Artificial Intelligence.
+  - `pyproject.toml`: Project configuration, dependencies, and console scripts (`firewalls_deploy`, `firewalls_log_ingress`, `firewalls_log_egress`, `firewalls_monitor`, `firewalls_probes`) managed with **Poetry**.
 
 ---
 
-## 🛠️ Herramientas y Convenciones
+## 🛠️ Tools and Conventions
 
-1. **Gestor de dependencias / empaquetado**:
-   - Usar **Poetry** (`pyproject.toml`).
-   - Dependencias de terminal: `colorama` para formateo y colores.
-   - Comandos disponibles registrados en Poetry:
-     - `poetry run firewalls_deploy <nombre_maquina>`
+1. **Dependency Management and Packaging**:
+   - Managed with **Poetry** (`pyproject.toml`).
+   - Terminal styling with `colorama`.
+   - Available console commands registered in Poetry:
+     - `poetry run firewalls_deploy <machine_name_or_path> [-d CONFIGS_DIR]`
      - `poetry run firewalls_log_ingress`
      - `poetry run firewalls_log_egress`
-     - `poetry run firewalls_monitor [-n INTERVALO_SEGUNDOS]`
-     - `poetry run firewalls_probes [-H HOST] [-p PUERTO] [-proto {tcp,udp}] [-t TIMEOUT] [-c COUNT] [-l]`
+     - `poetry run firewalls_monitor [-n INTERVAL] [-p TOP]`
+     - `poetry run firewalls_probes [-H HOST] [-p PORT] [-proto {tcp,udp}] [-t TIMEOUT] [-c COUNT] [-l]`
 
-2. **Sistema Operativo Destino**:
+2. **Target Operating System**:
    - **Gentoo Linux**.
-   - Soporta inicio tanto con **OpenRC** (`rc-service firewalld <action>`) como con **systemd** (`systemctl <action> firewalld`).
+   - Supports service management with either **OpenRC** (`rc-service firewalld <action>`) or **systemd** (`systemctl <action> firewalld`).
 
-3. **Reglas de Despliegue (`deploy`)**:
-   - **Parámetro obligatorio**: Nombre de la máquina a desplegar.
-   - **Ejecución y Privilegios**: Se asume que el usuario ejecutará el script con permisos de `root`. No se debe incluir lógica interna de `sudo` para reejecutar o elevar privilegios.
-   - **Copia**: Sincroniza recursivamente `<maquina>/etc/` a `/etc/` preservando atributos y enlaces.
-   - **Permisos de archivos**: **No se cambian los permisos del directorio `/etc`**. Únicamente se asigna propietario `root:root` y permisos estándar (`0750` directorios, `0644` ficheros) a los elementos que se escriban bajo `/etc/firewalld`.
-   - **Recarga automática**: Si `firewalld` está activo, ejecuta `firewall-cmd --reload`. Si está detenido, intenta arrancarlo mediante el gestor de servicios del sistema.
+3. **Deployment Rules (`deploy`)**:
+   - **Mandatory Parameter**: Machine name or filesystem path to deploy.
+   - **Path Resolution**: Looks in `--configs-dir`, `$FIREWALLS_DIR`, `~/.config/firewalls/machines/`, repository root, or direct path.
+   - **Execution & Privileges**: Must be executed directly with `root` privileges. No internal `sudo` elevation logic.
+   - **File Copy**: Recursively synchronizes `<machine>/etc/` to `/etc/` preserving attributes and links.
+   - **File Permissions**: **Parent `/etc` permissions are never modified**. Enforces `root:root` ownership and standard permissions (`0750` directories, `0644` files) strictly on items written under `/etc/firewalld`.
+   - **Automatic Reload**: If `firewalld` is active, executes `firewall-cmd --reload`. If stopped, attempts to start it via the system service manager.
 
-4. **Configuración de Logs (`syslog-ng`)**:
-   - Requiere incluir la siguiente directiva en `/etc/syslog-ng/conf.d/*.conf` desde `/etc/syslog-ng/syslog-ng.conf`:
-     `@include "/etc/syslog-ng/conf.d/*.conf"`
+4. **Logging Configuration (`syslog-ng`)**:
+   - Requires inclusion of `@include "/etc/syslog-ng/conf.d/*.conf"` in `/etc/syslog-ng/syslog-ng.conf` before catch-all destinations.
 
 ---
 
-## ➕ Añadir una nueva máquina
-Para dar de alta una nueva máquina:
-1. Crear el directorio `<nueva_maquina>/etc/firewalld/` con sus respectivas subcarpetas.
-2. Copiar o generar las configuraciones XML de zonas/servicios correspondientes.
-3. Desplegar con: `poetry run firewalls_deploy <nueva_maquina>`.
+## ➕ Adding a New Machine
+To configure a new machine:
+1. Use the instructions and master prompt in `AI_PROMPT.md` to generate the configuration from the `example/` template.
+2. Store the machine folder in a private repository or external directory (e.g. `~/my-firewalls/<new_machine>`).
+3. Deploy with: `poetry run firewalls_deploy ~/my-firewalls/<new_machine>` (or by setting `export FIREWALLS_DIR=~/my-firewalls`).

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<policy target="DROP">
+  <short>Egress-Policy-Template</short>
+  <description>Strict egress control: default drop (target DROP). Only explicitly authorized outgoing connections are permitted.</description>
+  <ingress-zone name="HOST"/>
+  <egress-zone name="ANY"/>
+
+  <!-- Anti-Spoofing: Immediate drop of outgoing packets with spoofed loopback addresses -->
+  <rule family="ipv4">
+    <source address="127.0.0.0/8"/>
+    <drop/>
+  </rule>
+
+  <!-- DNS restricted strictly to trusted resolvers (trusted-dns IPSet) -->
+  <rule family="ipv4">
+    <destination ipset="trusted-dns"/>
+    <service name="dns"/>
+    <accept/>
+  </rule>
+
+  <!-- Standard and secure web browsing -->
+  <service name="http"/>
+  <service name="https"/>
+  <!-- HTTP/3 / QUIC -->
+  <port port="443" protocol="udp"/>
+
+  <!-- Time synchronization -->
+  <service name="ntp"/>
+
+  <!-- DHCP client for local network IP renewal -->
+  <service name="dhcp"/>
+
+  <!-- Uncomment if machine synchronizes Gentoo Portage packages via rsync -->
+  <!-- <service name="rsync"/> -->
+
+  <!-- Example rich rule for a specific destination -->
+  <!--
+  <rule family="ipv4">
+    <destination address="192.168.1.50"/>
+    <service name="ssh"/>
+    <accept/>
+  </rule>
+  -->
+</policy>

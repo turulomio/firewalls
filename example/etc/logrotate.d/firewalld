@@ -1,0 +1,19 @@
+/var/log/firewalld/*.log {
+    weekly
+    missingok
+    rotate 12
+    compress
+    delaycompress
+    notifempty
+    create 0640 root root
+    sharedscripts
+    postrotate
+        if [ -f /run/syslog-ng.pid ]; then
+            kill -HUP $(cat /run/syslog-ng.pid) 2>/dev/null || true
+        elif command -v rc-service >/dev/null 2>&1; then
+            rc-service syslog-ng reload 2>/dev/null || true
+        elif command -v systemctl >/dev/null 2>&1; then
+            systemctl reload syslog-ng 2>/dev/null || true
+        fi
+    endscript
+}
