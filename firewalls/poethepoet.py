@@ -55,6 +55,7 @@ def translate() -> None:
                     "msgmerge",
                     "-N",
                     "--no-wrap",
+                    "--backup=none",
                     "-U",
                     str(po_file),
                     str(pot_file),
