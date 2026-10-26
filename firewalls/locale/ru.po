@@ -1,0 +1,492 @@
+# Russian translations for firewalls package.
+# Copyright (C) 2026 turulomio
+# This file is distributed under the same license as the firewalls package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: firewalls 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-26 10:24+0100\n"
+"PO-Revision-Date: 2026-10-26 10:30+0100\n"
+"Last-Translator: turulomio\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "This script must be executed with root privileges."
+msgstr "Этот скрипт должен выполняться с привилегиями root."
+
+#, python-brace-format
+msgid "rsync synchronization failed with exit code {code}"
+msgstr "Синхронизация rsync завершилась с ошибкой с кодом {code}"
+
+#, python-brace-format
+msgid "Could not adjust permissions in {path}: {error}"
+msgstr "Не удалось настроить права доступа в {path}: {error}"
+
+#, python-brace-format
+msgid "Could not verify or create log directory {dir}: {error}"
+msgstr "Не удалось проверить или создать каталог журналов {dir}: {error}"
+
+#, python-brace-format
+msgid "Configuring conf.d include directive in {conf}..."
+msgstr "Настройка директивы включения conf.d в {conf}..."
+
+#, python-brace-format
+msgid "Could not update {conf}: {error}"
+msgstr "Не удалось обновить {conf}: {error}"
+
+msgid "Managing syslog-ng service with OpenRC..."
+msgstr "Управление службой syslog-ng с помощью OpenRC..."
+
+msgid "Restarting/Reloading syslog-ng with OpenRC..."
+msgstr "Перезапуск/перезагрузка syslog-ng с помощью OpenRC..."
+
+msgid "Starting syslog-ng service with OpenRC..."
+msgstr "Запуск службы syslog-ng с помощью OpenRC..."
+
+msgid "Managing syslog-ng service with systemd..."
+msgstr "Управление службой syslog-ng с помощью systemd..."
+
+msgid "Detected sysctl.d configuration. Applying kernel parameters with sysctl..."
+msgstr "Обнаружена конфигурация sysctl.d. Применение параметров ядра с помощью sysctl..."
+
+msgid "sysctl parameters applied successfully."
+msgstr "Параметры sysctl успешно применены."
+
+#, python-brace-format
+msgid "sysctl --system exited with code {code}."
+msgstr "Команда sysctl --system завершилась с кодом {code}."
+
+msgid "'sysctl' binary not found in PATH."
+msgstr "Исполняемый файл 'sysctl' не найден в PATH."
+
+msgid "'firewall-cmd' is not installed or not found in PATH."
+msgstr "'firewall-cmd' не установлен или не найден в PATH."
+
+#, python-brace-format
+msgid "On Gentoo Linux, install it with: {cmd}"
+msgstr "В Gentoo Linux установите его с помощью: {cmd}"
+
+msgid "Reloading firewalld rules..."
+msgstr "Перезагрузка правил firewalld..."
+
+msgid "Configuration reloaded successfully in firewalld."
+msgstr "Конфигурация firewalld успешно перезагружена."
+
+msgid "firewalld reload failed. Please check XML configuration files."
+msgstr "Сбой перезагрузки firewalld. Пожалуйста, проверьте файлы конфигурации XML."
+
+msgid "firewalld is not running."
+msgstr "firewalld не запущен."
+
+msgid "Detected OpenRC. Starting firewalld service..."
+msgstr "Обнаружен OpenRC. Запуск службы firewalld..."
+
+msgid "firewalld service started successfully."
+msgstr "Служба firewalld успешно запущена."
+
+msgid "Failed to start firewalld service with OpenRC."
+msgstr "Не удалось запустить службу firewalld с помощью OpenRC."
+
+msgid "Detected systemd. Starting firewalld service..."
+msgstr "Обнаружен systemd. Запуск службы firewalld..."
+
+msgid "Failed to start firewalld service with systemd."
+msgstr "Не удалось запустить службу firewalld с помощью systemd."
+
+msgid "Could not determine service manager to start firewalld."
+msgstr "Не удалось определить менеджер служб для запуска firewalld."
+
+msgid "Please start the service manually."
+msgstr "Пожалуйста, запустите службу вручную."
+
+#, python-brace-format
+msgid "Executing post-deployment script ({name})..."
+msgstr "Выполнение скрипта после развертывания ({name})..."
+
+msgid "Post-deployment script finished successfully."
+msgstr "Скрипт после развертывания успешно завершен."
+
+#, python-brace-format
+msgid "Post-deployment script exited with code {code}."
+msgstr "Скрипт после развертывания завершился с кодом {code}."
+
+#, python-brace-format
+msgid "Error running post-deployment script: {error}"
+msgstr "Ошибка при выполнении скрипта после развертывания: {error}"
+
+msgid "Stopping firewalld service"
+msgstr "Остановка службы firewalld"
+
+msgid "Running OpenRC: rc-service firewalld stop..."
+msgstr "Выполнение OpenRC: rc-service firewalld stop..."
+
+msgid "firewalld service stopped successfully."
+msgstr "Служба firewalld успешно остановлена."
+
+msgid "Failed to stop firewalld service with OpenRC."
+msgstr "Не удалось остановить службу firewalld с помощью OpenRC."
+
+msgid "Running systemd: systemctl stop firewalld..."
+msgstr "Выполнение systemd: systemctl stop firewalld..."
+
+msgid "Failed to stop firewalld service with systemd."
+msgstr "Не удалось остановить службу firewalld с помощью systemd."
+
+msgid "Could not determine service manager to stop firewalld."
+msgstr "Не удалось определить менеджер служб для остановки firewalld."
+
+msgid "None found"
+msgstr "Не найдено"
+
+msgid "Deploy firewalld configuration for a machine on Gentoo Linux and reload or stop the service."
+msgstr "Развертывание конфигурации firewalld для машины на Gentoo Linux и перезагрузка или остановка службы."
+
+msgid "Detected machines:"
+msgstr "Обнаруженные машины:"
+
+msgid "Search directories:"
+msgstr "Каталоги поиска:"
+
+msgid "Special options:"
+msgstr "Специальные параметры:"
+
+msgid "Stop the system firewalld service."
+msgstr "Остановить системную службу firewalld."
+
+msgid "Machine name or directory path to deploy (e.g., example, /path/to/machine) or 'stop' to stop firewalld"
+msgstr "Имя машины или путь к каталогу для развертывания (напр. example, /path/to/machine) или 'stop' для остановки firewalld"
+
+msgid "Directory containing machine configuration folders (overrides FIREWALLS_DIR)"
+msgstr "Каталог, содержащий папки конфигураций машин (переопределяет FIREWALLS_DIR)"
+
+msgid "Stop the system firewalld service"
+msgstr "Остановить системную службу firewalld"
+
+#, python-brace-format
+msgid "Configuration for machine '{machine}' not found."
+msgstr "Конфигурация для машины '{machine}' не найдена."
+
+msgid "Search directories examined:"
+msgstr "Проверенные каталоги поиска:"
+
+msgid "Available machines:"
+msgstr "Доступные машины:"
+
+#, python-brace-format
+msgid "Missing 'etc' subfolder in '{dir}': {etc}"
+msgstr "Отсутствует подкаталог 'etc' в '{dir}': {etc}"
+
+#, python-brace-format
+msgid "Firewalld Deployment (Gentoo) - Machine: {machine}"
+msgstr "Развертывание Firewalld (Gentoo) - Машина: {machine}"
+
+#, python-brace-format
+msgid "Source Path: {path}"
+msgstr "Исходный путь: {path}"
+
+msgid "Deploying configuration files..."
+msgstr "Развертывание файлов конфигурации..."
+
+#, python-brace-format
+msgid "Source:      {src}/"
+msgstr "Источник:    {src}/"
+
+msgid "Destination: /etc/"
+msgstr "Назначение:  /etc/"
+
+#, python-brace-format
+msgid "File copy error: {error}"
+msgstr "Ошибка копирования файлов: {error}"
+
+msgid "Adjusting permissions and directories..."
+msgstr "Настройка прав доступа и каталогов..."
+
+#, python-brace-format
+msgid "Deployment completed successfully for '{machine}'"
+msgstr "Развертывание успешно завершено для '{machine}'"
+
+#, python-brace-format
+msgid "Enabling firewalld packet drop logging (LogDenied={mode})..."
+msgstr "Включение журналирования сброшенных пакетов firewalld (LogDenied={mode})..."
+
+msgid "Temporary drop logging activated."
+msgstr "Временное журналирование сброшенных пакетов активировано."
+
+#, python-brace-format
+msgid "Could not set LogDenied={mode} in firewalld."
+msgstr "Не удалось установить LogDenied={mode} в firewalld."
+
+msgid "Disabling firewalld packet drop logging (LogDenied=off)..."
+msgstr "Отключение журналирования сброшенных пакетов firewalld (LogDenied=off)..."
+
+msgid "Drop logging deactivated (dmesg protected)."
+msgstr "Журналирование сброшенных пакетов отключено (dmesg защищен)."
+
+msgid "Could not reset LogDenied in firewalld."
+msgstr "Не удалось сбросить LogDenied в firewalld."
+
+#, python-brace-format
+msgid "Log file does not exist: {file}"
+msgstr "Файл журнала не существует: {file}"
+
+msgid "Denied Egress Connections Summary"
+msgstr "Сводка заблокированных исходящих соединений (Egress)"
+
+msgid "No denied egress events found."
+msgstr "Заблокированных исходящих событий не найдено."
+
+msgid "COUNT"
+msgstr "КОЛИЧЕСТВО"
+
+msgid "PORT"
+msgstr "ПОРТ"
+
+msgid "DESTINATION"
+msgstr "НАЗНАЧЕНИЕ"
+
+msgid "Denied EGRESS Traffic Monitor"
+msgstr "Монитор заблокированного исходящего трафика (EGRESS)"
+
+#, python-brace-format
+msgid "Log File: {file}"
+msgstr "Файл журнала: {file}"
+
+msgid "Streaming real-time events (Press Ctrl+C to exit)..."
+msgstr "Потоковая передача событий в реальном времени (Нажмите Ctrl+C для выхода)..."
+
+msgid "BLOCKED EGRESS"
+msgstr "ЗАБЛОКИРОВАННЫЙ ИСХОДЯЩИЙ (EGRESS)"
+
+msgid "Port"
+msgstr "Порт"
+
+msgid "Destination"
+msgstr "Назначение"
+
+msgid "Source"
+msgstr "Источник"
+
+msgid "Interface"
+msgstr "Интерфейс"
+
+msgid "Monitor stopped."
+msgstr "Мониторинг остановлен."
+
+msgid "Monitor and summarize outgoing (egress) connections blocked by the firewall."
+msgstr "Мониторинг и сводка исходящих соединений (egress), заблокированных межсетевым экраном."
+
+msgid "Display a ranked summary of blocked egress connections."
+msgstr "Отобразить ранжированную сводку заблокированных исходящих соединений."
+
+msgid "Path to log file (default /var/log/firewalld/denied.log)."
+msgstr "Путь к файлу журнала (по умолчанию /var/log/firewalld/denied.log)."
+
+msgid "Denied Ingress Connections Summary"
+msgstr "Сводка заблокированных входящих соединений (Ingress)"
+
+msgid "No denied ingress events found."
+msgstr "Заблокированных входящих событий не найдено."
+
+msgid "SOURCE"
+msgstr "ИСТОЧНИК"
+
+msgid "Denied INGRESS Traffic Monitor"
+msgstr "Монитор заблокированного входящего трафика (INGRESS)"
+
+msgid "BLOCKED INGRESS"
+msgstr "ЗАБЛОКИРОВАННЫЙ ВХОДЯЩИЙ (INGRESS)"
+
+msgid "Source Port"
+msgstr "Порт источника"
+
+msgid "Monitor and summarize incoming (ingress) connections blocked by the firewall."
+msgstr "Мониторинг и сводка входящих соединений (ingress), заблокированных межсетевым экраном."
+
+msgid "Display a ranked summary of blocked ingress connections."
+msgstr "Отобразить ранжированную сводку заблокированных входящих соединений."
+
+msgid "DNS PTR Active"
+msgstr "DNS PTR активен"
+
+msgid "DNS PTR Disabled"
+msgstr "DNS PTR отключен"
+
+#, python-brace-format
+msgid "FIREWALL DENIAL MONITOR | Started: {start} | Refresh: {interval}s | {dns}"
+msgstr "МОНИТОР БЛОКИРОВОК FIREWALL | Запущен: {start} | Обновление: {interval}с | {dns}"
+
+#, python-brace-format
+msgid "File: {file} | Last update: {now}"
+msgstr "Файл: {file} | Посл. обновление: {now}"
+
+#, python-brace-format
+msgid "[ERROR] Log file not found: {file}"
+msgstr "[ОШИБКА] Файл журнала не найден: {file}"
+
+msgid "Waiting for log file to be created..."
+msgstr "Ожидание создания файла журнала..."
+
+msgid "POS"
+msgstr "ПОЗ"
+
+msgid "SOURCE IP / HOSTNAME"
+msgstr "IP ИСТОЧНИКА / ИМЯ УЗЛА"
+
+msgid "DESTINATION IP / HOSTNAME"
+msgstr "IP НАЗНАЧЕНИЯ / ИМЯ УЗЛА"
+
+msgid "DENIED INCOMING (INGRESS)"
+msgstr "ЗАБЛОКИРОВАННЫЕ ВХОДЯЩИЕ (INGRESS)"
+
+#, python-brace-format
+msgid "Captured events: {events}"
+msgstr "Перехвачено событий: {events}"
+
+msgid "Waiting for denied incoming events..."
+msgstr "Ожидание заблокированных входящих событий..."
+
+msgid "DENIED OUTGOING (EGRESS)"
+msgstr "ЗАБЛОКИРОВАННЫЕ ИСХОДЯЩИЕ (EGRESS)"
+
+msgid "Waiting for denied outgoing events..."
+msgstr "Ожидание заблокированных исходящих событий..."
+
+msgid "Real-time live dashboard tallying denied incoming and outgoing connections (IP + port + reverse DNS)."
+msgstr "Интерактивная панель в реальном времени, подсчитывающая заблокированные входящие и исходящие соединения (IP + порт + обратный DNS)."
+
+msgid "Refresh interval in seconds (default 3.0)."
+msgstr "Интервал обновления в секундах (по умолчанию 3.0)."
+
+msgid "Maximum ranking positions to display per panel (default 20)."
+msgstr "Максимальное количество позиций рейтинга для отображения на панели (по умолчанию 20)."
+
+msgid "Count all historical events in the log file instead of starting from zero."
+msgstr "Учитывать все исторические события из файла журнала вместо начала с нуля."
+
+msgid "Resolve IP addresses to domain names via reverse DNS PTR (enabled by default)."
+msgstr "Разрешать IP-адреса в доменные имена через обратный DNS PTR (включено по умолчанию)."
+
+msgid "Disable reverse DNS resolution (show IP addresses only)."
+msgstr "Отключить разрешение обратного DNS (показывать только IP-адреса)."
+
+msgid "Outgoing connection established successfully"
+msgstr "Исходящее соединение успешно установлено"
+
+#, python-brace-format
+msgid "Connection timed out (Timeout > {timeout}s) - Probable egress firewall drop"
+msgstr "Время ожидания соединения истекло (Таймаут > {timeout}с) - Вероятно сброс исходящим фаерволом"
+
+msgid "Connection refused - Port closed on remote destination"
+msgstr "В соединении отказано - Порт закрыт на удаленном узле"
+
+#, python-brace-format
+msgid "Network error ({error})"
+msgstr "Сетевая ошибка ({error})"
+
+msgid "UDP response received from destination"
+msgstr "Получен ответ UDP от узла назначения"
+
+#, python-brace-format
+msgid "No UDP response (Timeout > {timeout}s) - Port filtered or dropped"
+msgstr "Нет ответа UDP (Таймаут > {timeout}с) - Порт фильтруется или сброшен"
+
+#, python-brace-format
+msgid "UDP network error ({error})"
+msgstr "Сетевая ошибка UDP ({error})"
+
+#, python-brace-format
+msgid "Incoming connection received successfully from {host}:{port}"
+msgstr "Входящее соединение успешно получено от {host}:{port}"
+
+#, python-brace-format
+msgid "No incoming connections within {timeout}s - Probable ingress firewall block"
+msgstr "Нет входящих соединений в течение {timeout}с - Вероятно блокировка входящим фаерволом"
+
+#, python-brace-format
+msgid "Permission denied binding port {port} (root privileges required for ports < 1024)"
+msgstr "Отказано в доступе при привязке порта {port} (для портов < 1024 требуются права root)"
+
+#, python-brace-format
+msgid "Local socket error ({error})"
+msgstr "Ошибка локального сокета ({error})"
+
+#, python-brace-format
+msgid "Incoming UDP packet received successfully from {host}:{port}"
+msgstr "Входящий пакет UDP успешно получен от {host}:{port}"
+
+#, python-brace-format
+msgid "No incoming UDP packets within {timeout}s - Probable ingress firewall block"
+msgstr "Нет входящих пакетов UDP в течение {timeout}с - Вероятно блокировка входящим фаерволом"
+
+msgid "Firewall Ingress Probe (Listen Mode)"
+msgstr "Зонд входящего трафика Firewall (Режим прослушивания)"
+
+#, python-brace-format
+msgid "Listening: {bind}:{port} ({proto}) | Timeout: {timeout}s"
+msgstr "Прослушивание: {bind}:{port} ({proto}) | Таймаут: {timeout}с"
+
+#, python-brace-format
+msgid "Waiting for incoming connection [{curr}/{total}]..."
+msgstr "Ожидание входящего соединения [{curr}/{total}]..."
+
+#, python-brace-format
+msgid "Waiting for incoming connection on port {port}..."
+msgstr "Ожидание входящего соединения на порту {port}..."
+
+msgid "PASSED"
+msgstr "УСПЕШНО"
+
+msgid "FAILED"
+msgstr "НЕУДАЧА"
+
+#, python-brace-format
+msgid "Result: [{status}] {msg} ({ms:.1f} ms)"
+msgstr "Результат: [{status}] {msg} ({ms:.1f} мс)"
+
+#, python-brace-format
+msgid "Summary: {successes}/{count} incoming connections received successfully."
+msgstr "Итог: {successes}/{count} входящих соединений успешно получено."
+
+#, python-brace-format
+msgid "[ERROR] Could not resolve host: {host}"
+msgstr "[ОШИБКА] Не удалось разрешить имя узла: {host}"
+
+msgid "Firewall Egress Probe (Outgoing Mode)"
+msgstr "Зонд исходящего трафика Firewall (Исходящий режим)"
+
+#, python-brace-format
+msgid "Target: {host} ({ip}):{port} ({proto}) | Timeout: {timeout}s"
+msgstr "Цель: {host} ({ip}):{port} ({proto}) | Таймаут: {timeout}с"
+
+#, python-brace-format
+msgid "Summary: {successes}/{count} probe attempts succeeded."
+msgstr "Итог: {successes}/{count} попыток зондирования завершились успешно."
+
+msgid "Probe firewall connectivity for ingress and egress connections across hosts and ports."
+msgstr "Проверка связности межсетевого экрана для входящих и исходящих соединений по узлам и портам."
+
+msgid "Target hostname or IP address for outgoing probes (default: kde.org)"
+msgstr "Целевое имя узла или IP-адрес для исходящих зондов (по умолчанию: kde.org)"
+
+msgid "Port to probe (default: 1555)"
+msgstr "Порт для проверки (по умолчанию: 1555)"
+
+msgid "Transport protocol (tcp or udp, default: tcp)"
+msgstr "Транспортный протокол (tcp или udp, по умолчанию: tcp)"
+
+msgid "Maximum socket timeout in seconds (default: 5.0)"
+msgstr "Максимальный таймаут сокета в секундах (по умолчанию: 5.0)"
+
+msgid "Number of probe attempts to perform (default: 1)"
+msgstr "Количество выполняемых попыток зондирования (по умолчанию: 1)"
+
+msgid "Run in incoming listen mode (Ingress test) binding local port"
+msgstr "Запуск в режиме входящего прослушивания (тест Ingress) с привязкой локального порта"
+
+msgid "Local IP address to bind in listen mode (default: 0.0.0.0)"
+msgstr "Локальный IP-адрес для привязки в режиме прослушивания (по умолчанию: 0.0.0.0)"

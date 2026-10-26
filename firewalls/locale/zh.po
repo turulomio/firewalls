@@ -1,0 +1,492 @@
+# Chinese (simplified) translations for firewalls package.
+# Copyright (C) 2026 turulomio
+# This file is distributed under the same license as the firewalls package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: firewalls 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-26 10:24+0100\n"
+"PO-Revision-Date: 2026-10-26 10:30+0100\n"
+"Last-Translator: turulomio\n"
+"Language-Team: Chinese (simplified)\n"
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "This script must be executed with root privileges."
+msgstr "此脚本必须以 root 权限运行。"
+
+#, python-brace-format
+msgid "rsync synchronization failed with exit code {code}"
+msgstr "rsync 同步失败，退出代码为 {code}"
+
+#, python-brace-format
+msgid "Could not adjust permissions in {path}: {error}"
+msgstr "无法调整 {path} 中的权限：{error}"
+
+#, python-brace-format
+msgid "Could not verify or create log directory {dir}: {error}"
+msgstr "无法验证或创建日志目录 {dir}：{error}"
+
+#, python-brace-format
+msgid "Configuring conf.d include directive in {conf}..."
+msgstr "正在 {conf} 中配置 conf.d include 指令..."
+
+#, python-brace-format
+msgid "Could not update {conf}: {error}"
+msgstr "无法更新 {conf}：{error}"
+
+msgid "Managing syslog-ng service with OpenRC..."
+msgstr "正在使用 OpenRC 管理 syslog-ng 服务..."
+
+msgid "Restarting/Reloading syslog-ng with OpenRC..."
+msgstr "正在使用 OpenRC 重启/重新加载 syslog-ng..."
+
+msgid "Starting syslog-ng service with OpenRC..."
+msgstr "正在使用 OpenRC 启动 syslog-ng 服务..."
+
+msgid "Managing syslog-ng service with systemd..."
+msgstr "正在使用 systemd 管理 syslog-ng 服务..."
+
+msgid "Detected sysctl.d configuration. Applying kernel parameters with sysctl..."
+msgstr "检测到 sysctl.d 配置。正在使用 sysctl 应用内核参数..."
+
+msgid "sysctl parameters applied successfully."
+msgstr "sysctl 参数已成功应用。"
+
+#, python-brace-format
+msgid "sysctl --system exited with code {code}."
+msgstr "sysctl --system 退出，代码为 {code}。"
+
+msgid "'sysctl' binary not found in PATH."
+msgstr "在 PATH 中未找到 'sysctl' 可执行文件。"
+
+msgid "'firewall-cmd' is not installed or not found in PATH."
+msgstr "'firewall-cmd' 未安装或在 PATH 中未找到。"
+
+#, python-brace-format
+msgid "On Gentoo Linux, install it with: {cmd}"
+msgstr "在 Gentoo Linux 上，使用以下命令安装：{cmd}"
+
+msgid "Reloading firewalld rules..."
+msgstr "正在重新加载 firewalld 规则..."
+
+msgid "Configuration reloaded successfully in firewalld."
+msgstr "firewalld 配置已成功重新加载。"
+
+msgid "firewalld reload failed. Please check XML configuration files."
+msgstr "firewalld 重新加载失败。请检查 XML 配置文件。"
+
+msgid "firewalld is not running."
+msgstr "firewalld 未运行。"
+
+msgid "Detected OpenRC. Starting firewalld service..."
+msgstr "检测到 OpenRC。正在启动 firewalld 服务..."
+
+msgid "firewalld service started successfully."
+msgstr "firewalld 服务已成功启动。"
+
+msgid "Failed to start firewalld service with OpenRC."
+msgstr "使用 OpenRC 启动 firewalld 服务失败。"
+
+msgid "Detected systemd. Starting firewalld service..."
+msgstr "检测到 systemd。正在启动 firewalld 服务..."
+
+msgid "Failed to start firewalld service with systemd."
+msgstr "使用 systemd 启动 firewalld 服务失败。"
+
+msgid "Could not determine service manager to start firewalld."
+msgstr "无法确定用于启动 firewalld 的服务管理器。"
+
+msgid "Please start the service manually."
+msgstr "请手动启动该服务。"
+
+#, python-brace-format
+msgid "Executing post-deployment script ({name})..."
+msgstr "正在执行部署后脚本 ({name})..."
+
+msgid "Post-deployment script finished successfully."
+msgstr "部署后脚本已成功执行完成。"
+
+#, python-brace-format
+msgid "Post-deployment script exited with code {code}."
+msgstr "部署后脚本退出，代码为 {code}。"
+
+#, python-brace-format
+msgid "Error running post-deployment script: {error}"
+msgstr "运行部署后脚本时出错：{error}"
+
+msgid "Stopping firewalld service"
+msgstr "正在停止 firewalld 服务"
+
+msgid "Running OpenRC: rc-service firewalld stop..."
+msgstr "运行 OpenRC: rc-service firewalld stop..."
+
+msgid "firewalld service stopped successfully."
+msgstr "firewalld 服务已成功停止。"
+
+msgid "Failed to stop firewalld service with OpenRC."
+msgstr "使用 OpenRC 停止 firewalld 服务失败。"
+
+msgid "Running systemd: systemctl stop firewalld..."
+msgstr "运行 systemd: systemctl stop firewalld..."
+
+msgid "Failed to stop firewalld service with systemd."
+msgstr "使用 systemd 停止 firewalld 服务失败。"
+
+msgid "Could not determine service manager to stop firewalld."
+msgstr "无法确定用于停止 firewalld 的服务管理器。"
+
+msgid "None found"
+msgstr "未找到"
+
+msgid "Deploy firewalld configuration for a machine on Gentoo Linux and reload or stop the service."
+msgstr "为 Gentoo Linux 上的机器部署 firewalld 配置并重新加载或停止服务。"
+
+msgid "Detected machines:"
+msgstr "检测到的机器："
+
+msgid "Search directories:"
+msgstr "搜索目录："
+
+msgid "Special options:"
+msgstr "特殊选项："
+
+msgid "Stop the system firewalld service."
+msgstr "停止系统 firewalld 服务。"
+
+msgid "Machine name or directory path to deploy (e.g., example, /path/to/machine) or 'stop' to stop firewalld"
+msgstr "要部署的机器名称或目录路径（例如 example、/path/to/machine）或 'stop' 以停止 firewalld"
+
+msgid "Directory containing machine configuration folders (overrides FIREWALLS_DIR)"
+msgstr "包含机器配置文件夹的目录（覆盖 FIREWALLS_DIR）"
+
+msgid "Stop the system firewalld service"
+msgstr "停止系统 firewalld 服务"
+
+#, python-brace-format
+msgid "Configuration for machine '{machine}' not found."
+msgstr "未找到机器 '{machine}' 的配置。"
+
+msgid "Search directories examined:"
+msgstr "已检查的搜索目录："
+
+msgid "Available machines:"
+msgstr "可用机器："
+
+#, python-brace-format
+msgid "Missing 'etc' subfolder in '{dir}': {etc}"
+msgstr "'{dir}' 中缺少 'etc' 子文件夹：{etc}"
+
+#, python-brace-format
+msgid "Firewalld Deployment (Gentoo) - Machine: {machine}"
+msgstr "Firewalld 部署 (Gentoo) - 机器：{machine}"
+
+#, python-brace-format
+msgid "Source Path: {path}"
+msgstr "源路径：{path}"
+
+msgid "Deploying configuration files..."
+msgstr "正在部署配置文件..."
+
+#, python-brace-format
+msgid "Source:      {src}/"
+msgstr "源路径：    {src}/"
+
+msgid "Destination: /etc/"
+msgstr "目标路径：  /etc/"
+
+#, python-brace-format
+msgid "File copy error: {error}"
+msgstr "文件复制错误：{error}"
+
+msgid "Adjusting permissions and directories..."
+msgstr "正在调整权限和目录..."
+
+#, python-brace-format
+msgid "Deployment completed successfully for '{machine}'"
+msgstr "'{machine}' 的部署已成功完成"
+
+#, python-brace-format
+msgid "Enabling firewalld packet drop logging (LogDenied={mode})..."
+msgstr "正在启用 firewalld 丢弃数据包日志记录 (LogDenied={mode})..."
+
+msgid "Temporary drop logging activated."
+msgstr "临时丢包日志记录已激活。"
+
+#, python-brace-format
+msgid "Could not set LogDenied={mode} in firewalld."
+msgstr "无法在 firewalld 中设置 LogDenied={mode}。"
+
+msgid "Disabling firewalld packet drop logging (LogDenied=off)..."
+msgstr "正在禁用 firewalld 丢弃数据包日志记录 (LogDenied=off)..."
+
+msgid "Drop logging deactivated (dmesg protected)."
+msgstr "丢包日志记录已停用（dmesg 已受保护）。"
+
+msgid "Could not reset LogDenied in firewalld."
+msgstr "无法重置 firewalld 中的 LogDenied。"
+
+#, python-brace-format
+msgid "Log file does not exist: {file}"
+msgstr "日志文件不存在：{file}"
+
+msgid "Denied Egress Connections Summary"
+msgstr "已阻止的出站连接摘要"
+
+msgid "No denied egress events found."
+msgstr "未发现已阻止的出站事件。"
+
+msgid "COUNT"
+msgstr "次数"
+
+msgid "PORT"
+msgstr "端口"
+
+msgid "DESTINATION"
+msgstr "目标"
+
+msgid "Denied EGRESS Traffic Monitor"
+msgstr "阻止出站 (EGRESS) 流量监视器"
+
+#, python-brace-format
+msgid "Log File: {file}"
+msgstr "日志文件：{file}"
+
+msgid "Streaming real-time events (Press Ctrl+C to exit)..."
+msgstr "正在实时流式传输事件（按 Ctrl+C 退出）..."
+
+msgid "BLOCKED EGRESS"
+msgstr "已阻止的出站"
+
+msgid "Port"
+msgstr "端口"
+
+msgid "Destination"
+msgstr "目标"
+
+msgid "Source"
+msgstr "源"
+
+msgid "Interface"
+msgstr "接口"
+
+msgid "Monitor stopped."
+msgstr "监视器已停止。"
+
+msgid "Monitor and summarize outgoing (egress) connections blocked by the firewall."
+msgstr "监视并汇总防火墙阻止的出站 (egress) 连接。"
+
+msgid "Display a ranked summary of blocked egress connections."
+msgstr "显示被阻止的出站连接的排名摘要。"
+
+msgid "Path to log file (default /var/log/firewalld/denied.log)."
+msgstr "日志文件路径（默认 /var/log/firewalld/denied.log）。"
+
+msgid "Denied Ingress Connections Summary"
+msgstr "已阻止的入站连接摘要"
+
+msgid "No denied ingress events found."
+msgstr "未发现已阻止的入站事件。"
+
+msgid "SOURCE"
+msgstr "源"
+
+msgid "Denied INGRESS Traffic Monitor"
+msgstr "阻止入站 (INGRESS) 流量监视器"
+
+msgid "BLOCKED INGRESS"
+msgstr "已阻止的入站"
+
+msgid "Source Port"
+msgstr "源端口"
+
+msgid "Monitor and summarize incoming (ingress) connections blocked by the firewall."
+msgstr "监视并汇总防火墙阻止的入站 (ingress) 连接。"
+
+msgid "Display a ranked summary of blocked ingress connections."
+msgstr "显示被阻止的入站连接的排名摘要。"
+
+msgid "DNS PTR Active"
+msgstr "DNS PTR 已启用"
+
+msgid "DNS PTR Disabled"
+msgstr "DNS PTR 已禁用"
+
+#, python-brace-format
+msgid "FIREWALL DENIAL MONITOR | Started: {start} | Refresh: {interval}s | {dns}"
+msgstr "防火墙拒绝监视器 | 启动时间：{start} | 刷新间隔：{interval}秒 | {dns}"
+
+#, python-brace-format
+msgid "File: {file} | Last update: {now}"
+msgstr "文件：{file} | 上次更新：{now}"
+
+#, python-brace-format
+msgid "[ERROR] Log file not found: {file}"
+msgstr "[错误] 未找到日志文件：{file}"
+
+msgid "Waiting for log file to be created..."
+msgstr "正在等待日志文件创建..."
+
+msgid "POS"
+msgstr "排名"
+
+msgid "SOURCE IP / HOSTNAME"
+msgstr "源 IP / 主机名"
+
+msgid "DESTINATION IP / HOSTNAME"
+msgstr "目标 IP / 主机名"
+
+msgid "DENIED INCOMING (INGRESS)"
+msgstr "已拒绝入站 (INGRESS)"
+
+#, python-brace-format
+msgid "Captured events: {events}"
+msgstr "捕获的事件数：{events}"
+
+msgid "Waiting for denied incoming events..."
+msgstr "正在等待被拒绝的入站事件..."
+
+msgid "DENIED OUTGOING (EGRESS)"
+msgstr "已拒绝出站 (EGRESS)"
+
+msgid "Waiting for denied outgoing events..."
+msgstr "正在等待被拒绝的出站事件..."
+
+msgid "Real-time live dashboard tallying denied incoming and outgoing connections (IP + port + reverse DNS)."
+msgstr "实时仪表板，统计被拒绝的入站和出站连接（IP + 端口 + 反向 DNS）。"
+
+msgid "Refresh interval in seconds (default 3.0)."
+msgstr "刷新间隔（以秒为单位，默认 3.0）。"
+
+msgid "Maximum ranking positions to display per panel (default 20)."
+msgstr "每个面板显示的最大排名项数（默认 20）。"
+
+msgid "Count all historical events in the log file instead of starting from zero."
+msgstr "统计日志文件中的所有历史事件，而不是从零开始。"
+
+msgid "Resolve IP addresses to domain names via reverse DNS PTR (enabled by default)."
+msgstr "通过反向 DNS PTR 将 IP 地址解析为域名（默认启用）。"
+
+msgid "Disable reverse DNS resolution (show IP addresses only)."
+msgstr "禁用反向 DNS 解析（仅显示 IP 地址）。"
+
+msgid "Outgoing connection established successfully"
+msgstr "出站连接已成功建立"
+
+#, python-brace-format
+msgid "Connection timed out (Timeout > {timeout}s) - Probable egress firewall drop"
+msgstr "连接超时（超时 > {timeout}秒）- 可能是出站防火墙丢弃"
+
+msgid "Connection refused - Port closed on remote destination"
+msgstr "连接被拒绝 - 远程目标端口已关闭"
+
+#, python-brace-format
+msgid "Network error ({error})"
+msgstr "网络错误 ({error})"
+
+msgid "UDP response received from destination"
+msgstr "已收到来自目标的 UDP 响应"
+
+#, python-brace-format
+msgid "No UDP response (Timeout > {timeout}s) - Port filtered or dropped"
+msgstr "无 UDP 响应（超时 > {timeout}秒）- 端口被过滤或丢弃"
+
+#, python-brace-format
+msgid "UDP network error ({error})"
+msgstr "UDP 网络错误 ({error})"
+
+#, python-brace-format
+msgid "Incoming connection received successfully from {host}:{port}"
+msgstr "已成功接收来自 {host}:{port} 的入站连接"
+
+#, python-brace-format
+msgid "No incoming connections within {timeout}s - Probable ingress firewall block"
+msgstr "{timeout}秒内无入站连接 - 可能是入站防火墙阻止"
+
+#, python-brace-format
+msgid "Permission denied binding port {port} (root privileges required for ports < 1024)"
+msgstr "绑定端口 {port} 时权限被拒绝（端口 < 1024 需要 root 权限）"
+
+#, python-brace-format
+msgid "Local socket error ({error})"
+msgstr "本地套接字错误 ({error})"
+
+#, python-brace-format
+msgid "Incoming UDP packet received successfully from {host}:{port}"
+msgstr "已成功接收来自 {host}:{port} 的入站 UDP 数据包"
+
+#, python-brace-format
+msgid "No incoming UDP packets within {timeout}s - Probable ingress firewall block"
+msgstr "{timeout}秒内无入站 UDP 数据包 - 可能是入站防火墙阻止"
+
+msgid "Firewall Ingress Probe (Listen Mode)"
+msgstr "防火墙入站探测 (监听模式)"
+
+#, python-brace-format
+msgid "Listening: {bind}:{port} ({proto}) | Timeout: {timeout}s"
+msgstr "正在监听：{bind}:{port} ({proto}) | 超时：{timeout}秒"
+
+#, python-brace-format
+msgid "Waiting for incoming connection [{curr}/{total}]..."
+msgstr "正在等待入站连接 [{curr}/{total}]..."
+
+#, python-brace-format
+msgid "Waiting for incoming connection on port {port}..."
+msgstr "正在等待端口 {port} 上的入站连接..."
+
+msgid "PASSED"
+msgstr "成功"
+
+msgid "FAILED"
+msgstr "失败"
+
+#, python-brace-format
+msgid "Result: [{status}] {msg} ({ms:.1f} ms)"
+msgstr "结果：[{status}] {msg} ({ms:.1f} 毫秒)"
+
+#, python-brace-format
+msgid "Summary: {successes}/{count} incoming connections received successfully."
+msgstr "总结：已成功接收 {successes}/{count} 个入站连接。"
+
+#, python-brace-format
+msgid "[ERROR] Could not resolve host: {host}"
+msgstr "[错误] 无法解析主机：{host}"
+
+msgid "Firewall Egress Probe (Outgoing Mode)"
+msgstr "防火墙出站探测 (外发模式)"
+
+#, python-brace-format
+msgid "Target: {host} ({ip}):{port} ({proto}) | Timeout: {timeout}s"
+msgstr "目标：{host} ({ip}):{port} ({proto}) | 超时：{timeout}秒"
+
+#, python-brace-format
+msgid "Summary: {successes}/{count} probe attempts succeeded."
+msgstr "总结：{successes}/{count} 次探测尝试成功。"
+
+msgid "Probe firewall connectivity for ingress and egress connections across hosts and ports."
+msgstr "跨主机和端口探测入站和出站连接的防火墙连通性。"
+
+msgid "Target hostname or IP address for outgoing probes (default: kde.org)"
+msgstr "用于出站探测的目标主机名或 IP 地址（默认：kde.org）"
+
+msgid "Port to probe (default: 1555)"
+msgstr "要探测的端口（默认：1555）"
+
+msgid "Transport protocol (tcp or udp, default: tcp)"
+msgstr "传输协议（tcp 或 udp，默认：tcp）"
+
+msgid "Maximum socket timeout in seconds (default: 5.0)"
+msgstr "最大套接字超时时间（以秒为单位，默认：5.0）"
+
+msgid "Number of probe attempts to perform (default: 1)"
+msgstr "要执行的探测尝试次数（默认：1）"
+
+msgid "Run in incoming listen mode (Ingress test) binding local port"
+msgstr "以入站监听模式运行（Ingress 测试）并绑定本地端口"
+
+msgid "Local IP address to bind in listen mode (default: 0.0.0.0)"
+msgstr "监听模式下绑定的本地 IP 地址（默认：0.0.0.0）"

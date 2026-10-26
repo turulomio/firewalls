@@ -11,6 +11,8 @@ from subprocess import run
 
 from colorama import Fore, Style
 
+from firewalls import _
+
 
 def ensure_root() -> None:
     """Ensure the script is being executed with root privileges.
@@ -19,7 +21,7 @@ def ensure_root() -> None:
         SystemExit: If the current effective user ID is not 0 (root).
     """
     if os.geteuid() != 0:
-        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} This script must be executed with root privileges.")
+        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} {_('This script must be executed with root privileges.')}")
         sys.exit(1)
 
 
@@ -72,11 +74,17 @@ def managed_firewall_log(mode: str = "all") -> Generator[None, None, None]:
     """
     ensure_root()
 
-    print(f"{Fore.CYAN}[INFO]{Style.RESET_ALL} Enabling firewalld packet drop logging (LogDenied={mode})...")
+    print(
+        f"{Fore.CYAN}[INFO]{Style.RESET_ALL} "
+        + _("Enabling firewalld packet drop logging (LogDenied={mode})...").format(mode=mode)
+    )
     if set_firewalld_log_denied(mode):
-        print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} Temporary drop logging activated.")
+        print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} {_('Temporary drop logging activated.')}")
     else:
-        print(f"{Fore.YELLOW}[WARNING]{Style.RESET_ALL} Could not set LogDenied={mode} in firewalld.")
+        print(
+            f"{Fore.YELLOW}[WARNING]{Style.RESET_ALL} "
+            + _("Could not set LogDenied={mode} in firewalld.").format(mode=mode)
+        )
 
     def _sigterm_handler(signum, frame):
         sys.exit(0)
@@ -86,9 +94,12 @@ def managed_firewall_log(mode: str = "all") -> Generator[None, None, None]:
     try:
         yield
     finally:
-        print(f"\n{Fore.CYAN}[INFO]{Style.RESET_ALL} Disabling firewalld packet drop logging (LogDenied=off)...")
+        print(
+            f"\n{Fore.CYAN}[INFO]{Style.RESET_ALL} "
+            + _("Disabling firewalld packet drop logging (LogDenied=off)...")
+        )
         if set_firewalld_log_denied("off"):
-            print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} Drop logging deactivated (dmesg protected).")
+            print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} {_('Drop logging deactivated (dmesg protected).')}")
         else:
-            print(f"{Fore.YELLOW}[WARNING]{Style.RESET_ALL} Could not reset LogDenied in firewalld.")
+            print(f"{Fore.YELLOW}[WARNING]{Style.RESET_ALL} {_('Could not reset LogDenied in firewalld.')}")
         signal.signal(signal.SIGTERM, prev_sigterm)

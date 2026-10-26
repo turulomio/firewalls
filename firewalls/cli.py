@@ -10,6 +10,8 @@ from sys import exit
 
 from colorama import Fore, Style, init
 
+from firewalls import _
+
 # Initialize colorama
 init(autoreset=True)
 
@@ -103,11 +105,9 @@ def resolve_machine_path(machine_arg: str, search_dirs: list[Path]) -> tuple[str
         resolved directory Path, or (machine_arg, None) if not found.
     """
     candidate = Path(machine_arg).expanduser()
-    # Check if a direct directory path was passed
     if candidate.is_dir() and (candidate / "etc").is_dir():
         return candidate.resolve().name, candidate.resolve()
 
-    # Search in configured directories
     for sdir in search_dirs:
         candidate_dir = sdir / machine_arg
         if candidate_dir.is_dir() and (candidate_dir / "etc").is_dir():
@@ -123,7 +123,7 @@ def ensure_root() -> None:
         SystemExit: If the effective user ID is not 0 (root).
     """
     if geteuid() != 0:
-        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} This script must be executed with root privileges.")
+        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} {_('This script must be executed with root privileges.')}")
         exit(1)
 
 
@@ -144,7 +144,9 @@ def copy_configuration(source_etc: Path, target_etc: Path = Path("/etc")) -> Non
         cmd = ["rsync", "-avh", "--keep-dirlinks", f"{source_etc}/", f"{target_etc}/"]
         res = run(cmd)
         if res.returncode != 0:
-            raise RuntimeError(f"rsync synchronization failed with exit code {res.returncode}")
+            raise RuntimeError(
+                _("rsync synchronization failed with exit code {code}").format(code=res.returncode)
+            )
     else:
         for root, dirs, files in walk(source_etc):
             rel_path = Path(root).relative_to(source_etc)
@@ -181,7 +183,10 @@ def fix_firewalld_permissions(firewalld_path: Path = Path("/etc/firewalld")) -> 
                 chown(file_full, user="root", group="root")
                 chmod(file_full, 0o644)
     except Exception as e:
-        print(f"{Fore.YELLOW}[WARNING]{Style.RESET_ALL} Could not adjust permissions in {firewalld_path}: {e}")
+        print(
+            f"{Fore.YELLOW}[WARNING]{Style.RESET_ALL} "
+            + _("Could not adjust permissions in {path}: {error}").format(path=firewalld_path, error=e)
+        )
 
 
 def ensure_log_directory(log_dir: Path = Path("/var/log/firewalld")) -> None:
@@ -195,7 +200,10 @@ def ensure_log_directory(log_dir: Path = Path("/var/log/firewalld")) -> None:
         chown(log_dir, user="root", group="root")
         chmod(log_dir, 0o750)
     except Exception as e:
-        print(f"{Fore.YELLOW}[WARNING]{Style.RESET_ALL} Could not verify or create log directory {log_dir}: {e}")
+        print(
+            f"{Fore.YELLOW}[WARNING]{Style.RESET_ALL} "
+            + _("Could not verify or create log directory {dir}: {error}").format(dir=log_dir, error=e)
+        )
 
 
 def ensure_syslog_ng_include(syslog_conf: Path = Path("/etc/syslog-ng/syslog-ng.conf")) -> None:
@@ -213,7 +221,6 @@ def ensure_syslog_ng_include(syslog_conf: Path = Path("/etc/syslog-ng/syslog-ng.
         content = syslog_conf.read_text(encoding="utf-8")
         include_line = '@include "/etc/syslog-ng/conf.d/*.conf"'
 
-        # Remove misplaced include lines to ensure correct ordering
         lines = [line for line in content.splitlines() if "conf.d/*.conf" not in line]
         clean_content = "\n".join(lines).rstrip() + "\n"
 
@@ -240,26 +247,32 @@ def ensure_syslog_ng_include(syslog_conf: Path = Path("/etc/syslog-ng/syslog-ng.
                 new_content = clean_content + f"\n{include_line}\n"
 
         if new_content != content:
-            print(f"{Fore.CYAN}[INFO]{Style.RESET_ALL} Configuring conf.d include directive in {syslog_conf}...")
+            print(
+                f"{Fore.CYAN}[INFO]{Style.RESET_ALL} "
+                + _("Configuring conf.d include directive in {conf}...").format(conf=syslog_conf)
+            )
             syslog_conf.write_text(new_content, encoding="utf-8")
     except Exception as e:
-        print(f"{Fore.YELLOW}[WARNING]{Style.RESET_ALL} Could not update {syslog_conf}: {e}")
+        print(
+            f"{Fore.YELLOW}[WARNING]{Style.RESET_ALL} "
+            + _("Could not update {conf}: {error}").format(conf=syslog_conf, error=e)
+        )
 
 
 def reload_syslog_service() -> None:
     """Ensure syslog-ng daemon is running or reloaded using OpenRC or systemd."""
     ensure_syslog_ng_include()
     if which("rc-service"):
-        print(f"{Fore.CYAN}[3/5]{Style.RESET_ALL} Managing syslog-ng service with OpenRC...")
+        print(f"{Fore.CYAN}[3/5]{Style.RESET_ALL} {_('Managing syslog-ng service with OpenRC...')}")
         res = run(["rc-service", "syslog-ng", "status"], capture_output=True, text=True)
         if res.returncode == 0:
-            print("        Restarting/Reloading syslog-ng with OpenRC...")
+            print(f"        {_('Restarting/Reloading syslog-ng with OpenRC...')}")
             run(["rc-service", "syslog-ng", "restart"])
         else:
-            print("        Starting syslog-ng service with OpenRC...")
+            print(f"        {_('Starting syslog-ng service with OpenRC...')}")
             run(["rc-service", "syslog-ng", "start"])
     elif which("systemctl"):
-        print(f"{Fore.CYAN}[3/5]{Style.RESET_ALL} Managing syslog-ng service with systemd...")
+        print(f"{Fore.CYAN}[3/5]{Style.RESET_ALL} {_('Managing syslog-ng service with systemd...')}")
         res = run(["systemctl", "is-active", "--quiet", "syslog-ng"])
         if res.returncode == 0:
             run(["systemctl", "reload-or-restart", "syslog-ng"])
@@ -277,15 +290,21 @@ def reload_sysctl_settings(source_etc: Path) -> None:
     if not sysctl_dir.is_dir():
         return
 
-    print(f"{Fore.CYAN}[INFO]{Style.RESET_ALL} Detected sysctl.d configuration. Applying kernel parameters with sysctl...")
+    print(
+        f"{Fore.CYAN}[INFO]{Style.RESET_ALL} "
+        + _("Detected sysctl.d configuration. Applying kernel parameters with sysctl...")
+    )
     if which("sysctl"):
         res = run(["sysctl", "--system"])
         if res.returncode == 0:
-            print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} sysctl parameters applied successfully.")
+            print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} {_('sysctl parameters applied successfully.')}")
         else:
-            print(f"{Fore.YELLOW}[WARNING]{Style.RESET_ALL} sysctl --system exited with code {res.returncode}.")
+            print(
+                f"{Fore.YELLOW}[WARNING]{Style.RESET_ALL} "
+                + _("sysctl --system exited with code {code}.").format(code=res.returncode)
+            )
     else:
-        print(f"{Fore.YELLOW}[WARNING]{Style.RESET_ALL} 'sysctl' binary not found in PATH.")
+        print(f"{Fore.YELLOW}[WARNING]{Style.RESET_ALL} " + _("'sysctl' binary not found in PATH."))
 
 
 def reload_firewalld() -> None:
@@ -296,42 +315,64 @@ def reload_firewalld() -> None:
         cannot be started.
     """
     if not which("firewall-cmd"):
-        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} 'firewall-cmd' is not installed or not found in PATH.")
-        print(f"        On Gentoo Linux, install it with: {Fore.YELLOW}emerge --ask net-firewall/firewalld{Style.RESET_ALL}")
+        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} " + _("'firewall-cmd' is not installed or not found in PATH."))
+        install_hint = _("On Gentoo Linux, install it with: {cmd}").format(
+            cmd=f"{Fore.YELLOW}emerge --ask net-firewall/firewalld{Style.RESET_ALL}"
+        )
+        print(f"        {install_hint}")
         exit(1)
 
     state_res = run(["firewall-cmd", "--state"], capture_output=True, text=True)
     is_running = state_res.returncode == 0
 
     if is_running:
-        print(f"{Fore.CYAN}[4/5]{Style.RESET_ALL} Reloading firewalld rules...")
+        print(f"{Fore.CYAN}[4/5]{Style.RESET_ALL} {_('Reloading firewalld rules...')}")
         reload_res = run(["firewall-cmd", "--reload"])
         if reload_res.returncode == 0:
-            print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} Configuration reloaded successfully in firewalld.")
+            print(
+                f"{Fore.GREEN}[OK]{Style.RESET_ALL} {_('Configuration reloaded successfully in firewalld.')}"
+            )
         else:
-            print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} firewalld reload failed. Please check XML configuration files.")
+            print(
+                f"{Fore.RED}[ERROR]{Style.RESET_ALL} "
+                + _("firewalld reload failed. Please check XML configuration files.")
+            )
             exit(1)
     else:
-        print(f"{Fore.YELLOW}[WARNING]{Style.RESET_ALL} firewalld is not running.")
+        print(f"{Fore.YELLOW}[WARNING]{Style.RESET_ALL} {_('firewalld is not running.')}")
         if which("rc-service"):
-            print(f"{Fore.YELLOW}[INFO]{Style.RESET_ALL} Detected OpenRC. Starting firewalld service...")
+            print(
+                f"{Fore.YELLOW}[INFO]{Style.RESET_ALL} {_('Detected OpenRC. Starting firewalld service...')}"
+            )
             start_res = run(["rc-service", "firewalld", "start"])
             if start_res.returncode == 0:
-                print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} firewalld service started successfully.")
+                print(
+                    f"{Fore.GREEN}[OK]{Style.RESET_ALL} {_('firewalld service started successfully.')}"
+                )
             else:
-                print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} Failed to start firewalld service with OpenRC.")
+                print(
+                    f"{Fore.RED}[ERROR]{Style.RESET_ALL} {_('Failed to start firewalld service with OpenRC.')}"
+                )
                 exit(1)
         elif which("systemctl"):
-            print(f"{Fore.YELLOW}[INFO]{Style.RESET_ALL} Detected systemd. Starting firewalld service...")
+            print(
+                f"{Fore.YELLOW}[INFO]{Style.RESET_ALL} {_('Detected systemd. Starting firewalld service...')}"
+            )
             start_res = run(["systemctl", "start", "firewalld"])
             if start_res.returncode == 0:
-                print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} firewalld service started successfully.")
+                print(
+                    f"{Fore.GREEN}[OK]{Style.RESET_ALL} {_('firewalld service started successfully.')}"
+                )
             else:
-                print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} Failed to start firewalld service with systemd.")
+                print(
+                    f"{Fore.RED}[ERROR]{Style.RESET_ALL} {_('Failed to start firewalld service with systemd.')}"
+                )
                 exit(1)
         else:
-            print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} Could not determine service manager to start firewalld.")
-            print("        Please start the service manually.")
+            print(
+                f"{Fore.RED}[ERROR]{Style.RESET_ALL} {_('Could not determine service manager to start firewalld.')}"
+            )
+            print(f"        {_('Please start the service manually.')}")
             exit(1)
 
 
@@ -352,16 +393,25 @@ def run_post_deploy_script(machine_dir: Path) -> None:
     if not target_script:
         return
 
-    print(f"{Fore.CYAN}[5/5]{Style.RESET_ALL} Executing post-deployment script ({target_script.name})...")
+    print(
+        f"{Fore.CYAN}[5/5]{Style.RESET_ALL} "
+        + _("Executing post-deployment script ({name})...").format(name=target_script.name)
+    )
     try:
         chmod(target_script, 0o755)
         res = run([str(target_script)])
         if res.returncode == 0:
-            print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} Post-deployment script finished successfully.")
+            print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} {_('Post-deployment script finished successfully.')}")
         else:
-            print(f"{Fore.YELLOW}[WARNING]{Style.RESET_ALL} Post-deployment script exited with code {res.returncode}.")
+            print(
+                f"{Fore.YELLOW}[WARNING]{Style.RESET_ALL} "
+                + _("Post-deployment script exited with code {code}.").format(code=res.returncode)
+            )
     except Exception as e:
-        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} Error running post-deployment script: {e}")
+        print(
+            f"{Fore.RED}[ERROR]{Style.RESET_ALL} "
+            + _("Error running post-deployment script: {error}").format(error=e)
+        )
 
 
 def stop_firewalld() -> int:
@@ -372,29 +422,31 @@ def stop_firewalld() -> int:
     """
     ensure_root()
     print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
-    print(f"{Fore.CYAN}  Stopping firewalld service                          {Style.RESET_ALL}")
+    print(f"{Fore.CYAN}  {_('Stopping firewalld service')}                          {Style.RESET_ALL}")
     print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
 
     if which("rc-service"):
-        print(f"{Fore.YELLOW}[INFO]{Style.RESET_ALL} Running OpenRC: rc-service firewalld stop...")
+        print(f"{Fore.YELLOW}[INFO]{Style.RESET_ALL} {_('Running OpenRC: rc-service firewalld stop...')}")
         res = run(["rc-service", "firewalld", "stop"])
         if res.returncode == 0:
-            print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} firewalld service stopped successfully.")
+            print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} {_('firewalld service stopped successfully.')}")
             return 0
         else:
-            print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} Failed to stop firewalld service with OpenRC.")
+            print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} {_('Failed to stop firewalld service with OpenRC.')}")
             return 1
     elif which("systemctl"):
-        print(f"{Fore.YELLOW}[INFO]{Style.RESET_ALL} Running systemd: systemctl stop firewalld...")
+        print(f"{Fore.YELLOW}[INFO]{Style.RESET_ALL} {_('Running systemd: systemctl stop firewalld...')}")
         res = run(["systemctl", "stop", "firewalld"])
         if res.returncode == 0:
-            print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} firewalld service stopped successfully.")
+            print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} {_('firewalld service stopped successfully.')}")
             return 0
         else:
-            print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} Failed to stop firewalld service with systemd.")
+            print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} {_('Failed to stop firewalld service with systemd.')}")
             return 1
     else:
-        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} Could not determine service manager to stop firewalld.")
+        print(
+            f"{Fore.RED}[ERROR]{Style.RESET_ALL} {_('Could not determine service manager to stop firewalld.')}"
+        )
         return 1
 
 
@@ -406,10 +458,9 @@ def main() -> int:
     """
     project_root = get_project_root()
 
-    # Pre-parse -d/--configs-dir to discover machines for help epilog
     pre_parser = ArgumentParser(add_help=False)
     pre_parser.add_argument("-d", "--configs-dir", type=Path)
-    pre_args, _ = pre_parser.parse_known_args()
+    pre_args, _unused = pre_parser.parse_known_args()
 
     search_dirs = get_search_directories(project_root, pre_args.configs_dir)
     available_machines = get_available_machines(search_dirs)
@@ -417,35 +468,39 @@ def main() -> int:
     machine_list_str = (
         ", ".join(f"{name} ({path})" for name, path in available_machines.items())
         if available_machines
-        else "None found"
+        else _("None found")
     )
 
     parser = ArgumentParser(
         prog="deploy",
-        description="Deploy firewalld configuration for a machine on Gentoo Linux and reload or stop the service.",
+        description=_(
+            "Deploy firewalld configuration for a machine on Gentoo Linux and reload or stop the service."
+        ),
         formatter_class=RawDescriptionHelpFormatter,
         epilog=(
-            f"Detected machines:\n  {machine_list_str}\n\n"
-            f"Search directories:\n  "
+            f"{_('Detected machines:')}\n  {machine_list_str}\n\n"
+            f"{_('Search directories:')}\n  "
             + "\n  ".join(str(d) for d in search_dirs)
-            + "\n\nSpecial options:\n  stop                  Stop the system firewalld service."
+            + f"\n\n{_('Special options:')}\n  stop                  {_('Stop the system firewalld service.')}"
         ),
     )
     parser.add_argument(
         "machine",
         nargs="?",
-        help="Machine name or directory path to deploy (e.g., example, /path/to/machine) or 'stop' to stop firewalld",
+        help=_(
+            "Machine name or directory path to deploy (e.g., example, /path/to/machine) or 'stop' to stop firewalld"
+        ),
     )
     parser.add_argument(
         "-d",
         "--configs-dir",
         type=Path,
-        help="Directory containing machine configuration folders (overrides FIREWALLS_DIR)",
+        help=_("Directory containing machine configuration folders (overrides FIREWALLS_DIR)"),
     )
     parser.add_argument(
         "--stop",
         action="store_true",
-        help="Stop the system firewalld service",
+        help=_("Stop the system firewalld service"),
     )
 
     args = parser.parse_args()
@@ -457,45 +512,53 @@ def main() -> int:
         parser.print_help()
         return 1
 
-    # Re-evaluate search dirs if --configs-dir was supplied
     search_dirs = get_search_directories(project_root, args.configs_dir)
     machine_name, machine_dir = resolve_machine_path(args.machine, search_dirs)
 
     if not machine_dir:
-        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} Configuration for machine '{args.machine}' not found.")
-        print("        Search directories examined:")
+        print(
+            f"{Fore.RED}[ERROR]{Style.RESET_ALL} "
+            + _("Configuration for machine '{machine}' not found.").format(machine=args.machine)
+        )
+        print(f"        {_('Search directories examined:')}")
         for sdir in search_dirs:
             print(f"        - {sdir}")
         if available_machines:
-            print(f"\n{Fore.YELLOW}Available machines:{Style.RESET_ALL}")
+            print(f"\n{Fore.YELLOW}{_('Available machines:')}{Style.RESET_ALL}")
             for m_name, m_path in available_machines.items():
                 print(f"        - {m_name}: {m_path}")
         return 1
 
     source_etc = machine_dir / "etc"
     if not source_etc.is_dir():
-        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} Missing 'etc' subfolder in '{machine_dir}': {source_etc}")
+        print(
+            f"{Fore.RED}[ERROR]{Style.RESET_ALL} "
+            + _("Missing 'etc' subfolder in '{dir}': {etc}").format(dir=machine_dir, etc=source_etc)
+        )
         return 1
 
-    # Require root privileges
     ensure_root()
 
     print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
-    print(f"{Fore.CYAN}  Firewalld Deployment (Gentoo) - Machine: {Fore.GREEN}{machine_name}{Fore.CYAN}  {Style.RESET_ALL}")
-    print(f"{Fore.CYAN}  Source Path: {Style.DIM}{machine_dir}{Style.RESET_ALL}")
+    print(
+        f"{Fore.CYAN}  {_('Firewalld Deployment (Gentoo) - Machine: {machine}').format(machine=f'{Fore.GREEN}{machine_name}{Fore.CYAN}')}  {Style.RESET_ALL}"
+    )
+    print(
+        f"{Fore.CYAN}  {_('Source Path: {path}').format(path=f'{Style.DIM}{machine_dir}{Style.RESET_ALL}')}{Style.RESET_ALL}"
+    )
     print(f"{Fore.CYAN}======================================================{Style.RESET_ALL}")
 
-    print(f"{Fore.CYAN}[1/5]{Style.RESET_ALL} Deploying configuration files...")
-    print(f"      Source:      {source_etc}/")
-    print(f"      Destination: /etc/")
+    print(f"{Fore.CYAN}[1/5]{Style.RESET_ALL} {_('Deploying configuration files...')}")
+    print(f"      {_('Source:      {src}/').format(src=source_etc)}")
+    print(f"      {_('Destination: /etc/')}")
 
     try:
         copy_configuration(source_etc, Path("/etc"))
     except Exception as e:
-        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} File copy error: {e}")
+        print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} {_('File copy error: {error}').format(error=e)}")
         return 1
 
-    print(f"{Fore.CYAN}[2/5]{Style.RESET_ALL} Adjusting permissions and directories...")
+    print(f"{Fore.CYAN}[2/5]{Style.RESET_ALL} {_('Adjusting permissions and directories...')}")
     fix_firewalld_permissions(Path("/etc/firewalld"))
     ensure_log_directory(Path("/var/log/firewalld"))
 
@@ -506,7 +569,8 @@ def main() -> int:
     run_post_deploy_script(machine_dir)
 
     print(f"{Fore.GREEN}======================================================{Style.RESET_ALL}")
-    print(f"{Fore.GREEN}  Deployment completed successfully for '{machine_name}'  {Style.RESET_ALL}")
+    success_msg = _("Deployment completed successfully for '{machine}'").format(machine=machine_name)
+    print(f"{Fore.GREEN}  {success_msg}  {Style.RESET_ALL}")
     print(f"{Fore.GREEN}======================================================{Style.RESET_ALL}")
     return 0
 
